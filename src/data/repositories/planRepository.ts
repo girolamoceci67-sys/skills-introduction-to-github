@@ -24,6 +24,15 @@ export async function getPlanForWeek(userId: string, weekStartDate: string): Pro
   return rows[0] ? toDomain(rows[0]) : null;
 }
 
+export async function getPlanById(planId: string): Promise<WeeklyPlan | null> {
+  try {
+    const model = await collection().find(planId);
+    return toDomain(model);
+  } catch {
+    return null;
+  }
+}
+
 export async function getLatestPlan(userId: string): Promise<WeeklyPlan | null> {
   const rows = await collection()
     .query(Q.where('user_id', userId), Q.sortBy('week_start_date', Q.desc), Q.take(1))

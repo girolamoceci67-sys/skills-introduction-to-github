@@ -21,6 +21,9 @@ export type DifficultyTier = 1 | 2 | 3;
 
 export type ExerciseVariantKind = 'easier' | 'base' | 'harder';
 
+/** 'hold' = mantenimento isometrico a tempo (es. plank); 'reps' = ripetizioni dinamiche. */
+export type MovementType = 'reps' | 'hold';
+
 export interface ExerciseVariant {
   name: string;
   instructions: string[];
@@ -32,6 +35,7 @@ export interface Exercise {
   name: string;
   muscleGroup: MuscleGroup;
   baseDifficultyTier: DifficultyTier;
+  movementType: MovementType;
   instructions: string[];
   executionCues: string[];
   easierVariant: ExerciseVariant;
@@ -56,7 +60,9 @@ export interface PlanDayExercise {
   exerciseId: string;
   variant: ExerciseVariantKind;
   sets: number;
-  repsTarget: number | 'to_form_breakdown';
+  /** Ripetizioni per set se targetUnit è 'reps', secondi di mantenimento per set se 'seconds'. */
+  target: number;
+  targetUnit: 'reps' | 'seconds';
   restSeconds: number;
 }
 

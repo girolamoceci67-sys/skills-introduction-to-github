@@ -1,0 +1,317 @@
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
+import { Stack, router, useLocalSearchParams } from 'expo-router';
+
+import { CountdownTimer } from '../../../src/components/CountdownTimer';
+import { PrimaryButton } from '../../../src/components/PrimaryButton';
+import { Screen } from '../../../src/components/Screen';
+import { onSessionFeedback } from '../../../src/domain/engine/adaptEngine';
+import { exerciseLibrary } from '../../../src/domain/exercises/library';
+import { variantLabels } from '../../../src/domain/exercises/labels';
+import type {
+  PerceivedDifficulty,
+  PlanDay,
+  SessionExerciseLog,
+  UserProfile,
+  WeeklyPlan,
+} from '../../../src/domain/exercises/types';
+import { attachSessionToPlanDay, getPlanById } from '../../../src/data/repositories/planRepository';
+import {
+  abandonSession,
+  completeSession,
+  startSession,
+} from '../../../src/data/repositories/sessionRepository';
+import { getCurrentUser, updateUser } from '../../../src/data/repositories/userRepository';
+import { colors, radii, spacing, typography } from '../../../src/theme/theme';
+
+type Phase = 'loading' | 'not_found' | 'energy' | 'exercise' | 'rest' | 'feedback' | 'saving';
+type PendingAdvance = 'next_set' | 'next_exercise';
+
+const ENERGY_LEVELS: (1 | 2 | 3 | 4 | 5)[] = [1, 2, 3, 4, 5];
+
+export default function GuidedSession() {
+  const { planId, dayIndex: dayIndexParam } = useLocalSearchParams<{
+    planId: string;
+    dayIndex: string;
+  }>();
+  const dayIndex = Number(dayIndexParam);
+
+  const [phase, setPhase] = useState<Phase>('loading');
+  const [plan, setPlan] = useState<WeeklyPlan | null>(null);
+  const [user, setUser] = useState<UserProfile | null>(null);
+  const [day, setDay] = useState<PlanDay | null>(null);
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [exerciseIndex, setExerciseIndex] = useState(0);
+  const [setIndex, setSetIndex] = useState(0);
+  const [completedLogs, setCompletedLogs] = useState<SessionExerciseLog[]>([]);
+  // Serie effettivamente confermate per l'esercizio in corso: a differenza di `setIndex`
+  // (che avanza solo alla transizione post-riposo) questo si aggiorna subito al tap/countdown,
+  // così l'abbandono a metà riposo non sottostima le serie svolte.
+  const [setsDoneForCurrentExercise, setSetsDoneForCurrentExercise] = useState(0);
+  const pendingAdvance = useRef<PendingAdvance>('next_set');
+
+  useEffect(() => {
+    let cancelled = false;
+    Promise.all([getPlanById(planId), getCurrentUser()]).then(([loadedPlan, loadedUser]) => {
+      if (cancelled) return;
+      const loadedDay = loadedPlan?.days.find((d) => d.dayIndex === dayIndex) ?? null;
+      if (!loadedPlan || !loadedUser || !loadedDay || loadedDay.type !== 'training' || loadedDay.exercises.length === 0) {
+        setPhase('not_found');
+        return;
+      }
+      setPlan(loadedPlan);
+      setUser(loadedUser);
+      setDay(loadedDay);
+      setPhase('energy');
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [planId, dayIndex]);
+
+  const currentPlanExercise = day?.exercises[exerciseIndex] ?? null;
+  const currentExercise = currentPlanExercise
+    ? exerciseLibrary.find((e) => e.id === currentPlanExercise.exerciseId) ?? null
+    : null;
+  const currentVariant = currentExercise
+    ? currentPlanExercise!.variant === 'easier'
+      ? currentExercise.easierVariant
+      : currentPlanExercise!.variant === 'harder'
+        ? currentExercise.harderVariant
+        : null
+    : null;
+
+  const confirmAbandon = useCallback(() => {
+    Alert.alert(
+      'Uscire dall’allenamento?',
+      'I progressi di questa sessione non completata andranno persi.',
+      [
+        { text: 'Continua allenamento', style: 'cancel' },
+        {
+          text: 'Esci',
+          style: 'destructive',
+          onPress: async () => {
+            if (sessionId && user && day) {
+              // Durante 'exercise'/'rest' l'esercizio corrente non è ancora nei completedLogs;
+              // nelle altre fasi (es. 'feedback') è già stato finalizzato lì, quindi non va
+              // duplicato con un log "in corso".
+              const isMidExercise = (phase === 'exercise' || phase === 'rest') && currentPlanExercise;
+              const logs = isMidExercise
+                ? [
+                    ...completedLogs,
+                    {
+                      exerciseId: currentPlanExercise!.exerciseId,
+                      variantUsed: currentPlanExercise!.variant,
+                      setsCompleted: setsDoneForCurrentExercise,
+                      setsPlanned: currentPlanExercise!.sets,
+                    } satisfies SessionExerciseLog,
+                  ]
+                : completedLogs;
+              await abandonSession(sessionId, logs);
+              const updatedUser = onSessionFeedback(user, 'abandoned', null);
+              await updateUser(updatedUser);
+            }
+            router.back();
+          },
+        },
+      ]
+    );
+  }, [sessionId, user, day, currentPlanExercise, phase, setsDoneForCurrentExercise, completedLogs]);
+
+  function handleStartSession(energy: 1 | 2 | 3 | 4 | 5) {
+    if (!user || !plan || !day) return;
+    startSession({
+      planDayId: `${plan.id}:${day.dayIndex}`,
+      userId: user.id,
+      preSessionEnergy: energy,
+    }).then((session) => {
+      setSessionId(session.id);
+      setPhase('exercise');
+    });
+  }
+
+  function finalizeCurrentExerciseLog(): SessionExerciseLog {
+    return {
+      exerciseId: currentPlanExercise!.exerciseId,
+      variantUsed: currentPlanExercise!.variant,
+      setsCompleted: currentPlanExercise!.sets,
+      setsPlanned: currentPlanExercise!.sets,
+    };
+  }
+
+  function handleSetComplete() {
+    if (!day || !currentPlanExercise) return;
+    const isLastSetOfExercise = setIndex + 1 >= currentPlanExercise.sets;
+    const isLastExercise = exerciseIndex + 1 >= day.exercises.length;
+    setSetsDoneForCurrentExercise((n) => n + 1);
+
+    if (isLastSetOfExercise && isLastExercise) {
+      setCompletedLogs((logs) => [...logs, finalizeCurrentExerciseLog()]);
+      setPhase('feedback');
+      return;
+    }
+
+    pendingAdvance.current = isLastSetOfExercise ? 'next_exercise' : 'next_set';
+    setPhase('rest');
+  }
+
+  function handleRestComplete() {
+    if (pendingAdvance.current === 'next_exercise') {
+      setCompletedLogs((logs) => [...logs, finalizeCurrentExerciseLog()]);
+      setExerciseIndex((i) => i + 1);
+      setSetIndex(0);
+      setSetsDoneForCurrentExercise(0);
+    } else {
+      setSetIndex((i) => i + 1);
+    }
+    setPhase('exercise');
+  }
+
+  function handleFeedback(feedback: PerceivedDifficulty) {
+    if (!sessionId || !user || !plan || !day) return;
+    setPhase('saving');
+    completeSession(sessionId, { exerciseLogs: completedLogs, postSessionFeedback: feedback })
+      .then(async () => {
+        const updatedUser = onSessionFeedback(user, 'completed', feedback);
+        await updateUser(updatedUser);
+        await attachSessionToPlanDay(plan.id, day.dayIndex, sessionId);
+        router.replace('/(tabs)/home');
+      })
+      .catch(() => setPhase('feedback'));
+  }
+
+  return (
+    <Screen>
+      <Stack.Screen
+        options={{
+          headerShown: true,
+          title: currentExercise?.name ?? 'Allenamento',
+          gestureEnabled: false,
+          headerLeft: () => (
+            <Pressable onPress={confirmAbandon} accessibilityRole="button" hitSlop={12}>
+              <Text style={styles.exitLabel}>Esci</Text>
+            </Pressable>
+          ),
+        }}
+      />
+
+      {phase === 'loading' && (
+        <View style={styles.center}>
+          <ActivityIndicator color={colors.primary} />
+        </View>
+      )}
+
+      {phase === 'not_found' && (
+        <View style={styles.center}>
+          <Text style={styles.title}>Allenamento non disponibile</Text>
+          <Text style={styles.subtitle}>Torna alla home e riprova.</Text>
+          <PrimaryButton label="Torna alla home" onPress={() => router.replace('/(tabs)/home')} />
+        </View>
+      )}
+
+      {phase === 'energy' && (
+        <View style={styles.center}>
+          <Text style={styles.title}>Come ti senti oggi?</Text>
+          <Text style={styles.subtitle}>1 = poca energia · 5 = tanta energia</Text>
+          <View style={styles.energyRow}>
+            {ENERGY_LEVELS.map((level) => (
+              <Pressable
+                key={level}
+                accessibilityRole="button"
+                onPress={() => handleStartSession(level)}
+                style={styles.energyButton}
+              >
+                <Text style={styles.energyButtonLabel}>{level}</Text>
+              </Pressable>
+            ))}
+          </View>
+        </View>
+      )}
+
+      {phase === 'exercise' && currentExercise && currentPlanExercise && (
+        <View style={styles.center}>
+          <Text style={styles.progressText}>
+            Esercizio {exerciseIndex + 1} di {day?.exercises.length} — Serie {setIndex + 1} di{' '}
+            {currentPlanExercise.sets}
+          </Text>
+          <Text style={styles.title}>{currentVariant?.name ?? currentExercise.name}</Text>
+          <Text style={styles.variantTag}>{variantLabels[currentPlanExercise.variant]}</Text>
+
+          {(currentVariant?.instructions ?? currentExercise.instructions).map((step, i) => (
+            <Text key={i} style={styles.stepText}>
+              {i + 1}. {step}
+            </Text>
+          ))}
+
+          {currentPlanExercise.targetUnit === 'seconds' ? (
+            <CountdownTimer
+              key={`hold-${exerciseIndex}-${setIndex}`}
+              durationSeconds={currentPlanExercise.target}
+              label="Mantieni la posizione"
+              onComplete={handleSetComplete}
+            />
+          ) : (
+            <View style={styles.repsBlock}>
+              <Text style={styles.repsTarget}>{currentPlanExercise.target} ripetizioni</Text>
+              <PrimaryButton label="Serie completata" onPress={handleSetComplete} />
+            </View>
+          )}
+        </View>
+      )}
+
+      {phase === 'rest' && currentPlanExercise && (
+        <View style={styles.center}>
+          <CountdownTimer
+            key={`rest-${exerciseIndex}-${setIndex}`}
+            durationSeconds={currentPlanExercise.restSeconds}
+            label="Riposo"
+            onComplete={handleRestComplete}
+          />
+          <PrimaryButton label="Salta riposo" variant="secondary" onPress={handleRestComplete} />
+        </View>
+      )}
+
+      {phase === 'feedback' && (
+        <View style={styles.center}>
+          <Text style={styles.title}>Come è andata?</Text>
+          <View style={styles.feedbackRow}>
+            <PrimaryButton label="Facile" variant="secondary" onPress={() => handleFeedback('easy')} />
+            <PrimaryButton label="Giusto" onPress={() => handleFeedback('right')} />
+            <PrimaryButton label="Difficile" variant="secondary" onPress={() => handleFeedback('hard')} />
+          </View>
+        </View>
+      )}
+
+      {phase === 'saving' && (
+        <View style={styles.center}>
+          <ActivityIndicator color={colors.primary} />
+        </View>
+      )}
+    </Screen>
+  );
+}
+
+const styles = StyleSheet.create({
+  center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.md, paddingVertical: spacing.xl },
+  title: { ...typography.title, color: colors.text, textAlign: 'center' },
+  subtitle: { ...typography.body, color: colors.textMuted, textAlign: 'center' },
+  progressText: { ...typography.caption, color: colors.textMuted },
+  variantTag: { ...typography.caption, color: colors.primaryDark, marginBottom: spacing.sm },
+  stepText: { ...typography.body, color: colors.text, textAlign: 'left', alignSelf: 'stretch' },
+  repsBlock: { alignItems: 'center', gap: spacing.md, width: '100%' },
+  repsTarget: { ...typography.title, fontSize: 40, color: colors.text },
+  energyRow: { flexDirection: 'row', gap: spacing.sm },
+  energyButton: {
+    width: 48,
+    height: 48,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.border,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.surface,
+  },
+  energyButtonLabel: { ...typography.body, fontWeight: '700', color: colors.text },
+  feedbackRow: { flexDirection: 'row', gap: spacing.sm, width: '100%' },
+  exitLabel: { ...typography.body, color: colors.primary, fontWeight: '600' },
+});

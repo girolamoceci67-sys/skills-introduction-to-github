@@ -97,6 +97,9 @@ const VOLUME_TABLE: Record<DifficultyTier, { sets: number; repsMin: number; reps
   3: { sets: 3, repsMin: 12, repsMax: 15, restSeconds: 45 },
 };
 
+/** Per gli esercizi isometrici il valore "ripetizioni" della tabella volumi viene convertito in secondi di mantenimento. */
+const HOLD_SECONDS_PER_REP_UNIT = 3;
+
 function variantForTier(exercise: Exercise, tier: DifficultyTier): ExerciseVariantKind {
   if (tier > exercise.baseDifficultyTier) return 'harder';
   if (tier < exercise.baseDifficultyTier) return 'easier';
@@ -171,11 +174,13 @@ export function generateWeeklyPlan(params: {
       const exercise = pickExerciseForGroup(eligibleExercises, group, usedInWeek);
       if (!exercise) continue;
       usedInWeek.set(exercise.id, (usedInWeek.get(exercise.id) ?? 0) + 1);
+      const isHold = exercise.movementType === 'hold';
       exercises.push({
         exerciseId: exercise.id,
         variant: variantForTier(exercise, tier),
         sets: volume.sets,
-        repsTarget,
+        target: isHold ? Math.round(repsTarget * HOLD_SECONDS_PER_REP_UNIT) : repsTarget,
+        targetUnit: isHold ? 'seconds' : 'reps',
         restSeconds: volume.restSeconds,
       });
     }

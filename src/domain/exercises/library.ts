@@ -12,6 +12,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Squat a corpo libero',
     muscleGroup: 'legs_glutes',
     baseDifficultyTier: 1,
+    movementType: 'reps',
     instructions: [
       'In piedi, piedi larghi quanto le spalle, punte leggermente verso l’esterno.',
       'Piega le ginocchia e spingi i fianchi indietro come per sederti su una sedia.',
@@ -48,6 +49,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Ponte glutei',
     muscleGroup: 'legs_glutes',
     baseDifficultyTier: 1,
+    movementType: 'reps',
     instructions: [
       'Sdraiati sulla schiena, ginocchia piegate, piedi appoggiati a terra vicino ai glutei.',
       'Spingi i talloni a terra e solleva i fianchi verso l’alto.',
@@ -78,6 +80,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Affondo statico (split squat)',
     muscleGroup: 'legs_glutes',
     baseDifficultyTier: 2,
+    movementType: 'reps',
     instructions: [
       'Fai un passo lungo in avanti con un piede, mantenendo l’altro dietro.',
       'Piega entrambe le ginocchia scendendo verso il basso in verticale.',
@@ -110,6 +113,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Push-up al muro',
     muscleGroup: 'push',
     baseDifficultyTier: 1,
+    movementType: 'reps',
     instructions: [
       'In piedi a circa un passo da un muro, mani appoggiate all’altezza delle spalle.',
       'Piega i gomiti avvicinando il petto al muro.',
@@ -140,6 +144,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Push-up sulle ginocchia',
     muscleGroup: 'push',
     baseDifficultyTier: 2,
+    movementType: 'reps',
     instructions: [
       'Mani a terra sotto le spalle, ginocchia a terra, corpo in linea da ginocchia a testa.',
       'Piega i gomiti abbassando il petto verso il pavimento.',
@@ -167,6 +172,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Push-up standard',
     muscleGroup: 'push',
     baseDifficultyTier: 3,
+    movementType: 'reps',
     instructions: [
       'Mani a terra sotto le spalle, gambe distese, punte dei piedi a terra.',
       'Piega i gomiti abbassando il petto verso il pavimento mantenendo il corpo in linea retta.',
@@ -194,6 +200,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Spinta al muro sugli avambracci',
     muscleGroup: 'push',
     baseDifficultyTier: 1,
+    movementType: 'reps',
     instructions: [
       'In piedi di fronte a un muro, appoggia gli avambracci al muro all’altezza delle spalle, gomiti piegati.',
       'Spingi gli avambracci contro il muro allontanando leggermente il corpo, poi rilascia con controllo.',
@@ -223,6 +230,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Superman (estensione dorsale)',
     muscleGroup: 'pull',
     baseDifficultyTier: 1,
+    movementType: 'reps',
     instructions: [
       'Sdraiati a pancia in giù, braccia distese in avanti, gambe distese.',
       'Solleva contemporaneamente braccia, petto e gambe di pochi centimetri da terra.',
@@ -250,6 +258,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Retrazioni scapolari in piedi',
     muscleGroup: 'pull',
     baseDifficultyTier: 1,
+    movementType: 'reps',
     instructions: [
       'In piedi, braccia distese in avanti all’altezza delle spalle, gomiti leggermente piegati.',
       'Porta i gomiti indietro avvicinando le scapole, come per stringerle insieme.',
@@ -277,6 +286,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Nuoto a terra (prone swimmer)',
     muscleGroup: 'pull',
     baseDifficultyTier: 2,
+    movementType: 'reps',
     instructions: [
       'Sdraiati a pancia in giù, braccia distese in avanti, gambe distese.',
       'Solleva leggermente braccia e gambe da terra e alterna piccoli movimenti come nel nuoto.',
@@ -304,6 +314,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Retrazione scapolare da seduti',
     muscleGroup: 'pull',
     baseDifficultyTier: 1,
+    movementType: 'reps',
     instructions: [
       'Siediti su una sedia stabile, schiena appoggiata allo schienale.',
       'Porta i gomiti indietro avvicinando le scapole, senza sollevare le spalle.',
@@ -333,6 +344,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Plank sulle ginocchia',
     muscleGroup: 'core',
     baseDifficultyTier: 1,
+    movementType: 'hold',
     instructions: [
       'Avambracci a terra sotto le spalle, ginocchia a terra.',
       'Solleva i fianchi formando una linea retta da ginocchia a testa.',
@@ -360,6 +372,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Dead bug',
     muscleGroup: 'core',
     baseDifficultyTier: 2,
+    movementType: 'reps',
     instructions: [
       'Sdraiati sulla schiena, braccia tese verso il soffitto, ginocchia piegate a 90 gradi sopra i fianchi.',
       'Estendi lentamente un braccio dietro la testa e la gamba opposta verso il pavimento, senza toccarlo.',
@@ -387,6 +400,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Bird dog',
     muscleGroup: 'core',
     baseDifficultyTier: 2,
+    movementType: 'reps',
     instructions: [
       'Mani e ginocchia a terra, schiena in posizione neutra.',
       'Estendi un braccio in avanti e la gamba opposta indietro, mantenendo il bacino stabile.',
@@ -414,6 +428,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Attivazione addominale in piedi',
     muscleGroup: 'core',
     baseDifficultyTier: 1,
+    movementType: 'hold',
     instructions: [
       'In piedi, mani sui fianchi o incrociate sul petto, piedi larghi quanto i fianchi.',
       'Contrai dolcemente gli addominali come per allontanare l’ombelico dalla cintura.',
@@ -446,6 +461,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Marcia sul posto',
     muscleGroup: 'mobility_cardio',
     baseDifficultyTier: 1,
+    movementType: 'reps',
     instructions: [
       'In piedi, inizia a camminare sul posto sollevando alternativamente i piedi.',
       'Muovi le braccia in modo naturale, come in una camminata.',
@@ -470,6 +486,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Step touch laterale',
     muscleGroup: 'mobility_cardio',
     baseDifficultyTier: 1,
+    movementType: 'reps',
     instructions: [
       'In piedi, fai un passo laterale con un piede, poi avvicina l’altro piede senza incrociarlo.',
       'Ripeti dal lato opposto, alternando.',
@@ -494,6 +511,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Circonduzioni di anche e spalle',
     muscleGroup: 'mobility_cardio',
     baseDifficultyTier: 1,
+    movementType: 'reps',
     instructions: [
       'In piedi, mani sui fianchi, esegui lente circonduzioni del bacino in un senso e poi nell’altro.',
       'Poi esegui circonduzioni delle spalle, sollevandole verso avanti-alto-indietro-basso.',
@@ -520,6 +538,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Cat-cow (mobilità della colonna)',
     muscleGroup: 'full_body',
     baseDifficultyTier: 1,
+    movementType: 'reps',
     instructions: [
       'Mani e ginocchia a terra, schiena in posizione neutra.',
       'Inspira inarcando leggermente la schiena verso il basso e sollevando lo sguardo.',
@@ -544,6 +563,7 @@ export const exerciseLibrary: Exercise[] = [
     name: 'Alzata da seduto (sit-to-stand)',
     muscleGroup: 'full_body',
     baseDifficultyTier: 1,
+    movementType: 'reps',
     instructions: [
       'Siediti sul bordo di una sedia stabile, piedi appoggiati a terra.',
       'Sporgiti leggermente in avanti e alzati in piedi senza usare le mani, se possibile.',
