@@ -35,3 +35,22 @@
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Expo / React Native #
+########################
+node_modules/
+.expo/
+dist/
+web-build/
+expo-env.d.ts
+*.orig.*
+.metro-health-check*
+android/
+ios/
+*.jks
+*.p8
+*.p12
+*.key
+*.mobileprovision
+.env
+.env.local
