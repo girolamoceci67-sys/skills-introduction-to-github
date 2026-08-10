@@ -6,7 +6,8 @@ export const schema = appSchema({
     tableSchema({
       name: 'user_profiles',
       columns: [
-        { name: 'created_at', type: 'string' },
+        // "created_at" è un nome riservato da WatermelonDB (deve essere number/epoch): usiamo un nome custom.
+        { name: 'profile_created_at', type: 'string' },
         { name: 'starting_level', type: 'string' },
         { name: 'goal', type: 'string' },
         { name: 'days_per_week_available', type: 'number' },

@@ -6,7 +6,7 @@ const sanitizeStringArray = (raw: unknown): string[] => (Array.isArray(raw) ? ra
 export default class UserProfileModel extends Model {
   static table = 'user_profiles';
 
-  @field('created_at') createdAt!: string;
+  @field('profile_created_at') createdAt!: string;
   @field('starting_level') startingLevel!: string;
   @field('goal') goal!: string;
   @field('days_per_week_available') daysPerWeekAvailable!: number;
