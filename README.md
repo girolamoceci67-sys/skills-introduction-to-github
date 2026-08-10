@@ -25,7 +25,9 @@ react-native-reanimated · react-native-gifted-charts · date-fns · zod
 
 ## Eseguire il progetto
 
-WatermelonDB usa moduli nativi: **l'app non funziona su Expo Go**. Serve una build di dev client:
+WatermelonDB usa moduli nativi: **l'app non funziona su Expo Go**. Ci sono due modi per ottenere una build installabile.
+
+### Opzione A — build in locale (richiede Android Studio o Xcode)
 
 ```bash
 npm install
@@ -38,6 +40,20 @@ Per lo sviluppo quotidiano, una volta creata la build nativa:
 ```bash
 npx expo start --dev-client
 ```
+
+### Opzione B — build nel cloud con EAS (nessun tool locale richiesto)
+
+Compila l'app sui server di Expo e produce un file installabile direttamente sul telefono
+(su Android non serve un account sviluppatore a pagamento):
+
+```bash
+npm install -g eas-cli
+eas login          # crea un account Expo gratuito se non ne hai uno
+eas build --platform android --profile preview
+```
+
+Al termine della build (qualche minuto), il comando restituisce un link: apri quel link dal
+telefono Android e installa il file `.apk` scaricato.
 
 ## Struttura del progetto
 
