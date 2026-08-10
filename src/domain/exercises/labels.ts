@@ -1,4 +1,4 @@
-import type { ExerciseVariantKind, MuscleGroup } from './types';
+import type { ExerciseVariantKind, LimitationTag, MuscleGroup } from './types';
 
 export const muscleGroupLabels: Record<MuscleGroup, string> = {
   full_body: 'Corpo intero',
@@ -13,4 +13,12 @@ export const variantLabels: Record<ExerciseVariantKind, string> = {
   easier: 'Variante facilitata',
   base: 'Variante base',
   harder: 'Variante avanzata',
+};
+
+/** Esclude deliberatamente 'none': non è una limitazione da mostrare all'utente, ma l'assenza di controindicazioni. */
+export const limitationLabels: Record<Exclude<LimitationTag, 'none'>, string> = {
+  knees: 'ginocchia',
+  back: 'schiena',
+  shoulders: 'spalle',
+  wrists: 'polsi',
 };

@@ -4,8 +4,8 @@ import { Stack, useLocalSearchParams } from 'expo-router';
 import { Screen } from '../../src/components/Screen';
 import { Tag } from '../../src/components/Tag';
 import { exerciseLibrary } from '../../src/domain/exercises/library';
-import { muscleGroupLabels, variantLabels } from '../../src/domain/exercises/labels';
-import type { ExerciseVariant } from '../../src/domain/exercises/types';
+import { limitationLabels, muscleGroupLabels, variantLabels } from '../../src/domain/exercises/labels';
+import type { ExerciseVariant, LimitationTag } from '../../src/domain/exercises/types';
 import { colors, radii, spacing, typography } from '../../src/theme/theme';
 
 function VariantBlock({ label, variant }: { label: string; variant: ExerciseVariant }) {
@@ -66,8 +66,11 @@ export default function ExerciseDetail() {
       {!exercise.contraindicationTags.includes('none') && (
         <Text style={styles.disclaimer}>
           Questo esercizio viene evitato automaticamente se hai segnalato limitazioni a:{' '}
-          {exercise.contraindicationTags.join(', ')}. Non è una valutazione medica: in caso di
-          dubbi, consulta un professionista.
+          {exercise.contraindicationTags
+            .filter((tag): tag is Exclude<LimitationTag, 'none'> => tag !== 'none')
+            .map((tag) => limitationLabels[tag])
+            .join(', ')}
+          . Non è una valutazione medica: in caso di dubbi, consulta un professionista.
         </Text>
       )}
     </Screen>

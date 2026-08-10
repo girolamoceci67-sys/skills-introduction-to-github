@@ -48,7 +48,7 @@ export default function Library() {
                 <Text style={styles.cardMeta}>Livello base {exercise.baseDifficultyTier} di 3</Text>
               </View>
               {exercise.contraindicationTags.includes('none') ? null : (
-                <Tag label="Ha varianti per limitazioni" />
+                <Tag label="Escluso per alcune limitazioni" />
               )}
             </Pressable>
           ))}

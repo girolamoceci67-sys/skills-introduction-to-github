@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 
 import { Screen } from '../../src/components/Screen';
@@ -51,10 +51,17 @@ function DayRow({ day, isToday }: { day: PlanDay; isToday: boolean }) {
 export default function Home() {
   const version = useRefreshBus((state) => state.version);
   const [state, setState] = useState<LoadState>({ status: 'loading' });
+  const hasLoadedOnce = useRef(false);
 
   useEffect(() => {
     let cancelled = false;
-    setState({ status: 'loading' });
+    // Dopo il primo caricamento riusciamo i dati esistenti mentre ricarichiamo in background:
+    // generare/salvare il piano qui sotto incrementa `version` (di cui questo effetto è
+    // dipendente) e altrimenti rimostrerebbe lo spinner a piena pagina subito dopo essersi
+    // già risolto la prima volta.
+    if (!hasLoadedOnce.current) {
+      setState({ status: 'loading' });
+    }
     getCurrentUser()
       .then(async (user) => {
         if (!user) {
@@ -62,7 +69,10 @@ export default function Home() {
           return;
         }
         const plan = await ensureWeeklyPlanForCurrentWeek(user);
-        if (!cancelled) setState({ status: 'ready', user, plan });
+        if (!cancelled) {
+          hasLoadedOnce.current = true;
+          setState({ status: 'ready', user, plan });
+        }
       })
       .catch(() => {
         if (!cancelled) setState({ status: 'error' });
