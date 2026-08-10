@@ -3,6 +3,7 @@ import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'rea
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 
 import { CountdownTimer } from '../../../src/components/CountdownTimer';
+import { NumberPicker } from '../../../src/components/NumberPicker';
 import { PrimaryButton } from '../../../src/components/PrimaryButton';
 import { Screen } from '../../../src/components/Screen';
 import { onSessionFeedback } from '../../../src/domain/engine/adaptEngine';
@@ -22,7 +23,8 @@ import {
   startSession,
 } from '../../../src/data/repositories/sessionRepository';
 import { getCurrentUser, updateUser } from '../../../src/data/repositories/userRepository';
-import { colors, radii, spacing, typography } from '../../../src/theme/theme';
+import { incrementGoalCompletedSessions } from '../../../src/data/repositories/goalRepository';
+import { colors, spacing, typography } from '../../../src/theme/theme';
 
 type Phase = 'loading' | 'not_found' | 'energy' | 'exercise' | 'rest' | 'feedback' | 'saving';
 type PendingAdvance = 'next_set' | 'next_exercise';
@@ -175,6 +177,7 @@ export default function GuidedSession() {
         const updatedUser = onSessionFeedback(user, 'completed', feedback);
         await updateUser(updatedUser);
         await attachSessionToPlanDay(plan.id, day.dayIndex, sessionId);
+        await incrementGoalCompletedSessions(user.id, plan.weekStartDate);
         router.replace('/(tabs)/home');
       })
       .catch(() => setPhase('feedback'));
@@ -213,18 +216,11 @@ export default function GuidedSession() {
         <View style={styles.center}>
           <Text style={styles.title}>Come ti senti oggi?</Text>
           <Text style={styles.subtitle}>1 = poca energia · 5 = tanta energia</Text>
-          <View style={styles.energyRow}>
-            {ENERGY_LEVELS.map((level) => (
-              <Pressable
-                key={level}
-                accessibilityRole="button"
-                onPress={() => handleStartSession(level)}
-                style={styles.energyButton}
-              >
-                <Text style={styles.energyButtonLabel}>{level}</Text>
-              </Pressable>
-            ))}
-          </View>
+          <NumberPicker
+            options={ENERGY_LEVELS}
+            selected={null}
+            onSelect={(level) => handleStartSession(level as 1 | 2 | 3 | 4 | 5)}
+          />
         </View>
       )}
 
@@ -300,18 +296,6 @@ const styles = StyleSheet.create({
   stepText: { ...typography.body, color: colors.text, textAlign: 'left', alignSelf: 'stretch' },
   repsBlock: { alignItems: 'center', gap: spacing.md, width: '100%' },
   repsTarget: { ...typography.title, fontSize: 40, color: colors.text },
-  energyRow: { flexDirection: 'row', gap: spacing.sm },
-  energyButton: {
-    width: 48,
-    height: 48,
-    borderRadius: radii.md,
-    borderWidth: 1,
-    borderColor: colors.border,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: colors.surface,
-  },
-  energyButtonLabel: { ...typography.body, fontWeight: '700', color: colors.text },
   feedbackRow: { flexDirection: 'row', gap: spacing.sm, width: '100%' },
   exitLabel: { ...typography.body, color: colors.primary, fontWeight: '600' },
 });

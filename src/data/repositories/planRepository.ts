@@ -40,6 +40,13 @@ export async function getLatestPlan(userId: string): Promise<WeeklyPlan | null> 
   return rows[0] ? toDomain(rows[0]) : null;
 }
 
+export async function getRecentPlans(userId: string, limit = 12): Promise<WeeklyPlan[]> {
+  const rows = await collection()
+    .query(Q.where('user_id', userId), Q.sortBy('week_start_date', Q.desc), Q.take(limit))
+    .fetch();
+  return rows.map(toDomain);
+}
+
 export async function saveGeneratedPlan(plan: Omit<WeeklyPlan, 'id'>): Promise<WeeklyPlan> {
   const created = await database.write(async () =>
     collection().create((model) => {
