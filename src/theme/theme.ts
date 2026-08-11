@@ -1,12 +1,13 @@
 export const colors = {
   background: '#FBFAF7',
   surface: '#FFFFFF',
-  primary: '#2F6F4E',
-  primaryDark: '#1F4D36',
+  primary: '#1E6B4F',
+  primaryDark: '#153A28',
+  accent: '#E07A3F',
   text: '#1B1B18',
   textMuted: '#6B6B63',
-  border: '#E4E1D8',
-  success: '#2F6F4E',
+  border: '#EDEAE2',
+  success: '#1E6B4F',
   warning: '#B8863B',
   danger: '#B3462C',
 } as const;
@@ -20,9 +21,9 @@ export const spacing = {
 } as const;
 
 export const radii = {
-  sm: 8,
-  md: 14,
-  lg: 22,
+  sm: 10,
+  md: 18,
+  lg: 26,
 } as const;
 
 export const typography = {
@@ -31,3 +32,13 @@ export const typography = {
   body: { fontSize: 16, fontWeight: '400' as const },
   caption: { fontSize: 13, fontWeight: '500' as const },
 };
+
+export const shadows = {
+  card: {
+    shadowColor: '#1B1B18',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    elevation: 2,
+  },
+} as const;

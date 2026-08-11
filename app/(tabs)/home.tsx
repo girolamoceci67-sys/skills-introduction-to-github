@@ -9,7 +9,7 @@ import { bumpRefreshBus, useRefreshBus } from '../../src/data/refreshBus';
 import { exerciseLibrary } from '../../src/domain/exercises/library';
 import type { PlanDay, UserProfile, WeeklyPlan } from '../../src/domain/exercises/types';
 import { ensureWeeklyPlanForCurrentWeek } from '../../src/features/home/ensureWeeklyPlan';
-import { colors, radii, spacing, typography } from '../../src/theme/theme';
+import { colors, radii, shadows, spacing, typography } from '../../src/theme/theme';
 import { weekdayLabel } from '../../src/utils/week';
 
 type LoadState =
@@ -163,6 +163,7 @@ const styles = StyleSheet.create({
     borderColor: colors.border,
     padding: spacing.md,
     marginBottom: spacing.sm,
+    ...shadows.card,
   },
   dayCardToday: {
     borderColor: colors.primary,

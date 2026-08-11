@@ -6,7 +6,7 @@ import { Tag } from '../../src/components/Tag';
 import { exerciseLibrary } from '../../src/domain/exercises/library';
 import { muscleGroupLabels } from '../../src/domain/exercises/labels';
 import type { Exercise, MuscleGroup } from '../../src/domain/exercises/types';
-import { colors, radii, spacing, typography } from '../../src/theme/theme';
+import { colors, radii, shadows, spacing, typography } from '../../src/theme/theme';
 
 const GROUP_ORDER: MuscleGroup[] = [
   'legs_glutes',
@@ -79,6 +79,7 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     marginBottom: spacing.sm,
     gap: spacing.sm,
+    ...shadows.card,
   },
   cardPressed: { opacity: 0.7 },
   cardText: { flex: 1 },

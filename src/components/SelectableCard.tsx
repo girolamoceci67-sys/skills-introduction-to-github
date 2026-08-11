@@ -1,6 +1,6 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 
-import { colors, radii, spacing, typography } from '../theme/theme';
+import { colors, radii, shadows, spacing, typography } from '../theme/theme';
 
 interface SelectableCardProps {
   title: string;
@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
     padding: spacing.md,
     marginBottom: spacing.sm,
     backgroundColor: colors.surface,
+    ...shadows.card,
   },
   cardSelected: {
     borderColor: colors.primary,

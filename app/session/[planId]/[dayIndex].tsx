@@ -2,6 +2,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 
+import { ExerciseAvatar } from '../../../src/components/avatar/ExerciseAvatar';
 import { CountdownTimer } from '../../../src/components/CountdownTimer';
 import { NumberPicker } from '../../../src/components/NumberPicker';
 import { PrimaryButton } from '../../../src/components/PrimaryButton';
@@ -232,6 +233,8 @@ export default function GuidedSession() {
           </Text>
           <Text style={styles.title}>{currentVariant?.name ?? currentExercise.name}</Text>
           <Text style={styles.variantTag}>{variantLabels[currentPlanExercise.variant]}</Text>
+
+          <ExerciseAvatar exerciseId={currentPlanExercise.exerciseId} />
 
           {(currentVariant?.instructions ?? currentExercise.instructions).map((step, i) => (
             <Text key={i} style={styles.stepText}>
