@@ -117,6 +117,8 @@ const zh: LocaleResource = {
     dumbbellReaskSubtitle: '既然你已经坚持训练了一段时间，可以考虑解锁哑铃模块。',
     dumbbellReaskCta: '回答',
     dumbbellReaskDismiss: '暂不',
+    weekCompleteTitle: '本周已完成！🎉',
+    weekCompleteSubtitle: '你已完成本周所有计划的训练。下一周的计划将在周一准备好。',
   },
   dumbbellReask: {
     title: '你有紧凑型或可调节哑铃吗？',

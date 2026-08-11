@@ -117,6 +117,8 @@ const ar: LocaleResource = {
     dumbbellReaskSubtitle: 'بما أنك تدربت بانتظام، يمكنك الآن فتح وحدة الدمبل.',
     dumbbellReaskCta: 'أجب',
     dumbbellReaskDismiss: 'ليس الآن',
+    weekCompleteTitle: 'اكتمل الأسبوع! 🎉',
+    weekCompleteSubtitle: 'أتممت كل التمارين المقررة. ستكون خطتك التالية جاهزة يوم الاثنين.',
   },
   dumbbellReask: {
     title: 'هل تملك دمبل مدمج أو قابل للتعديل؟',

@@ -126,6 +126,8 @@ const it: LocaleResource = {
     dumbbellReaskSubtitle: 'Ora che ti sei allenato con costanza, potresti sbloccare il modulo con i manubri.',
     dumbbellReaskCta: 'Rispondi',
     dumbbellReaskDismiss: 'No, non ora',
+    weekCompleteTitle: 'Settimana completata! 🎉',
+    weekCompleteSubtitle: 'Hai svolto tutti gli allenamenti in programma. Il prossimo piano sarà pronto lunedì.',
   },
   dumbbellReask: {
     title: 'Hai dei manubri compatti o regolabili?',

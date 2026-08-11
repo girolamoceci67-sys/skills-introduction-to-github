@@ -121,6 +121,8 @@ const fr: LocaleResource = {
     dumbbellReaskSubtitle: 'Maintenant que vous vous entraînez avec régularité, vous pourriez débloquer le module haltères.',
     dumbbellReaskCta: 'Répondre',
     dumbbellReaskDismiss: 'Pas maintenant',
+    weekCompleteTitle: 'Semaine terminée ! 🎉',
+    weekCompleteSubtitle: 'Vous avez fait toutes les séances prévues. Votre prochain programme sera prêt lundi.',
   },
   dumbbellReask: {
     title: 'Avez-vous des haltères compacts ou réglables ?',

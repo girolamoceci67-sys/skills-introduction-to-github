@@ -108,6 +108,8 @@ export interface LocaleResource {
     dumbbellReaskSubtitle: string;
     dumbbellReaskCta: string;
     dumbbellReaskDismiss: string;
+    weekCompleteTitle: string;
+    weekCompleteSubtitle: string;
   };
   dumbbellReask: {
     title: string;

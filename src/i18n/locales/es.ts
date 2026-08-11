@@ -120,6 +120,8 @@ const es: LocaleResource = {
     dumbbellReaskSubtitle: 'Ahora que has entrenado con constancia, podrías desbloquear el módulo de mancuernas.',
     dumbbellReaskCta: 'Responder',
     dumbbellReaskDismiss: 'Ahora no',
+    weekCompleteTitle: '¡Semana completada! 🎉',
+    weekCompleteSubtitle: 'Has hecho todos los entrenamientos previstos. Tu próximo plan estará listo el lunes.',
   },
   dumbbellReask: {
     title: '¿Tienes mancuernas compactas o ajustables?',

@@ -121,6 +121,8 @@ const ru: LocaleResource = {
     dumbbellReaskSubtitle: 'Теперь, когда вы тренируетесь регулярно, вы можете открыть модуль с гантелями.',
     dumbbellReaskCta: 'Ответить',
     dumbbellReaskDismiss: 'Не сейчас',
+    weekCompleteTitle: 'Неделя завершена! 🎉',
+    weekCompleteSubtitle: 'Вы выполнили все запланированные тренировки. Новая программа будет готова в понедельник.',
   },
   dumbbellReask: {
     title: 'Есть ли у вас компактные или разборные гантели?',

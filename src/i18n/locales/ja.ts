@@ -117,6 +117,8 @@ const ja: LocaleResource = {
     dumbbellReaskSubtitle: '継続してトレーニングできているので、ダンベルモジュールを解放できます。',
     dumbbellReaskCta: '回答する',
     dumbbellReaskDismiss: '今はしない',
+    weekCompleteTitle: '今週の目標達成！🎉',
+    weekCompleteSubtitle: '予定していたトレーニングをすべて完了しました。次のプランは月曜日に用意されます。',
   },
   dumbbellReask: {
     title: 'コンパクトまたは可変式のダンベルをお持ちですか？',

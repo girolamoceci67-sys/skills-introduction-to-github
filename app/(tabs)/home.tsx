@@ -144,12 +144,20 @@ export default function Home() {
 
   const { plan, user } = state;
   const todayIndex = todayIndexMondayFirst();
+  const trainingDays = plan.days.filter((day) => day.type === 'training');
+  const isWeekComplete = trainingDays.length > 0 && trainingDays.every((day) => Boolean(day.sessionId));
 
   return (
     <Screen>
       <Text style={styles.title}>{t('home.title')}</Text>
       <Text style={styles.subtitle}>{t('home.subtitle', { tier: plan.difficultyTierSnapshot })}</Text>
       {shouldOfferDumbbellReask(user) ? <DumbbellReaskBanner user={user} /> : null}
+      {isWeekComplete ? (
+        <View style={styles.weekCompleteCard}>
+          <Text style={styles.weekCompleteTitle}>{t('home.weekCompleteTitle')}</Text>
+          <Text style={styles.weekCompleteSubtitle}>{t('home.weekCompleteSubtitle')}</Text>
+        </View>
+      ) : null}
       {plan.days.map((day) => (
         <DayRow key={day.dayIndex} day={day} planId={plan.id} isToday={day.dayIndex === todayIndex} />
       ))}
@@ -212,6 +220,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: spacing.md,
   },
   reaskDismissLabel: { ...typography.caption, fontWeight: '700', color: colors.textMuted },
+  weekCompleteCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.success,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+    ...shadows.card,
+  },
+  weekCompleteTitle: { ...typography.body, fontWeight: '700', color: colors.text, marginBottom: spacing.xs },
+  weekCompleteSubtitle: { ...typography.caption, color: colors.textMuted },
   dayCard: {
     backgroundColor: colors.surface,
     borderRadius: radii.md,

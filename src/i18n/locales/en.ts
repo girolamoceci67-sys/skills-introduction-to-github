@@ -119,6 +119,8 @@ const en: LocaleResource = {
     dumbbellReaskSubtitle: 'Now that you’ve been training consistently, you could unlock the dumbbell module.',
     dumbbellReaskCta: 'Answer',
     dumbbellReaskDismiss: 'Not now',
+    weekCompleteTitle: 'Week complete! 🎉',
+    weekCompleteSubtitle: 'You’ve done every planned workout. Your next plan will be ready on Monday.',
   },
   dumbbellReask: {
     title: 'Do you have compact or adjustable dumbbells?',

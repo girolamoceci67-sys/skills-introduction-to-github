@@ -120,6 +120,8 @@ const pt: LocaleResource = {
     dumbbellReaskSubtitle: 'Agora que tens treinado com constância, podias desbloquear o módulo de halteres.',
     dumbbellReaskCta: 'Responder',
     dumbbellReaskDismiss: 'Agora não',
+    weekCompleteTitle: 'Semana concluída! 🎉',
+    weekCompleteSubtitle: 'Fizeste todos os treinos previstos. O teu próximo plano estará pronto na segunda-feira.',
   },
   dumbbellReask: {
     title: 'Tens halteres compactos ou ajustáveis?',
