@@ -1,10 +1,12 @@
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { Screen } from '../../src/components/Screen';
 import { Tag } from '../../src/components/Tag';
+import { useExerciseContent } from '../../src/domain/exercises/exerciseContent';
 import { exerciseLibrary } from '../../src/domain/exercises/library';
-import { muscleGroupLabels } from '../../src/domain/exercises/labels';
+import { useLabels } from '../../src/domain/exercises/labels';
 import type { Exercise, MuscleGroup } from '../../src/domain/exercises/types';
 import { colors, radii, shadows, spacing, typography } from '../../src/theme/theme';
 
@@ -24,33 +26,39 @@ function groupExercises(exercises: Exercise[]): { group: MuscleGroup; items: Exe
   })).filter((section) => section.items.length > 0);
 }
 
+function ExerciseRow({ exercise }: { exercise: Exercise }) {
+  const { t } = useTranslation();
+  const content = useExerciseContent(exercise.id);
+
+  return (
+    <Pressable
+      style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
+      onPress={() => router.push(`/library/${exercise.id}`)}
+      accessibilityRole="button"
+    >
+      <View style={styles.cardText}>
+        <Text style={styles.cardTitle}>{content.name}</Text>
+        <Text style={styles.cardMeta}>{t('library.levelBadge', { tier: exercise.baseDifficultyTier })}</Text>
+      </View>
+      {exercise.contraindicationTags.includes('none') ? null : <Tag label={t('library.excludedBadge')} />}
+    </Pressable>
+  );
+}
+
 export default function Library() {
+  const { t } = useTranslation();
+  const { muscleGroupLabels } = useLabels();
   const sections = groupExercises(exerciseLibrary);
 
   return (
     <Screen>
-      <Text style={styles.title}>Libreria esercizi</Text>
-      <Text style={styles.subtitle}>
-        Tutti gli esercizi sono a corpo libero, pensati per uno spazio domestico di almeno 2x2 m.
-      </Text>
+      <Text style={styles.title}>{t('library.title')}</Text>
+      <Text style={styles.subtitle}>{t('library.subtitle')}</Text>
       {sections.map((section) => (
         <View key={section.group} style={styles.section}>
           <Text style={styles.sectionTitle}>{muscleGroupLabels[section.group]}</Text>
           {section.items.map((exercise) => (
-            <Pressable
-              key={exercise.id}
-              style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
-              onPress={() => router.push(`/library/${exercise.id}`)}
-              accessibilityRole="button"
-            >
-              <View style={styles.cardText}>
-                <Text style={styles.cardTitle}>{exercise.name}</Text>
-                <Text style={styles.cardMeta}>Livello base {exercise.baseDifficultyTier} di 3</Text>
-              </View>
-              {exercise.contraindicationTags.includes('none') ? null : (
-                <Tag label="Escluso per alcune limitazioni" />
-              )}
-            </Pressable>
+            <ExerciseRow key={exercise.id} exercise={exercise} />
           ))}
         </View>
       ))}

@@ -1,17 +1,19 @@
 import { StyleSheet, Text, View } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { avatarPoses } from '../../domain/exercises/avatarPoses';
 import { colors, radii, shadows, spacing, typography } from '../../theme/theme';
 import { StickFigureAvatar } from './StickFigureAvatar';
 
 export function ExerciseAvatar({ exerciseId }: { exerciseId: string }) {
+  const { t } = useTranslation();
   const animation = avatarPoses[exerciseId];
   if (!animation) return null;
 
   return (
     <View style={styles.card}>
       <StickFigureAvatar {...animation} />
-      <Text style={styles.caption}>Anteprima del movimento</Text>
+      <Text style={styles.caption}>{t('library.previewCaption')}</Text>
     </View>
   );
 }

@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'react-native';
 import { Stack, router, useLocalSearchParams } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { ExerciseAvatar } from '../../../src/components/avatar/ExerciseAvatar';
 import { SessionCompleteCelebration } from '../../../src/components/celebration/SessionCompleteCelebration';
@@ -9,8 +10,9 @@ import { NumberPicker } from '../../../src/components/NumberPicker';
 import { PrimaryButton } from '../../../src/components/PrimaryButton';
 import { Screen } from '../../../src/components/Screen';
 import { onSessionFeedback } from '../../../src/domain/engine/adaptEngine';
+import { useExerciseContent } from '../../../src/domain/exercises/exerciseContent';
 import { exerciseLibrary } from '../../../src/domain/exercises/library';
-import { variantLabels } from '../../../src/domain/exercises/labels';
+import { useLabels } from '../../../src/domain/exercises/labels';
 import type {
   PerceivedDifficulty,
   PlanDay,
@@ -34,6 +36,8 @@ type PendingAdvance = 'next_set' | 'next_exercise';
 const ENERGY_LEVELS: (1 | 2 | 3 | 4 | 5)[] = [1, 2, 3, 4, 5];
 
 export default function GuidedSession() {
+  const { t } = useTranslation();
+  const { variantLabels } = useLabels();
   const { planId, dayIndex: dayIndexParam } = useLocalSearchParams<{
     planId: string;
     dayIndex: string;
@@ -77,22 +81,24 @@ export default function GuidedSession() {
   const currentExercise = currentPlanExercise
     ? exerciseLibrary.find((e) => e.id === currentPlanExercise.exerciseId) ?? null
     : null;
-  const currentVariant = currentExercise
-    ? currentPlanExercise!.variant === 'easier'
-      ? currentExercise.easierVariant
-      : currentPlanExercise!.variant === 'harder'
-        ? currentExercise.harderVariant
+  // Gli hook non possono essere condizionali: chiamato sempre, con stringa vuota finché l'esercizio non è pronto.
+  const currentContent = useExerciseContent(currentExercise?.id ?? '');
+  const currentVariant = currentPlanExercise
+    ? currentPlanExercise.variant === 'easier'
+      ? currentContent.easierVariant
+      : currentPlanExercise.variant === 'harder'
+        ? currentContent.harderVariant
         : null
     : null;
 
   const confirmAbandon = useCallback(() => {
     Alert.alert(
-      'Uscire dall’allenamento?',
-      'I progressi di questa sessione non completata andranno persi.',
+      t('session.exitConfirmTitle'),
+      t('session.exitConfirmBody'),
       [
-        { text: 'Continua allenamento', style: 'cancel' },
+        { text: t('session.exitConfirmCancel'), style: 'cancel' },
         {
-          text: 'Esci',
+          text: t('session.exitConfirmConfirm'),
           style: 'destructive',
           onPress: async () => {
             if (sessionId && user && day) {
@@ -120,7 +126,7 @@ export default function GuidedSession() {
         },
       ]
     );
-  }, [sessionId, user, day, currentPlanExercise, phase, setsDoneForCurrentExercise, completedLogs]);
+  }, [t, sessionId, user, day, currentPlanExercise, phase, setsDoneForCurrentExercise, completedLogs]);
 
   function handleStartSession(energy: 1 | 2 | 3 | 4 | 5) {
     if (!user || !plan || !day) return;
@@ -190,11 +196,11 @@ export default function GuidedSession() {
       <Stack.Screen
         options={{
           headerShown: phase !== 'celebration',
-          title: currentExercise?.name ?? 'Allenamento',
+          title: currentContent.name || t('home.title'),
           gestureEnabled: false,
           headerLeft: () => (
             <Pressable onPress={confirmAbandon} accessibilityRole="button" hitSlop={12}>
-              <Text style={styles.exitLabel}>Esci</Text>
+              <Text style={styles.exitLabel}>{t('common.exit')}</Text>
             </Pressable>
           ),
         }}
@@ -208,16 +214,16 @@ export default function GuidedSession() {
 
       {phase === 'not_found' && (
         <View style={styles.center}>
-          <Text style={styles.title}>Allenamento non disponibile</Text>
-          <Text style={styles.subtitle}>Torna alla home e riprova.</Text>
-          <PrimaryButton label="Torna alla home" onPress={() => router.replace('/(tabs)/home')} />
+          <Text style={styles.title}>{t('session.notAvailableTitle')}</Text>
+          <Text style={styles.subtitle}>{t('session.notAvailableSubtitle')}</Text>
+          <PrimaryButton label={t('session.backToHome')} onPress={() => router.replace('/(tabs)/home')} />
         </View>
       )}
 
       {phase === 'energy' && (
         <View style={styles.center}>
-          <Text style={styles.title}>Come ti senti oggi?</Text>
-          <Text style={styles.subtitle}>1 = poca energia · 5 = tanta energia</Text>
+          <Text style={styles.title}>{t('session.energyTitle')}</Text>
+          <Text style={styles.subtitle}>{t('session.energySubtitle')}</Text>
           <NumberPicker
             options={ENERGY_LEVELS}
             selected={null}
@@ -229,15 +235,19 @@ export default function GuidedSession() {
       {phase === 'exercise' && currentExercise && currentPlanExercise && (
         <View style={styles.center}>
           <Text style={styles.progressText}>
-            Esercizio {exerciseIndex + 1} di {day?.exercises.length} — Serie {setIndex + 1} di{' '}
-            {currentPlanExercise.sets}
+            {t('session.progress', {
+              current: exerciseIndex + 1,
+              total: day?.exercises.length,
+              setCurrent: setIndex + 1,
+              setTotal: currentPlanExercise.sets,
+            })}
           </Text>
-          <Text style={styles.title}>{currentVariant?.name ?? currentExercise.name}</Text>
+          <Text style={styles.title}>{currentVariant?.name || currentContent.name}</Text>
           <Text style={styles.variantTag}>{variantLabels[currentPlanExercise.variant]}</Text>
 
           <ExerciseAvatar exerciseId={currentPlanExercise.exerciseId} />
 
-          {(currentVariant?.instructions ?? currentExercise.instructions).map((step, i) => (
+          {(currentVariant?.instructions ?? currentContent.instructions).map((step, i) => (
             <Text key={i} style={styles.stepText}>
               {i + 1}. {step}
             </Text>
@@ -247,13 +257,13 @@ export default function GuidedSession() {
             <CountdownTimer
               key={`hold-${exerciseIndex}-${setIndex}`}
               durationSeconds={currentPlanExercise.target}
-              label="Mantieni la posizione"
+              label={t('session.holdLabel')}
               onComplete={handleSetComplete}
             />
           ) : (
             <View style={styles.repsBlock}>
-              <Text style={styles.repsTarget}>{currentPlanExercise.target} ripetizioni</Text>
-              <PrimaryButton label="Serie completata" onPress={handleSetComplete} />
+              <Text style={styles.repsTarget}>{t('session.reps', { count: currentPlanExercise.target })}</Text>
+              <PrimaryButton label={t('session.setComplete')} onPress={handleSetComplete} />
             </View>
           )}
         </View>
@@ -264,20 +274,20 @@ export default function GuidedSession() {
           <CountdownTimer
             key={`rest-${exerciseIndex}-${setIndex}`}
             durationSeconds={currentPlanExercise.restSeconds}
-            label="Riposo"
+            label={t('session.rest')}
             onComplete={handleRestComplete}
           />
-          <PrimaryButton label="Salta riposo" variant="secondary" onPress={handleRestComplete} />
+          <PrimaryButton label={t('session.skipRest')} variant="secondary" onPress={handleRestComplete} />
         </View>
       )}
 
       {phase === 'feedback' && (
         <View style={styles.center}>
-          <Text style={styles.title}>Come è andata?</Text>
+          <Text style={styles.title}>{t('session.feedbackTitle')}</Text>
           <View style={styles.feedbackRow}>
-            <PrimaryButton label="Facile" variant="secondary" onPress={() => handleFeedback('easy')} />
-            <PrimaryButton label="Giusto" onPress={() => handleFeedback('right')} />
-            <PrimaryButton label="Difficile" variant="secondary" onPress={() => handleFeedback('hard')} />
+            <PrimaryButton label={t('feedback.easy')} variant="secondary" onPress={() => handleFeedback('easy')} />
+            <PrimaryButton label={t('feedback.right')} onPress={() => handleFeedback('right')} />
+            <PrimaryButton label={t('feedback.hard')} variant="secondary" onPress={() => handleFeedback('hard')} />
           </View>
         </View>
       )}
@@ -290,10 +300,8 @@ export default function GuidedSession() {
 
       {phase === 'celebration' && day && (
         <SessionCompleteCelebration
-          title="Allenamento completato!"
-          subtitle={`Hai portato a termine ${completedLogs.length} ${
-            completedLogs.length === 1 ? 'esercizio' : 'esercizi'
-          } su ${day.exercises.length}. Bel lavoro.`}
+          title={t('celebration.title')}
+          subtitle={t('celebration.subtitle', { count: completedLogs.length, total: day.exercises.length })}
           onContinue={() => router.replace('/(tabs)/home')}
         />
       )}

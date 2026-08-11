@@ -1,16 +1,16 @@
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { PrimaryButton } from '../../src/components/PrimaryButton';
 import { Screen } from '../../src/components/Screen';
 import { getCurrentUser } from '../../src/data/repositories/userRepository';
 import { bumpRefreshBus, useRefreshBus } from '../../src/data/refreshBus';
-import { exerciseLibrary } from '../../src/domain/exercises/library';
-import type { PlanDay, UserProfile, WeeklyPlan } from '../../src/domain/exercises/types';
+import { useExerciseContent } from '../../src/domain/exercises/exerciseContent';
+import type { PlanDay, PlanDayExercise, UserProfile, WeeklyPlan } from '../../src/domain/exercises/types';
 import { ensureWeeklyPlanForCurrentWeek } from '../../src/features/home/ensureWeeklyPlan';
 import { colors, radii, shadows, spacing, typography } from '../../src/theme/theme';
-import { weekdayLabel } from '../../src/utils/week';
 
 type LoadState =
   | { status: 'loading' }
@@ -23,36 +23,41 @@ function todayIndexMondayFirst(): number {
   return (jsDay + 6) % 7;
 }
 
-function exerciseName(exerciseId: string): string {
-  return exerciseLibrary.find((e) => e.id === exerciseId)?.name ?? 'Esercizio';
+function PlanExerciseText({ planExercise }: { planExercise: PlanDayExercise }) {
+  const { t } = useTranslation();
+  const content = useExerciseContent(planExercise.exerciseId);
+  const target = planExercise.targetUnit === 'seconds' ? `${planExercise.target}s` : planExercise.target;
+
+  return (
+    <Text style={styles.exerciseText}>
+      {content.name} — {planExercise.sets}×{target}
+      {'  '}({t('session.rest').toLowerCase()} {planExercise.restSeconds}s)
+    </Text>
+  );
 }
 
 function DayRow({ day, planId, isToday }: { day: PlanDay; planId: string; isToday: boolean }) {
+  const { t } = useTranslation();
+  const weekdays = t('weekdays', { returnObjects: true }) as string[];
   const isTraining = day.type === 'training';
   const isDone = Boolean(day.sessionId);
 
   return (
     <View style={[styles.dayCard, isToday && styles.dayCardToday]}>
       <View style={styles.dayHeaderRow}>
-        <Text style={styles.dayLabel}>{weekdayLabel(day.dayIndex)}</Text>
+        <Text style={styles.dayLabel}>{weekdays[day.dayIndex]}</Text>
         <View style={styles.badgeRow}>
-          {isDone ? <Text style={styles.doneBadge}>completato ✓</Text> : null}
-          {isToday ? <Text style={styles.todayBadge}>oggi</Text> : null}
+          {isDone ? <Text style={styles.doneBadge}>{t('home.done')}</Text> : null}
+          {isToday ? <Text style={styles.todayBadge}>{t('home.today')}</Text> : null}
         </View>
       </View>
       {!isTraining ? (
-        <Text style={styles.restText}>Giorno di riposo</Text>
+        <Text style={styles.restText}>{t('home.restDay')}</Text>
       ) : (
         <>
           <View style={styles.exerciseList}>
             {day.exercises.map((planExercise, index) => (
-              <Text key={`${planExercise.exerciseId}-${index}`} style={styles.exerciseText}>
-                {exerciseName(planExercise.exerciseId)} — {planExercise.sets}×
-                {planExercise.targetUnit === 'seconds'
-                  ? `${planExercise.target}s`
-                  : planExercise.target}
-                {'  '}(riposo {planExercise.restSeconds}s)
-              </Text>
+              <PlanExerciseText key={`${planExercise.exerciseId}-${index}`} planExercise={planExercise} />
             ))}
           </View>
           <Pressable
@@ -60,9 +65,7 @@ function DayRow({ day, planId, isToday }: { day: PlanDay; planId: string; isToda
             onPress={() => router.push(`/session/${planId}/${day.dayIndex}`)}
             style={({ pressed }) => [styles.startButton, pressed && styles.startButtonPressed]}
           >
-            <Text style={styles.startButtonLabel}>
-              {isDone ? 'Rifai allenamento' : 'Avvia allenamento'}
-            </Text>
+            <Text style={styles.startButtonLabel}>{isDone ? t('home.redo') : t('home.start')}</Text>
           </Pressable>
         </>
       )}
@@ -71,6 +74,7 @@ function DayRow({ day, planId, isToday }: { day: PlanDay; planId: string; isToda
 }
 
 export default function Home() {
+  const { t } = useTranslation();
   const version = useRefreshBus((state) => state.version);
   const [state, setState] = useState<LoadState>({ status: 'loading' });
   const hasLoadedOnce = useRef(false);
@@ -118,8 +122,8 @@ export default function Home() {
     return (
       <Screen>
         <View style={styles.center}>
-          <Text style={styles.title}>Profilo non trovato</Text>
-          <Text style={styles.subtitle}>Riavvia l’app per rifare l’onboarding.</Text>
+          <Text style={styles.title}>{t('home.noProfileTitle')}</Text>
+          <Text style={styles.subtitle}>{t('home.noProfileSubtitle')}</Text>
         </View>
       </Screen>
     );
@@ -129,8 +133,8 @@ export default function Home() {
     return (
       <Screen>
         <View style={styles.center}>
-          <Text style={styles.title}>Non siamo riusciti a generare il piano</Text>
-          <PrimaryButton label="Riprova" onPress={bumpRefreshBus} />
+          <Text style={styles.title}>{t('home.errorTitle')}</Text>
+          <PrimaryButton label={t('common.retry')} onPress={bumpRefreshBus} />
         </View>
       </Screen>
     );
@@ -141,10 +145,8 @@ export default function Home() {
 
   return (
     <Screen>
-      <Text style={styles.title}>Il tuo piano di questa settimana</Text>
-      <Text style={styles.subtitle}>
-        Livello di difficoltà attuale: {plan.difficultyTierSnapshot} di 3
-      </Text>
+      <Text style={styles.title}>{t('home.title')}</Text>
+      <Text style={styles.subtitle}>{t('home.subtitle', { tier: plan.difficultyTierSnapshot })}</Text>
       {plan.days.map((day) => (
         <DayRow key={day.dayIndex} day={day} planId={plan.id} isToday={day.dayIndex === todayIndex} />
       ))}

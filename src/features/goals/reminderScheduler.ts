@@ -1,6 +1,8 @@
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 
+import i18n from '../../i18n';
+
 const REMINDER_NOTIFICATION_ID = 'daily-training-reminder';
 const ANDROID_CHANNEL_ID = 'training-reminders';
 
@@ -26,7 +28,7 @@ export async function syncDailyReminder(
 
   if (Platform.OS === 'android') {
     await Notifications.setNotificationChannelAsync(ANDROID_CHANNEL_ID, {
-      name: 'Promemoria allenamento',
+      name: i18n.t('notifications.reminderChannelName'),
       importance: Notifications.AndroidImportance.DEFAULT,
     });
   }
@@ -37,8 +39,8 @@ export async function syncDailyReminder(
   await Notifications.scheduleNotificationAsync({
     identifier: REMINDER_NOTIFICATION_ID,
     content: {
-      title: 'È ora di allenarti',
-      body: 'Il tuo allenamento a corpo libero di oggi ti aspetta.',
+      title: i18n.t('notifications.reminderTitle'),
+      body: i18n.t('notifications.reminderBody'),
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,

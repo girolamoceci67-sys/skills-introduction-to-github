@@ -1,5 +1,6 @@
 import { Tabs } from 'expo-router';
 import { Text } from 'react-native';
+import { useTranslation } from 'react-i18next';
 
 import { colors } from '../../src/theme/theme';
 
@@ -12,6 +13,8 @@ function TabIcon({ symbol, focused }: { symbol: string; focused: boolean }) {
 }
 
 export default function TabsLayout() {
+  const { t } = useTranslation();
+
   return (
     <Tabs
       screenOptions={{
@@ -24,21 +27,21 @@ export default function TabsLayout() {
       <Tabs.Screen
         name="home"
         options={{
-          title: 'Home',
+          title: t('tabs.home'),
           tabBarIcon: ({ focused }) => <TabIcon symbol="🏠" focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="library"
         options={{
-          title: 'Libreria',
+          title: t('tabs.library'),
           tabBarIcon: ({ focused }) => <TabIcon symbol="📚" focused={focused} />,
         }}
       />
       <Tabs.Screen
         name="progress"
         options={{
-          title: 'Progressi',
+          title: t('tabs.progress'),
           tabBarIcon: ({ focused }) => <TabIcon symbol="📈" focused={focused} />,
         }}
       />

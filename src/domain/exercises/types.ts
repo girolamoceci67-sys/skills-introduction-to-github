@@ -24,22 +24,30 @@ export type ExerciseVariantKind = 'easier' | 'base' | 'harder';
 /** 'hold' = mantenimento isometrico a tempo (es. plank); 'reps' = ripetizioni dinamiche. */
 export type MovementType = 'reps' | 'hold';
 
-export interface ExerciseVariant {
+/**
+ * Contenuto localizzabile (nome, istruzioni, segnali, varianti) di un esercizio.
+ * Vive nelle risorse i18n per lingua, non qui: questo tipo descrive solo la forma
+ * di quel contenuto, risolto a runtime con useExerciseContent(exerciseId).
+ */
+export interface ExerciseVariantContent {
   name: string;
   instructions: string[];
   executionCues: string[];
 }
 
+export interface ExerciseContent {
+  name: string;
+  instructions: string[];
+  executionCues: string[];
+  easierVariant: ExerciseVariantContent;
+  harderVariant: ExerciseVariantContent;
+}
+
 export interface Exercise {
   id: string;
-  name: string;
   muscleGroup: MuscleGroup;
   baseDifficultyTier: DifficultyTier;
   movementType: MovementType;
-  instructions: string[];
-  executionCues: string[];
-  easierVariant: ExerciseVariant;
-  harderVariant: ExerciseVariant;
   contraindicationTags: LimitationTag[];
   spaceRequirement: '2x2m';
 }

@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { PrimaryButton } from '../../src/components/PrimaryButton';
 import { Screen } from '../../src/components/Screen';
@@ -10,6 +11,7 @@ import { useOnboardingStore } from '../../src/features/onboarding/onboardingStor
 import { colors, spacing, typography } from '../../src/theme/theme';
 
 export default function OnboardingAvailability() {
+  const { t } = useTranslation();
   const daysPerWeekAvailable = useOnboardingStore((state) => state.daysPerWeekAvailable);
   const setDaysPerWeekAvailable = useOnboardingStore((state) => state.setDaysPerWeekAvailable);
 
@@ -17,23 +19,21 @@ export default function OnboardingAvailability() {
     <Screen>
       <StepProgress currentStep={3} totalSteps={4} />
       <View style={styles.header}>
-        <Text style={styles.title}>Quanti giorni a settimana puoi allenarti?</Text>
-        <Text style={styles.subtitle}>
-          Distribuiremo gli allenamenti nella settimana lasciando spazio al recupero.
-        </Text>
+        <Text style={styles.title}>{t('onboarding.availabilityTitle')}</Text>
+        <Text style={styles.subtitle}>{t('onboarding.availabilitySubtitle')}</Text>
       </View>
       <View style={styles.options}>
         {daysPerWeekOptions.map((days) => (
           <SelectableCard
             key={days}
-            title={`${days} giorni a settimana`}
+            title={t('onboarding.daysPerWeek', { count: days })}
             selected={daysPerWeekAvailable === days}
             onPress={() => setDaysPerWeekAvailable(days)}
           />
         ))}
       </View>
       <PrimaryButton
-        label="Continua"
+        label={t('common.continue')}
         disabled={!daysPerWeekAvailable}
         onPress={() => router.push('/onboarding/limitations')}
       />

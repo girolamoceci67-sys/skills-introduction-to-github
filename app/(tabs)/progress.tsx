@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
 import { format, parseISO } from 'date-fns';
-import { it } from 'date-fns/locale';
 import { BarChart } from 'react-native-gifted-charts';
+import { useTranslation } from 'react-i18next';
 
 import { NumberPicker } from '../../src/components/NumberPicker';
 import { PrimaryButton } from '../../src/components/PrimaryButton';
@@ -14,31 +14,14 @@ import { getSessionHistory } from '../../src/data/repositories/sessionRepository
 import { getCurrentUser } from '../../src/data/repositories/userRepository';
 import { bumpRefreshBus, useRefreshBus } from '../../src/data/refreshBus';
 import { computeCurrentStreak, computeWeeklyAdherence } from '../../src/domain/engine/streak';
-import type {
-  PerceivedDifficulty,
-  UserProfile,
-  WeeklyGoal,
-  WorkoutSession,
-  WorkoutSessionStatus,
-} from '../../src/domain/exercises/types';
+import type { UserProfile, WeeklyGoal, WorkoutSession } from '../../src/domain/exercises/types';
 import { syncDailyReminder } from '../../src/features/goals/reminderScheduler';
+import { dateFnsLocaleFor } from '../../src/i18n/dateLocale';
 import { colors, radii, spacing, typography } from '../../src/theme/theme';
 import { currentWeekStartDate } from '../../src/utils/week';
 
 const REMINDER_TIME_OPTIONS = ['07:00', '08:00', '12:30', '18:00', '19:30', '21:00'];
 const GOAL_TARGET_OPTIONS = [1, 2, 3, 4, 5, 6, 7];
-
-const STATUS_LABELS: Record<WorkoutSessionStatus, string> = {
-  completed: 'Completata',
-  abandoned: 'Abbandonata',
-  skipped: 'Saltata',
-};
-
-const FEEDBACK_LABELS: Record<PerceivedDifficulty, string> = {
-  easy: 'Facile',
-  right: 'Giusto',
-  hard: 'Difficile',
-};
 
 type LoadState =
   | { status: 'loading' }
@@ -54,6 +37,7 @@ type LoadState =
     };
 
 export default function Progress() {
+  const { t, i18n } = useTranslation();
   const version = useRefreshBus((state) => state.version);
   const [state, setState] = useState<LoadState>({ status: 'loading' });
   const [editingGoal, setEditingGoal] = useState(false);
@@ -114,7 +98,7 @@ export default function Progress() {
     return (
       <Screen>
         <View style={styles.center}>
-          <Text style={styles.title}>Profilo non trovato</Text>
+          <Text style={styles.title}>{t('progress.noProfile')}</Text>
         </View>
       </Screen>
     );
@@ -124,14 +108,15 @@ export default function Progress() {
     return (
       <Screen>
         <View style={styles.center}>
-          <Text style={styles.title}>Non siamo riusciti a caricare i progressi</Text>
-          <PrimaryButton label="Riprova" onPress={bumpRefreshBus} />
+          <Text style={styles.title}>{t('progress.loadErrorTitle')}</Text>
+          <PrimaryButton label={t('common.retry')} onPress={bumpRefreshBus} />
         </View>
       </Screen>
     );
   }
 
   const { user, streak, adherence, history, goal } = state;
+  const dateLocale = dateFnsLocaleFor(i18n.language);
   const chartData = adherence.map((point) => ({
     value: point.adherencePercent,
     label: format(parseISO(point.weekStartDate), 'dd/MM'),
@@ -159,27 +144,22 @@ export default function Progress() {
     setSavingGoal(false);
     setEditingGoal(false);
     if (!reminderResult.ok) {
-      Alert.alert(
-        'Promemoria non attivato',
-        'L’obiettivo è stato salvato, ma senza il permesso di inviare notifiche non possiamo ricordarti di allenarti. Puoi abilitarlo dalle impostazioni del telefono.'
-      );
+      Alert.alert(t('progress.reminderNotEnabledTitle'), t('progress.reminderNotEnabledBody'));
     }
   }
 
   return (
     <Screen>
-      <Text style={styles.title}>Progressi</Text>
+      <Text style={styles.title}>{t('progress.title')}</Text>
 
       <View style={styles.card}>
         <Text style={styles.streakValue}>{streak}</Text>
-        <Text style={styles.streakLabel}>
-          {streak === 1 ? 'allenamento consecutivo' : 'allenamenti consecutivi'}
-        </Text>
+        <Text style={styles.streakLabel}>{t('progress.streak', { count: streak })}</Text>
       </View>
 
       {chartData.length > 0 && (
         <View style={styles.card}>
-          <Text style={styles.sectionTitle}>Aderenza settimanale</Text>
+          <Text style={styles.sectionTitle}>{t('progress.weeklyAdherence')}</Text>
           <BarChart
             data={chartData}
             barWidth={22}
@@ -195,33 +175,33 @@ export default function Progress() {
       )}
 
       <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Obiettivo di questa settimana</Text>
+        <Text style={styles.sectionTitle}>{t('progress.weeklyGoal')}</Text>
         {!editingGoal ? (
           <>
             {goal ? (
               <Text style={styles.body}>
-                {goal.completedSessions} di {goal.targetSessions} allenamenti completati
+                {t('progress.goalProgress', { completed: goal.completedSessions, target: goal.targetSessions })}
                 {goal.reminderEnabled && goal.reminderTimeOfDay
-                  ? ` · promemoria alle ${goal.reminderTimeOfDay}`
+                  ? t('progress.goalReminderSuffix', { time: goal.reminderTimeOfDay })
                   : ''}
               </Text>
             ) : (
-              <Text style={styles.body}>Non hai ancora impostato un obiettivo per questa settimana.</Text>
+              <Text style={styles.body}>{t('progress.noGoalSet')}</Text>
             )}
             <PrimaryButton
-              label={goal ? 'Modifica obiettivo' : 'Imposta obiettivo'}
+              label={goal ? t('progress.editGoal') : t('progress.setGoal')}
               variant="secondary"
               onPress={startEditingGoal}
             />
           </>
         ) : (
           <View style={styles.editForm}>
-            <Text style={styles.body}>Quanti allenamenti vuoi completare questa settimana?</Text>
+            <Text style={styles.body}>{t('progress.howManyThisWeek')}</Text>
             <NumberPicker options={GOAL_TARGET_OPTIONS} selected={draftTarget} onSelect={setDraftTarget} />
 
             <SelectableCard
-              title="Promemoria giornaliero"
-              description="Ti avvisiamo con una notifica ogni giorno"
+              title={t('progress.dailyReminderTitle')}
+              description={t('progress.dailyReminderDesc')}
               selected={draftReminderEnabled}
               onPress={() => setDraftReminderEnabled((v) => !v)}
             />
@@ -240,9 +220,9 @@ export default function Progress() {
             )}
 
             <View style={styles.editActions}>
-              <PrimaryButton label="Annulla" variant="secondary" onPress={() => setEditingGoal(false)} />
+              <PrimaryButton label={t('common.cancel')} variant="secondary" onPress={() => setEditingGoal(false)} />
               <PrimaryButton
-                label={savingGoal ? 'Salvataggio…' : 'Salva'}
+                label={savingGoal ? t('common.saving') : t('common.save')}
                 disabled={draftTarget === null || savingGoal}
                 onPress={saveGoal}
               />
@@ -252,18 +232,18 @@ export default function Progress() {
       </View>
 
       <View style={styles.card}>
-        <Text style={styles.sectionTitle}>Storico sessioni</Text>
+        <Text style={styles.sectionTitle}>{t('progress.sessionHistory')}</Text>
         {history.length === 0 ? (
-          <Text style={styles.body}>Nessuna sessione registrata ancora.</Text>
+          <Text style={styles.body}>{t('progress.noSessions')}</Text>
         ) : (
           history.map((session) => (
             <View key={session.id} style={styles.historyRow}>
               <Text style={styles.historyDate}>
-                {format(parseISO(session.startedAt), "d MMM yyyy", { locale: it })}
+                {format(parseISO(session.startedAt), 'd MMM yyyy', { locale: dateLocale })}
               </Text>
               <Text style={styles.historyMeta}>
-                {STATUS_LABELS[session.status]}
-                {session.postSessionFeedback ? ` · ${FEEDBACK_LABELS[session.postSessionFeedback]}` : ''}
+                {t(`sessionStatus.${session.status}`)}
+                {session.postSessionFeedback ? ` · ${t(`feedback.${session.postSessionFeedback}`)}` : ''}
               </Text>
             </View>
           ))

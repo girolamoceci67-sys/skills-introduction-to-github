@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { PrimaryButton } from '../../src/components/PrimaryButton';
 import { Screen } from '../../src/components/Screen';
@@ -9,6 +10,7 @@ import { useOnboardingStore } from '../../src/features/onboarding/onboardingStor
 import { colors, spacing, typography } from '../../src/theme/theme';
 
 export default function OnboardingSummary() {
+  const { t } = useTranslation();
   const { startingLevel, goal, daysPerWeekAvailable, limitations, reset } = useOnboardingStore();
   const [status, setStatus] = useState<'saving' | 'error'>('saving');
 
@@ -38,10 +40,10 @@ export default function OnboardingSummary() {
     return (
       <Screen>
         <View style={styles.center}>
-          <Text style={styles.title}>Non siamo riusciti a salvare il profilo</Text>
-          <Text style={styles.subtitle}>Controlla le risposte date nei passaggi precedenti e riprova.</Text>
+          <Text style={styles.title}>{t('onboarding.saveErrorTitle')}</Text>
+          <Text style={styles.subtitle}>{t('onboarding.saveErrorSubtitle')}</Text>
         </View>
-        <PrimaryButton label="Torna all'inizio" onPress={() => router.replace('/onboarding')} />
+        <PrimaryButton label={t('onboarding.backToStart')} onPress={() => router.replace('/onboarding')} />
       </Screen>
     );
   }
@@ -50,7 +52,7 @@ export default function OnboardingSummary() {
     <Screen>
       <View style={styles.center}>
         <ActivityIndicator color={colors.primary} size="large" />
-        <Text style={styles.title}>Stiamo preparando il tuo piano</Text>
+        <Text style={styles.title}>{t('onboarding.preparingPlan')}</Text>
       </View>
     </Screen>
   );

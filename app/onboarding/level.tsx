@@ -1,15 +1,18 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
+import { useTranslation } from 'react-i18next';
 
 import { PrimaryButton } from '../../src/components/PrimaryButton';
 import { Screen } from '../../src/components/Screen';
 import { SelectableCard } from '../../src/components/SelectableCard';
 import { StepProgress } from '../../src/components/StepProgress';
-import { startingLevelOptions } from '../../src/features/onboarding/onboardingContent';
+import { useOnboardingOptions } from '../../src/features/onboarding/onboardingContent';
 import { useOnboardingStore } from '../../src/features/onboarding/onboardingStore';
 import { colors, spacing, typography } from '../../src/theme/theme';
 
 export default function OnboardingLevel() {
+  const { t } = useTranslation();
+  const { startingLevelOptions } = useOnboardingOptions();
   const startingLevel = useOnboardingStore((state) => state.startingLevel);
   const setStartingLevel = useOnboardingStore((state) => state.setStartingLevel);
 
@@ -17,8 +20,8 @@ export default function OnboardingLevel() {
     <Screen>
       <StepProgress currentStep={1} totalSteps={4} />
       <View style={styles.header}>
-        <Text style={styles.title}>Da dove parti?</Text>
-        <Text style={styles.subtitle}>Serve per calibrare l’intensità del primo piano.</Text>
+        <Text style={styles.title}>{t('onboarding.levelTitle')}</Text>
+        <Text style={styles.subtitle}>{t('onboarding.levelSubtitle')}</Text>
       </View>
       <View style={styles.options}>
         {startingLevelOptions.map((option) => (
@@ -32,7 +35,7 @@ export default function OnboardingLevel() {
         ))}
       </View>
       <PrimaryButton
-        label="Continua"
+        label={t('common.continue')}
         disabled={!startingLevel}
         onPress={() => router.push('/onboarding/goal')}
       />
