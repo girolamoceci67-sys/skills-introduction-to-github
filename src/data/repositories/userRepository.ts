@@ -31,9 +31,13 @@ function toDomain(model: UserProfileModel): UserProfile {
   };
 }
 
-/** In v1 l'app è single-profile: esiste al più un UserProfile locale. */
+/**
+ * In v1 l'app è single-profile: esiste al più un UserProfile locale. Ordina comunque per data di
+ * creazione decrescente (il più recente prima): se per qualsiasi motivo esistesse più di una riga
+ * (es. onboarding ripetuto), l'app deve leggere sempre l'ultimo profilo creato, non uno qualsiasi.
+ */
 export async function getCurrentUser(): Promise<UserProfile | null> {
-  const rows = await collection().query(Q.take(1)).fetch();
+  const rows = await collection().query(Q.sortBy('profile_created_at', Q.desc), Q.take(1)).fetch();
   return rows[0] ? toDomain(rows[0]) : null;
 }
 
@@ -47,6 +51,11 @@ export async function createUserFromOnboarding(input: {
   dumbbellMaxKg: number | null;
 }): Promise<UserProfile> {
   const created = await database.write(async () => {
+    // Applica davvero la semantica single-profile: se per qualsiasi motivo esiste già un
+    // profilo (es. onboarding rifatto senza cancellare i dati), lo rimuove prima di crearne
+    // uno nuovo, così getCurrentUser() non può mai ambiguamente leggere quello vecchio.
+    const existing = await collection().query().fetch();
+    await Promise.all(existing.map((row) => row.destroyPermanently()));
     return collection().create((model) => {
       model.createdAt = new Date().toISOString();
       model.startingLevel = input.startingLevel;
