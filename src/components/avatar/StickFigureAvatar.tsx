@@ -28,6 +28,7 @@ export function StickFigureAvatar({
   viewBoxHeight,
   groundY,
   durationMs,
+  showDumbbell,
 }: ExerciseAvatarAnimation) {
   const progress = useSharedValue(0);
 
@@ -81,6 +82,17 @@ export function StickFigureAvatar({
   }));
   const elbowJointProps = useAnimatedProps(() => ({ cx: pose.value.elbow.x, cy: pose.value.elbow.y }));
   const kneeJointProps = useAnimatedProps(() => ({ cx: pose.value.knee.x, cy: pose.value.knee.y }));
+  // Manubrio schematico: una barra corta centrata sulla mano con un disco a ogni estremità.
+  // L'offset orizzontale fisso è una semplificazione voluta (coerente con lo stile minimale
+  // della figura), non un manubrio orientato secondo l'angolo reale dell'avambraccio.
+  const dumbbellBarProps = useAnimatedProps(() => ({
+    x1: pose.value.hand.x - 7,
+    y1: pose.value.hand.y,
+    x2: pose.value.hand.x + 7,
+    y2: pose.value.hand.y,
+  }));
+  const dumbbellLeftPlateProps = useAnimatedProps(() => ({ cx: pose.value.hand.x - 7, cy: pose.value.hand.y }));
+  const dumbbellRightPlateProps = useAnimatedProps(() => ({ cx: pose.value.hand.x + 7, cy: pose.value.hand.y }));
 
   return (
     <View style={styles.wrap}>
@@ -99,6 +111,13 @@ export function StickFigureAvatar({
         <AnimatedCircle animatedProps={elbowJointProps} r={3} fill={colors.primaryDark} />
         <AnimatedCircle animatedProps={kneeJointProps} r={3.5} fill={colors.primaryDark} />
         <AnimatedCircle animatedProps={headProps} r={9} fill={colors.primary} />
+        {showDumbbell && (
+          <>
+            <AnimatedLine animatedProps={dumbbellBarProps} stroke={colors.accent} strokeWidth={2.5} strokeLinecap="round" />
+            <AnimatedCircle animatedProps={dumbbellLeftPlateProps} r={4} fill={colors.accent} />
+            <AnimatedCircle animatedProps={dumbbellRightPlateProps} r={4} fill={colors.accent} />
+          </>
+        )}
       </Svg>
     </View>
   );
