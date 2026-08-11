@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "CorpoLibero",
+    "name": "Corpo e Salute",
     "slug": "corpolibero",
     "scheme": "corpolibero",
     "version": "1.0.0",
@@ -14,7 +14,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
+        "backgroundColor": "#1E6B4F",
         "foregroundImage": "./assets/android-icon-foreground.png",
         "backgroundImage": "./assets/android-icon-background.png",
         "monochromeImage": "./assets/android-icon-monochrome.png"
