@@ -168,6 +168,8 @@ const es: LocaleResource = {
     feedbackTitle: '¿Cómo ha ido?',
     loadLabel: 'Carga (kg)',
     exerciseFeedbackTitle: '¿Cómo ha ido este ejercicio?',
+    muteAudio: 'Silenciar audio',
+    unmuteAudio: 'Activar audio',
   },
   celebration: {
     title: '¡Entrenamiento completado!',

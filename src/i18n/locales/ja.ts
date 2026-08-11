@@ -163,6 +163,8 @@ const ja: LocaleResource = {
     feedbackTitle: '今日の感覚はどうでしたか？',
     loadLabel: '重量（kg）',
     exerciseFeedbackTitle: 'この種目の感覚はどうでしたか？',
+    muteAudio: '音声をミュート',
+    unmuteAudio: 'ミュート解除',
   },
   celebration: {
     title: 'トレーニング完了！',

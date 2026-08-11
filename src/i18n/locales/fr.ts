@@ -169,6 +169,8 @@ const fr: LocaleResource = {
     feedbackTitle: 'Comment ça s’est passé ?',
     loadLabel: 'Charge (kg)',
     exerciseFeedbackTitle: 'Comment avez-vous ressenti cet exercice ?',
+    muteAudio: 'Couper le son',
+    unmuteAudio: 'Activer le son',
   },
   celebration: {
     title: 'Séance terminée !',

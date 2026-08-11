@@ -9,6 +9,7 @@ import { CountdownTimer } from '../../../src/components/CountdownTimer';
 import { NumberPicker } from '../../../src/components/NumberPicker';
 import { PrimaryButton } from '../../../src/components/PrimaryButton';
 import { Screen } from '../../../src/components/Screen';
+import { useSessionAudio } from '../../../src/domain/audio/useSessionAudio';
 import { loadOptionsKg, onSessionFeedback } from '../../../src/domain/engine/adaptEngine';
 import { estimatedRepsDurationSeconds } from '../../../src/domain/engine/progressionRules';
 import { dumbbellLibrary } from '../../../src/domain/exercises/dumbbellLibrary';
@@ -71,6 +72,29 @@ export default function GuidedSession() {
   // Sovrascrittura manuale del carico consigliato per l'esercizio manubri in corso, valida solo per questa sessione.
   const [loadOverrideKg, setLoadOverrideKg] = useState<number | null>(null);
   const pendingAdvance = useRef<PendingAdvance>('next_set');
+  const { muted, toggleMuted, startBackgroundMusic, stopBackgroundMusic, playCue } = useSessionAudio();
+  const previousPhase = useRef<Phase | null>(null);
+
+  // Musica di sottofondo attiva durante la parte "attiva" della sessione (esercizio, riposo,
+  // feedback per singolo esercizio); sospesa prima dell'inizio e dopo la fine.
+  useEffect(() => {
+    const activePhases: Phase[] = ['exercise', 'rest', 'exercise_feedback'];
+    if (activePhases.includes(phase)) {
+      startBackgroundMusic();
+    } else {
+      stopBackgroundMusic();
+    }
+  }, [phase, startBackgroundMusic, stopBackgroundMusic]);
+
+  // Suoni brevi ai cambi di fase: inizio esercizio, inizio riposo, fine sessione.
+  useEffect(() => {
+    if (previousPhase.current !== phase) {
+      if (phase === 'exercise') playCue('go');
+      else if (phase === 'rest') playCue('rest');
+      else if (phase === 'celebration') playCue('complete');
+      previousPhase.current = phase;
+    }
+  }, [phase, playCue]);
 
   useEffect(() => {
     let cancelled = false;
@@ -260,6 +284,16 @@ export default function GuidedSession() {
               <Text style={styles.exitLabel}>{t('common.exit')}</Text>
             </Pressable>
           ),
+          headerRight: () => (
+            <Pressable
+              onPress={toggleMuted}
+              accessibilityRole="button"
+              accessibilityLabel={muted ? t('session.unmuteAudio') : t('session.muteAudio')}
+              hitSlop={12}
+            >
+              <Text style={styles.muteIcon}>{muted ? '🔇' : '🔊'}</Text>
+            </Pressable>
+          ),
         }}
       />
 
@@ -414,6 +448,7 @@ const styles = StyleSheet.create({
   repsTarget: { ...typography.title, fontSize: 40, color: colors.text },
   feedbackRow: { flexDirection: 'row', gap: spacing.sm, width: '100%' },
   exitLabel: { ...typography.body, color: colors.primary, fontWeight: '600' },
+  muteIcon: { fontSize: 20 },
   loadBlock: { alignItems: 'center', gap: spacing.xs, marginBottom: spacing.sm },
   loadLabel: { ...typography.caption, color: colors.textMuted },
 });

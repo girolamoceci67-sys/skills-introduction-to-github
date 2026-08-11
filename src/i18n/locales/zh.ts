@@ -163,6 +163,8 @@ const zh: LocaleResource = {
     feedbackTitle: '这次感觉如何？',
     loadLabel: '重量（千克）',
     exerciseFeedbackTitle: '这个动作感觉如何？',
+    muteAudio: '静音',
+    unmuteAudio: '取消静音',
   },
   celebration: {
     title: '训练完成！',

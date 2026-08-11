@@ -153,6 +153,8 @@ export interface LocaleResource {
     feedbackTitle: string;
     loadLabel: string;
     exerciseFeedbackTitle: string;
+    muteAudio: string;
+    unmuteAudio: string;
   };
   celebration: {
     title: string;

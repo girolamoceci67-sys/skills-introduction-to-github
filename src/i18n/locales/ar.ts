@@ -163,6 +163,8 @@ const ar: LocaleResource = {
     feedbackTitle: 'كيف سارت الأمور؟',
     loadLabel: 'الحمل (كجم)',
     exerciseFeedbackTitle: 'كيف كان هذا التمرين؟',
+    muteAudio: 'كتم الصوت',
+    unmuteAudio: 'تفعيل الصوت',
   },
   celebration: {
     title: 'اكتمل التمرين!',

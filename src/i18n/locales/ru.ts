@@ -169,6 +169,8 @@ const ru: LocaleResource = {
     feedbackTitle: 'Как всё прошло?',
     loadLabel: 'Вес (кг)',
     exerciseFeedbackTitle: 'Как ощущалось это упражнение?',
+    muteAudio: 'Выключить звук',
+    unmuteAudio: 'Включить звук',
   },
   celebration: {
     title: 'Тренировка завершена!',

@@ -168,6 +168,8 @@ const pt: LocaleResource = {
     feedbackTitle: 'Como correu?',
     loadLabel: 'Carga (kg)',
     exerciseFeedbackTitle: 'Como correu este exercício?',
+    muteAudio: 'Silenciar áudio',
+    unmuteAudio: 'Ativar áudio',
   },
   celebration: {
     title: 'Treino concluído!',
