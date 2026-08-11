@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ExerciseAvatar } from '../../src/components/avatar/ExerciseAvatar';
 import { Screen } from '../../src/components/Screen';
 import { Tag } from '../../src/components/Tag';
+import { dumbbellLibrary } from '../../src/domain/exercises/dumbbellLibrary';
 import { useExerciseContent } from '../../src/domain/exercises/exerciseContent';
 import { exerciseLibrary } from '../../src/domain/exercises/library';
 import { useLabels } from '../../src/domain/exercises/labels';
@@ -34,7 +35,7 @@ export default function ExerciseDetail() {
   const { t } = useTranslation();
   const { muscleGroupLabels, variantLabels, limitationLabels } = useLabels();
   const { exerciseId } = useLocalSearchParams<{ exerciseId: string }>();
-  const exercise = exerciseLibrary.find((e) => e.id === exerciseId);
+  const exercise = [...exerciseLibrary, ...dumbbellLibrary].find((e) => e.id === exerciseId);
   // Gli hook non possono essere condizionali: chiamato sempre, con stringa vuota se l'esercizio non esiste.
   const content = useExerciseContent(exercise?.id ?? '');
 
@@ -51,7 +52,17 @@ export default function ExerciseDetail() {
       <Stack.Screen options={{ headerShown: true, title: content.name }} />
       <View style={styles.tagsRow}>
         <Tag label={muscleGroupLabels[exercise.muscleGroup]} />
-        <Tag label={t('library.levelBadge', { tier: exercise.baseDifficultyTier })} />
+        <Tag
+          label={
+            exercise.equipment === 'dumbbell' && exercise.loadRangeKg
+              ? t('library.levelBadgeDumbbell', {
+                  tier: exercise.baseDifficultyTier,
+                  min: exercise.loadRangeKg.min,
+                  max: exercise.loadRangeKg.max,
+                })
+              : t('library.levelBadge', { tier: exercise.baseDifficultyTier })
+          }
+        />
       </View>
 
       <ExerciseAvatar exerciseId={exercise.id} />

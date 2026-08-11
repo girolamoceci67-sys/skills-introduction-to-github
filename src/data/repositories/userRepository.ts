@@ -23,6 +23,11 @@ function toDomain(model: UserProfileModel): UserProfile {
     difficultyScore: model.difficultyScore,
     consecutiveEasyCount: model.consecutiveEasyCount,
     consecutiveHardOrMissedCount: model.consecutiveHardOrMissedCount,
+    hasDumbbells: model.hasDumbbells,
+    dumbbellMinKg: model.dumbbellMinKg,
+    dumbbellMaxKg: model.dumbbellMaxKg,
+    dumbbellModuleUnlocked: model.dumbbellModuleUnlocked,
+    dumbbellReaskDismissed: model.dumbbellReaskDismissed,
   };
 }
 
@@ -37,6 +42,9 @@ export async function createUserFromOnboarding(input: {
   goal: GoalType;
   daysPerWeekAvailable: number;
   limitations: LimitationTag[];
+  hasDumbbells: boolean;
+  dumbbellMinKg: number | null;
+  dumbbellMaxKg: number | null;
 }): Promise<UserProfile> {
   const created = await database.write(async () => {
     return collection().create((model) => {
@@ -48,6 +56,13 @@ export async function createUserFromOnboarding(input: {
       model.difficultyScore = initialDifficultyScoreFor(input.startingLevel);
       model.consecutiveEasyCount = 0;
       model.consecutiveHardOrMissedCount = 0;
+      model.hasDumbbells = input.hasDumbbells;
+      model.dumbbellMinKg = input.dumbbellMinKg;
+      model.dumbbellMaxKg = input.dumbbellMaxKg;
+      // Sblocco immediato solo se confermato in onboarding (logica B): altrimenti si ri-chiede
+      // al raggiungimento della soglia di progresso nel modulo a corpo libero.
+      model.dumbbellModuleUnlocked = input.hasDumbbells;
+      model.dumbbellReaskDismissed = false;
     });
   });
   bumpRefreshBus();
@@ -64,6 +79,11 @@ export async function updateUser(user: UserProfile): Promise<UserProfile> {
       record.daysPerWeekAvailable = user.daysPerWeekAvailable;
       record.limitations = user.limitations;
       record.goal = user.goal;
+      record.hasDumbbells = user.hasDumbbells;
+      record.dumbbellMinKg = user.dumbbellMinKg;
+      record.dumbbellMaxKg = user.dumbbellMaxKg;
+      record.dumbbellModuleUnlocked = user.dumbbellModuleUnlocked;
+      record.dumbbellReaskDismissed = user.dumbbellReaskDismissed;
     })
   );
   bumpRefreshBus();

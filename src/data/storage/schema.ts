@@ -1,7 +1,7 @@
 import { appSchema, tableSchema } from '@nozbe/watermelondb';
 
 export const schema = appSchema({
-  version: 1,
+  version: 2,
   tables: [
     tableSchema({
       name: 'user_profiles',
@@ -15,6 +15,11 @@ export const schema = appSchema({
         { name: 'difficulty_score', type: 'number' },
         { name: 'consecutive_easy_count', type: 'number' },
         { name: 'consecutive_hard_or_missed_count', type: 'number' },
+        { name: 'has_dumbbells', type: 'boolean' },
+        { name: 'dumbbell_min_kg', type: 'number', isOptional: true },
+        { name: 'dumbbell_max_kg', type: 'number', isOptional: true },
+        { name: 'dumbbell_module_unlocked', type: 'boolean' },
+        { name: 'dumbbell_reask_dismissed', type: 'boolean' },
       ],
     }),
     tableSchema({

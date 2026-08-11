@@ -18,7 +18,7 @@ export default function OnboardingGoal() {
 
   return (
     <Screen>
-      <StepProgress currentStep={2} totalSteps={4} />
+      <StepProgress currentStep={2} totalSteps={5} />
       <View style={styles.header}>
         <Text style={styles.title}>{t('onboarding.goalTitle')}</Text>
         <Text style={styles.subtitle}>{t('onboarding.goalSubtitle')}</Text>

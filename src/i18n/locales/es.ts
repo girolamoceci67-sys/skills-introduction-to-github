@@ -52,6 +52,13 @@ const es: LocaleResource = {
       'Evitaremos o adaptaremos los ejercicios que las involucren directamente. Puedes seleccionar más de una.',
     limitationsDisclaimer:
       'Esta información solo se usa para personalizar la selección de ejercicios y no constituye una evaluación médica.',
+    equipmentTitle: '¿Tienes mancuernas compactas o ajustables?',
+    equipmentSubtitle:
+      'Si las tienes, desbloquearemos un módulo de ejercicios con mancuernas para alternar o combinar con los de peso corporal.',
+    equipmentYes: 'Sí, tengo',
+    equipmentNo: 'No tengo',
+    equipmentMinLabel: 'Carga mínima disponible (kg)',
+    equipmentMaxLabel: 'Carga máxima disponible (kg)',
     createPlan: 'Crear mi plan',
     preparingPlan: 'Estamos preparando tu plan',
     saveErrorTitle: 'No hemos podido guardar tu perfil',
@@ -109,11 +116,29 @@ const es: LocaleResource = {
     noProfileTitle: 'Perfil no encontrado',
     noProfileSubtitle: 'Reinicia la app para repetir el registro inicial.',
     errorTitle: 'No hemos podido generar tu plan',
+    dumbbellReaskTitle: '¿Tienes mancuernas?',
+    dumbbellReaskSubtitle: 'Ahora que has entrenado con constancia, podrías desbloquear el módulo de mancuernas.',
+    dumbbellReaskCta: 'Responder',
+    dumbbellReaskDismiss: 'Ahora no',
+  },
+  dumbbellReask: {
+    title: '¿Tienes mancuernas compactas o ajustables?',
+    subtitle:
+      'Si las tienes, desbloquearemos un módulo de ejercicios con mancuernas para alternar o combinar con los de peso corporal.',
+    yes: 'Sí, tengo',
+    no: 'No tengo',
+    minLabel: 'Carga mínima disponible (kg)',
+    maxLabel: 'Carga máxima disponible (kg)',
+    confirm: 'Confirmar',
+    skip: 'Ahora no',
   },
   library: {
     title: 'Biblioteca de ejercicios',
     subtitle: 'Todos los ejercicios son con el peso corporal, pensados para un espacio en casa de al menos 2x2 m.',
+    subtitleWithDumbbell:
+      'Ejercicios con peso corporal y con mancuernas, pensados para un espacio en casa de al menos 2x2 m.',
     levelBadge: 'Nivel base {{tier}} de 3',
+    levelBadgeDumbbell: 'Nivel base {{tier}} de 3 · {{min}}–{{max}} kg',
     excludedBadge: 'Excluido por algunas limitaciones',
     notFound: 'Ejercicio no encontrado',
     previewCaption: 'Vista previa del movimiento',
@@ -138,6 +163,8 @@ const es: LocaleResource = {
     rest: 'Descanso',
     skipRest: 'Saltar descanso',
     feedbackTitle: '¿Cómo ha ido?',
+    loadLabel: 'Carga (kg)',
+    exerciseFeedbackTitle: '¿Cómo ha ido este ejercicio?',
   },
   celebration: {
     title: '¡Entrenamiento completado!',
@@ -150,6 +177,8 @@ const es: LocaleResource = {
     streak_one: '{{count}} entrenamiento consecutivo',
     streak_other: '{{count}} entrenamientos consecutivos',
     weeklyAdherence: 'Adherencia semanal',
+    loadProgression: 'Carga por ejercicio (mancuernas)',
+    loadLatest: 'última: {{kg}} kg',
     weeklyGoal: 'Objetivo de esta semana',
     goalProgress: '{{completed}} de {{target}} entrenamientos completados',
     goalReminderSuffix: ' · recordatorio a las {{time}}',
@@ -184,6 +213,10 @@ const es: LocaleResource = {
     push: 'Empuje',
     pull: 'Tracción',
     mobility_cardio: 'Movilidad y cardio',
+    chest: 'Pecho',
+    back: 'Espalda',
+    shoulders: 'Hombros',
+    arms: 'Brazos',
   },
   variants: {
     easier: 'Variante facilitada',
@@ -642,6 +675,358 @@ const es: LocaleResource = {
         name: 'Levantarse de la silla lento',
         instructions: ['Realiza el movimiento ralentizando tanto la fase de subida como la de bajada.'],
         executionCues: ['Ralentizar aumenta el trabajo requerido sin necesidad de saltar o empujar con fuerza.'],
+      },
+    },
+    'db-chest-floor-press': {
+      name: 'Press en el suelo',
+      instructions: [
+        'Túmbate boca arriba, rodillas flexionadas, un mancuerna en cada mano apoyada sobre el pecho.',
+        'Empuja las mancuernas hacia arriba hasta extender casi por completo los brazos.',
+        'Baja con control hasta que los codos rocen el suelo.',
+      ],
+      executionCues: [
+        'Los codos se mantienen a unos 45 grados del torso, no completamente abiertos.',
+        'Las muñecas se mantienen alineadas sobre los codos durante el empuje.',
+      ],
+      easierVariant: {
+        name: 'Press en el suelo con carga reducida',
+        instructions: ['Realiza el mismo movimiento con una mancuerna más ligera, reduciendo la amplitud si es necesario.'],
+        executionCues: ['Es mejor un movimiento completo con menos peso que uno parcial con más peso.'],
+      },
+      harderVariant: {
+        name: 'Press en el suelo con pausa abajo',
+        instructions: ['Realiza el press y, con los codos cerca del suelo, haz una pausa de 2 segundos.'],
+        executionCues: ['La pausa se mantiene controlada, sin rebotar en el suelo.'],
+      },
+    },
+    'db-chest-floor-fly': {
+      name: 'Aperturas en el suelo',
+      instructions: [
+        'Túmbate boca arriba, rodillas flexionadas, una mancuerna en cada mano, brazos extendidos sobre el pecho.',
+        'Abre los brazos lateralmente bajando las mancuernas con los codos ligeramente flexionados, hasta casi tocar el suelo.',
+        'Vuelve a juntar los brazos sobre el pecho siguiendo el mismo arco.',
+      ],
+      executionCues: [
+        'Los codos mantienen una ligera flexión fija durante todo el movimiento.',
+        'El movimiento es un arco amplio, no un empuje vertical.',
+      ],
+      easierVariant: {
+        name: 'Aperturas en el suelo con rango reducido',
+        instructions: ['Realiza el mismo movimiento abriendo los brazos solo parcialmente.'],
+        executionCues: ['Reduce la amplitud si sientes tensión en el hombro.'],
+      },
+      harderVariant: {
+        name: 'Aperturas en el suelo con pausa en apertura',
+        instructions: ['Realiza la apertura y, con los brazos casi en el suelo, mantén la posición 1-2 segundos.'],
+        executionCues: ['La pausa se mantiene ligera, sin forzar el hombro.'],
+      },
+    },
+    'db-back-bent-row': {
+      name: 'Remo con torso inclinado',
+      instructions: [
+        'Pies a la anchura de las caderas, rodillas ligeramente flexionadas, torso inclinado hacia delante, una mancuerna en cada mano.',
+        'Tira de las mancuernas hacia el abdomen llevando los codos atrás, acercando las escápulas.',
+        'Baja con control hasta extender casi por completo los brazos.',
+      ],
+      executionCues: [
+        'La espalda se mantiene larga durante todo el movimiento, sin curvarse.',
+        'El movimiento parte de la espalda, no de una simple flexión del codo.',
+      ],
+      easierVariant: {
+        name: 'Remo con torso menos inclinado',
+        instructions: ['Realiza el mismo movimiento inclinando menos el torso hacia delante, para reducir la carga en la espalda.'],
+        executionCues: ['Mantén igualmente la espalda larga.'],
+      },
+      harderVariant: {
+        name: 'Remo con pausa en la tracción',
+        instructions: ['Realiza el remo y, con los codos atrás, mantén la posición 1-2 segundos.'],
+        executionCues: ['Las escápulas se mantienen juntas durante la pausa.'],
+      },
+    },
+    'db-back-single-row': {
+      name: 'Remo a un brazo',
+      instructions: [
+        'Apoya la mano y la rodilla del mismo lado en una silla o superficie estable, torso paralelo al suelo.',
+        'Con la otra mano, tira de la mancuerna hacia la cadera llevando el codo atrás.',
+        'Baja con control y repite en el lado opuesto.',
+      ],
+      executionCues: [
+        'El torso se mantiene quieto, sin rotar durante la tracción.',
+        'El codo permanece cerca del torso durante el movimiento.',
+      ],
+      easierVariant: {
+        name: 'Remo a un brazo con rango reducido',
+        instructions: ['Realiza el mismo movimiento con un recorrido más pequeño.'],
+        executionCues: ['Reduce la amplitud si el torso tiende a rotar.'],
+      },
+      harderVariant: {
+        name: 'Remo a un brazo con pausa en la tracción',
+        instructions: ['Realiza la tracción y, con el codo atrás, mantén la posición 1-2 segundos.'],
+        executionCues: ['El torso se mantiene estable durante toda la pausa.'],
+      },
+    },
+    'db-shoulder-press': {
+      name: 'Press militar',
+      instructions: [
+        'De pie o sentado, una mancuerna en cada mano a la altura de los hombros, palmas hacia delante.',
+        'Empuja las mancuernas hacia arriba hasta extender casi por completo los brazos.',
+        'Baja con control hasta volver a la altura de los hombros.',
+      ],
+      executionCues: [
+        'Evita arquear la espalda durante el empuje: el torso se mantiene estable.',
+        'Las mancuernas siguen una trayectoria vertical, no hacia delante.',
+      ],
+      easierVariant: {
+        name: 'Press militar sentado',
+        instructions: ['Realiza el mismo movimiento sentado, con la espalda apoyada, para reducir la implicación del torso.'],
+        executionCues: ['Concéntrate solo en el movimiento de los brazos.'],
+      },
+      harderVariant: {
+        name: 'Press militar con brazos alternos',
+        instructions: ['Realiza el empuje con un brazo a la vez, manteniendo el torso estable.'],
+        executionCues: ['Evita inclinarte lateralmente durante el empuje a un brazo.'],
+      },
+    },
+    'db-shoulder-lateral-raise': {
+      name: 'Elevaciones laterales',
+      instructions: [
+        'De pie, una mancuerna en cada mano junto a las caderas, codos ligeramente flexionados.',
+        'Eleva los brazos lateralmente hasta la altura de los hombros.',
+        'Baja con control hasta la posición inicial.',
+      ],
+      executionCues: [
+        'El movimiento parte de los hombros, no de un impulso de los brazos.',
+        'Las muñecas se mantienen un poco más bajas que los codos durante la subida.',
+      ],
+      easierVariant: {
+        name: 'Elevaciones laterales con rango reducido',
+        instructions: ['Realiza el mismo movimiento elevando los brazos solo hasta la mitad.'],
+        executionCues: ['Reduce la amplitud si sientes tensión en el cuello.'],
+      },
+      harderVariant: {
+        name: 'Elevaciones laterales con pausa arriba',
+        instructions: ['Realiza la elevación y, con los brazos a la altura de los hombros, mantén la posición 1-2 segundos.'],
+        executionCues: ['Los hombros se mantienen bajos también durante la pausa.'],
+      },
+    },
+    'db-shoulder-front-raise': {
+      name: 'Elevaciones frontales',
+      instructions: [
+        'De pie, una mancuerna en cada mano delante de los muslos, codos ligeramente flexionados.',
+        'Eleva un brazo hacia delante hasta la altura de los hombros.',
+        'Baja con control y repite con el otro brazo o alterna.',
+      ],
+      executionCues: [
+        'El torso se mantiene quieto, sin usar el impulso de la espalda para levantar el peso.',
+        'El movimiento se detiene a la altura de los hombros, no más allá.',
+      ],
+      easierVariant: {
+        name: 'Elevaciones frontales con rango reducido',
+        instructions: ['Realiza el mismo movimiento elevando el brazo solo hasta la mitad.'],
+        executionCues: ['Reduce la amplitud si el torso tiende a inclinarse hacia atrás.'],
+      },
+      harderVariant: {
+        name: 'Elevaciones frontales con pausa arriba',
+        instructions: ['Realiza la elevación y, con el brazo a la altura de los hombros, mantén la posición 1-2 segundos.'],
+        executionCues: ['El torso se mantiene quieto durante toda la pausa.'],
+      },
+    },
+    'db-arms-bicep-curl': {
+      name: 'Curl de bíceps',
+      instructions: [
+        'De pie, una mancuerna en cada mano junto a las caderas, palmas hacia delante.',
+        'Flexiona los codos elevando las mancuernas hacia los hombros.',
+        'Baja con control hasta extender casi por completo los brazos.',
+      ],
+      executionCues: [
+        'Los codos se mantienen cerca del torso durante todo el movimiento.',
+        'Evita usar el impulso de la espalda para levantar el peso.',
+      ],
+      easierVariant: {
+        name: 'Curl de bíceps apoyado',
+        instructions: ['Realiza el mismo movimiento con la espalda apoyada en una pared, para reducir el impulso.'],
+        executionCues: ['El contacto con la pared ayuda a aislar el movimiento.'],
+      },
+      harderVariant: {
+        name: 'Curl de bíceps alterno con pausa',
+        instructions: ['Realiza el curl con un brazo a la vez, manteniendo la posición más alta 1-2 segundos.'],
+        executionCues: ['El brazo que no trabaja permanece extendido y relajado durante la alternancia.'],
+      },
+    },
+    'db-arms-hammer-curl': {
+      name: 'Curl martillo',
+      instructions: [
+        'De pie, una mancuerna en cada mano junto a las caderas, palmas hacia el cuerpo.',
+        'Flexiona los codos elevando las mancuernas hacia los hombros, manteniendo las palmas hacia dentro.',
+        'Baja con control hasta extender casi por completo los brazos.',
+      ],
+      executionCues: [
+        'Las muñecas se mantienen quietas y alineadas con los antebrazos durante todo el movimiento.',
+        'Los codos se mantienen cerca del torso.',
+      ],
+      easierVariant: {
+        name: 'Curl martillo apoyado',
+        instructions: ['Realiza el mismo movimiento con la espalda apoyada en una pared.'],
+        executionCues: ['El contacto con la pared reduce el impulso.'],
+      },
+      harderVariant: {
+        name: 'Curl martillo alterno con pausa',
+        instructions: ['Realiza el curl con un brazo a la vez, manteniendo la posición más alta 1-2 segundos.'],
+        executionCues: ['El torso se mantiene estable durante la alternancia.'],
+      },
+    },
+    'db-arms-tricep-extension': {
+      name: 'Extensión de tríceps sobre la cabeza',
+      instructions: [
+        'De pie o sentado, sujeta una mancuerna con ambas manos por encima de la cabeza, brazos casi extendidos.',
+        'Flexiona los codos bajando la mancuerna detrás de la cabeza.',
+        'Extiende los brazos volviendo a la posición inicial.',
+      ],
+      executionCues: [
+        'Los codos apuntan hacia delante, sin abrirse lateralmente.',
+        'El movimiento ocurre solo en el codo, el torso se mantiene quieto.',
+      ],
+      easierVariant: {
+        name: 'Extensión de tríceps con rango reducido',
+        instructions: ['Realiza el mismo movimiento reduciendo la profundidad del descenso.'],
+        executionCues: ['Reduce la amplitud si sientes tensión en el hombro.'],
+      },
+      harderVariant: {
+        name: 'Extensión de tríceps con pausa abajo',
+        instructions: ['Realiza la extensión y, con los codos flexionados, mantén la posición 1-2 segundos.'],
+        executionCues: ['Los codos se mantienen quietos durante la pausa.'],
+      },
+    },
+    'db-legs-goblet-squat': {
+      name: 'Sentadilla goblet',
+      instructions: [
+        'De pie, pies a la anchura de los hombros, una mancuerna sujeta verticalmente con ambas manos frente al pecho.',
+        'Flexiona las rodillas y baja como en una sentadilla, manteniendo la mancuerna cerca del cuerpo.',
+        'Sube empujando con los talones hasta la posición inicial.',
+      ],
+      executionCues: [
+        'Las rodillas siguen la dirección de las puntas de los pies.',
+        'El torso se mantiene lo más erguido posible durante el descenso.',
+      ],
+      easierVariant: {
+        name: 'Sentadilla goblet con rango reducido',
+        instructions: ['Realiza el mismo movimiento reduciendo la profundidad del descenso.'],
+        executionCues: ['Usa una mancuerna más ligera si la profundidad completa es difícil de controlar.'],
+      },
+      harderVariant: {
+        name: 'Sentadilla goblet con pausa abajo',
+        instructions: ['Realiza la sentadilla y, en el punto más bajo, mantén la posición 2 segundos.'],
+        executionCues: ['El torso se mantiene estable durante la pausa.'],
+      },
+    },
+    'db-legs-rdl': {
+      name: 'Peso muerto rumano',
+      instructions: [
+        'De pie, una mancuerna en cada mano delante de los muslos, rodillas ligeramente flexionadas.',
+        'Lleva las caderas atrás bajando las mancuernas a lo largo de las piernas, manteniendo la espalda larga.',
+        'Sube empujando las caderas hacia delante hasta la posición erguida.',
+      ],
+      executionCues: [
+        'Las mancuernas se mantienen cerca de las piernas durante todo el movimiento.',
+        'La espalda se mantiene larga, sin curvarse durante el descenso.',
+      ],
+      easierVariant: {
+        name: 'Peso muerto rumano con rango reducido',
+        instructions: ['Realiza el mismo movimiento bajando solo hasta la mitad del recorrido.'],
+        executionCues: ['Reduce la amplitud si la espalda tiene dificultad para mantenerse larga.'],
+      },
+      harderVariant: {
+        name: 'Peso muerto rumano con pausa abajo',
+        instructions: ['Realiza el peso muerto y, en el punto más bajo, mantén la posición 2 segundos.'],
+        executionCues: ['La espalda se mantiene larga también durante la pausa.'],
+      },
+    },
+    'db-core-russian-twist': {
+      name: 'Giro ruso con carga',
+      instructions: [
+        'Sentado, rodillas flexionadas, torso inclinado ligeramente hacia atrás, una mancuerna sujeta con ambas manos frente al pecho.',
+        'Rota el torso llevando la mancuerna a un lado, luego al otro.',
+        'Mantén un ritmo controlado durante toda la serie.',
+      ],
+      executionCues: [
+        'El movimiento parte del torso, no solo de los brazos.',
+        'Mantén la espalda larga, sin curvarla durante la rotación.',
+      ],
+      easierVariant: {
+        name: 'Giro ruso con pies en el suelo',
+        instructions: ['Realiza el mismo movimiento manteniendo los pies apoyados en el suelo, para más estabilidad.'],
+        executionCues: ['Usa una mancuerna más ligera si el torso tiene dificultad para mantenerse estable.'],
+      },
+      harderVariant: {
+        name: 'Giro ruso con pies elevados',
+        instructions: ['Realiza el giro manteniendo los pies elevados del suelo durante toda la serie.'],
+        executionCues: ['El equilibrio requiere un ritmo más lento y controlado.'],
+      },
+    },
+    'db-core-suitcase-carry': {
+      name: 'Paseo del granjero a un brazo',
+      instructions: [
+        'De pie, una mancuerna pesada sujeta con un brazo junto a la cadera, el otro brazo libre para el equilibrio.',
+        'Camina en línea recta o en el sitio manteniendo el torso erguido y los hombros nivelados.',
+        'Cambia de brazo a mitad de tiempo si la serie lo requiere.',
+      ],
+      executionCues: [
+        'Los hombros se mantienen nivelados, sin inclinarse hacia el lado de la carga.',
+        'Los pasos se mantienen cortos y controlados, sin prisas.',
+      ],
+      easierVariant: {
+        name: 'Paseo del granjero con carga reducida',
+        instructions: ['Realiza el mismo ejercicio con una mancuerna más ligera.'],
+        executionCues: ['Reduce la carga si los hombros tienden a desequilibrarse.'],
+      },
+      harderVariant: {
+        name: 'Paseo del granjero con pausa a mitad',
+        instructions: ['Realiza el paseo y, a mitad de tiempo, detente manteniendo la posición 2-3 segundos.'],
+        executionCues: ['El torso se mantiene erguido también durante la pausa.'],
+      },
+    },
+    'db-fullbody-thruster': {
+      name: 'Thruster (sentadilla + empuje)',
+      instructions: [
+        'De pie, una mancuerna en cada mano a la altura de los hombros, pies a la anchura de los hombros.',
+        'Baja en sentadilla, luego sube empujando con los talones y empujando al mismo tiempo las mancuernas por encima de la cabeza.',
+        'Baja con control devolviendo las mancuernas a la altura de los hombros.',
+      ],
+      executionCues: [
+        'El impulso hacia arriba parte de la fuerza de las piernas, no solo de los brazos.',
+        'El movimiento se mantiene fluido, sin pausas bruscas entre la sentadilla y el empuje.',
+      ],
+      easierVariant: {
+        name: 'Thruster en dos tiempos',
+        instructions: ['Realiza primero la sentadilla completa, luego el empuje sobre la cabeza como dos movimientos separados.'],
+        executionCues: ['Está bien dividir el movimiento hasta que resulte natural.'],
+      },
+      harderVariant: {
+        name: 'Thruster con pausa abajo',
+        instructions: ['Realiza el thruster y, en el punto más bajo de la sentadilla, mantén la posición 1-2 segundos antes de subir y empujar.'],
+        executionCues: ['El torso se mantiene estable durante la pausa.'],
+      },
+    },
+    'db-fullbody-renegade-row': {
+      name: 'Renegade row',
+      instructions: [
+        'En posición de plancha alta, una mancuerna en cada mano apoyada en el suelo bajo los hombros.',
+        'Tira de una mancuerna hacia la cadera manteniendo la pelvis estable, luego apóyala de nuevo en el suelo.',
+        'Repite en el lado opuesto, alternando.',
+      ],
+      executionCues: [
+        'La pelvis se mantiene paralela al suelo, sin rotar durante la tracción.',
+        'Unos pies ligeramente más separados ayudan a la estabilidad.',
+      ],
+      easierVariant: {
+        name: 'Renegade row de rodillas',
+        instructions: ['Realiza el mismo movimiento con las rodillas en el suelo en lugar de plancha alta.'],
+        executionCues: ['Reduce la carga en la pelvis manteniendo el gesto de la tracción.'],
+      },
+      harderVariant: {
+        name: 'Renegade row con flexión',
+        instructions: ['Realiza la tracción en cada lado, luego añade una flexión de brazos antes de repetir.'],
+        executionCues: ['Añade la flexión solo si consigues mantener la pelvis estable.'],
       },
     },
   },

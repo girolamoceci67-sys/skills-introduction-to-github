@@ -42,3 +42,6 @@ export function useOnboardingOptions() {
 }
 
 export const daysPerWeekOptions = [2, 3, 4, 5, 6];
+
+/** Coincide col vincolo v1 del modulo manubri: carico sempre compreso tra 5 e 25 kg. */
+export const DUMBBELL_RANGE_OPTIONS_KG = [5, 10, 15, 20, 25];

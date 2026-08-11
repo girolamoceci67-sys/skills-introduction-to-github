@@ -65,6 +65,12 @@ export interface LocaleResource {
     limitationsTitle: string;
     limitationsSubtitle: string;
     limitationsDisclaimer: string;
+    equipmentTitle: string;
+    equipmentSubtitle: string;
+    equipmentYes: string;
+    equipmentNo: string;
+    equipmentMinLabel: string;
+    equipmentMaxLabel: string;
     createPlan: string;
     preparingPlan: string;
     saveErrorTitle: string;
@@ -98,11 +104,27 @@ export interface LocaleResource {
     noProfileTitle: string;
     noProfileSubtitle: string;
     errorTitle: string;
+    dumbbellReaskTitle: string;
+    dumbbellReaskSubtitle: string;
+    dumbbellReaskCta: string;
+    dumbbellReaskDismiss: string;
+  };
+  dumbbellReask: {
+    title: string;
+    subtitle: string;
+    yes: string;
+    no: string;
+    minLabel: string;
+    maxLabel: string;
+    confirm: string;
+    skip: string;
   };
   library: {
     title: string;
     subtitle: string;
+    subtitleWithDumbbell: string;
     levelBadge: string;
+    levelBadgeDumbbell: string;
     excludedBadge: string;
     notFound: string;
     previewCaption: string;
@@ -126,6 +148,8 @@ export interface LocaleResource {
     rest: string;
     skipRest: string;
     feedbackTitle: string;
+    loadLabel: string;
+    exerciseFeedbackTitle: string;
   };
   celebration: {
     title: string;
@@ -138,6 +162,8 @@ export interface LocaleResource {
     streak_one: string;
     streak_other: string;
     weeklyAdherence: string;
+    loadProgression: string;
+    loadLatest: string;
     weeklyGoal: string;
     goalProgress: string;
     goalReminderSuffix: string;
@@ -170,6 +196,10 @@ export interface LocaleResource {
     core: string;
     push: string;
     pull: string;
+    chest: string;
+    back: string;
+    shoulders: string;
+    arms: string;
     mobility_cardio: string;
   };
   variants: {

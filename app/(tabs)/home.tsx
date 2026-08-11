@@ -5,8 +5,9 @@ import { useTranslation } from 'react-i18next';
 
 import { PrimaryButton } from '../../src/components/PrimaryButton';
 import { Screen } from '../../src/components/Screen';
-import { getCurrentUser } from '../../src/data/repositories/userRepository';
+import { getCurrentUser, updateUser } from '../../src/data/repositories/userRepository';
 import { bumpRefreshBus, useRefreshBus } from '../../src/data/refreshBus';
+import { shouldOfferDumbbellReask } from '../../src/domain/engine/dumbbellUnlock';
 import { useExerciseContent } from '../../src/domain/exercises/exerciseContent';
 import type { PlanDay, PlanDayExercise, UserProfile, WeeklyPlan } from '../../src/domain/exercises/types';
 import { ensureWeeklyPlanForCurrentWeek } from '../../src/features/home/ensureWeeklyPlan';
@@ -31,6 +32,7 @@ function PlanExerciseText({ planExercise }: { planExercise: PlanDayExercise }) {
   return (
     <Text style={styles.exerciseText}>
       {content.name} — {planExercise.sets}×{target}
+      {planExercise.loadKg !== undefined ? ` · ${planExercise.loadKg}kg` : ''}
       {'  '}({t('session.rest').toLowerCase()} {planExercise.restSeconds}s)
     </Text>
   );
@@ -140,13 +142,14 @@ export default function Home() {
     );
   }
 
-  const { plan } = state;
+  const { plan, user } = state;
   const todayIndex = todayIndexMondayFirst();
 
   return (
     <Screen>
       <Text style={styles.title}>{t('home.title')}</Text>
       <Text style={styles.subtitle}>{t('home.subtitle', { tier: plan.difficultyTierSnapshot })}</Text>
+      {shouldOfferDumbbellReask(user) ? <DumbbellReaskBanner user={user} /> : null}
       {plan.days.map((day) => (
         <DayRow key={day.dayIndex} day={day} planId={plan.id} isToday={day.dayIndex === todayIndex} />
       ))}
@@ -154,10 +157,61 @@ export default function Home() {
   );
 }
 
+function DumbbellReaskBanner({ user }: { user: UserProfile }) {
+  const { t } = useTranslation();
+
+  const dismiss = () => {
+    updateUser({ ...user, dumbbellReaskDismissed: true }).catch(() => {});
+  };
+
+  return (
+    <View style={styles.reaskCard}>
+      <Text style={styles.reaskTitle}>{t('home.dumbbellReaskTitle')}</Text>
+      <Text style={styles.reaskSubtitle}>{t('home.dumbbellReaskSubtitle')}</Text>
+      <View style={styles.reaskActions}>
+        <Pressable
+          accessibilityRole="button"
+          onPress={() => router.push('/dumbbell-reask')}
+          style={({ pressed }) => [styles.reaskPrimaryButton, pressed && styles.startButtonPressed]}
+        >
+          <Text style={styles.reaskPrimaryLabel}>{t('home.dumbbellReaskCta')}</Text>
+        </Pressable>
+        <Pressable accessibilityRole="button" onPress={dismiss} style={styles.reaskDismissButton}>
+          <Text style={styles.reaskDismissLabel}>{t('home.dumbbellReaskDismiss')}</Text>
+        </Pressable>
+      </View>
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center', gap: spacing.md },
   title: { ...typography.title, color: colors.text, marginBottom: spacing.xs },
   subtitle: { ...typography.body, color: colors.textMuted, marginBottom: spacing.lg },
+  reaskCard: {
+    backgroundColor: colors.surface,
+    borderRadius: radii.md,
+    borderWidth: 1,
+    borderColor: colors.primary,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+    ...shadows.card,
+  },
+  reaskTitle: { ...typography.body, fontWeight: '700', color: colors.text, marginBottom: spacing.xs },
+  reaskSubtitle: { ...typography.caption, color: colors.textMuted, marginBottom: spacing.sm },
+  reaskActions: { flexDirection: 'row', gap: spacing.sm },
+  reaskPrimaryButton: {
+    backgroundColor: colors.primary,
+    borderRadius: radii.sm,
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+  },
+  reaskPrimaryLabel: { ...typography.caption, fontWeight: '700', color: '#FFFFFF' },
+  reaskDismissButton: {
+    paddingVertical: spacing.sm,
+    paddingHorizontal: spacing.md,
+  },
+  reaskDismissLabel: { ...typography.caption, fontWeight: '700', color: colors.textMuted },
   dayCard: {
     backgroundColor: colors.surface,
     borderRadius: radii.md,

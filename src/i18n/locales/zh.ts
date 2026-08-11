@@ -50,6 +50,12 @@ const zh: LocaleResource = {
     limitationsTitle: '有需要注意的身体限制吗？',
     limitationsSubtitle: '我们会避免或调整直接涉及这些部位的动作。可以选择多项。',
     limitationsDisclaimer: '这些信息仅用于个性化选择训练动作，不构成医学评估。',
+    equipmentTitle: '你有紧凑型或可调节哑铃吗？',
+    equipmentSubtitle: '如果有，我们会解锁一个哑铃训练模块，可与徒手训练交替或组合使用。',
+    equipmentYes: '有',
+    equipmentNo: '没有',
+    equipmentMinLabel: '可用的最小重量（千克）',
+    equipmentMaxLabel: '可用的最大重量（千克）',
     createPlan: '生成我的计划',
     preparingPlan: '正在为你准备计划',
     saveErrorTitle: '未能保存你的资料',
@@ -107,11 +113,27 @@ const zh: LocaleResource = {
     noProfileTitle: '未找到个人资料',
     noProfileSubtitle: '请重启应用重新完成初始设置。',
     errorTitle: '未能生成你的计划',
+    dumbbellReaskTitle: '你有哑铃吗？',
+    dumbbellReaskSubtitle: '既然你已经坚持训练了一段时间，可以考虑解锁哑铃模块。',
+    dumbbellReaskCta: '回答',
+    dumbbellReaskDismiss: '暂不',
+  },
+  dumbbellReask: {
+    title: '你有紧凑型或可调节哑铃吗？',
+    subtitle: '如果有，我们会解锁一个哑铃训练模块，可与徒手训练交替或组合使用。',
+    yes: '有',
+    no: '没有',
+    minLabel: '可用的最小重量（千克）',
+    maxLabel: '可用的最大重量（千克）',
+    confirm: '确认',
+    skip: '暂不',
   },
   library: {
     title: '训练动作库',
     subtitle: '所有动作均为徒手训练，适合至少 2x2 米的居家空间。',
+    subtitleWithDumbbell: '徒手训练和哑铃训练动作，适合至少 2x2 米的居家空间。',
     levelBadge: '基础难度 {{tier}} / 3',
+    levelBadgeDumbbell: '基础难度 {{tier}} / 3 · {{min}}–{{max}} 千克',
     excludedBadge: '因部分身体限制被排除',
     notFound: '未找到该动作',
     previewCaption: '动作预览',
@@ -136,6 +158,8 @@ const zh: LocaleResource = {
     rest: '休息',
     skipRest: '跳过休息',
     feedbackTitle: '这次感觉如何？',
+    loadLabel: '重量（千克）',
+    exerciseFeedbackTitle: '这个动作感觉如何？',
   },
   celebration: {
     title: '训练完成！',
@@ -148,6 +172,8 @@ const zh: LocaleResource = {
     streak_one: '连续训练 {{count}} 次',
     streak_other: '连续训练 {{count}} 次',
     weeklyAdherence: '每周训练达成率',
+    loadProgression: '各动作重量变化（哑铃）',
+    loadLatest: '最近一次：{{kg}} 千克',
     weeklyGoal: '本周目标',
     goalProgress: '已完成 {{completed}} / {{target}} 次训练',
     goalReminderSuffix: ' · 提醒时间 {{time}}',
@@ -181,6 +207,10 @@ const zh: LocaleResource = {
     push: '推',
     pull: '拉',
     mobility_cardio: '灵活性与有氧',
+    chest: '胸部',
+    back: '背部',
+    shoulders: '肩部',
+    arms: '手臂',
   },
   variants: {
     easier: '简化版',
@@ -639,6 +669,358 @@ const zh: LocaleResource = {
         name: '慢速坐站转换',
         instructions: ['做相同的动作，起身和坐下的过程都放得更慢。'],
         executionCues: ['放慢速度会增加训练强度，而不需要跳起或用力猛推。'],
+      },
+    },
+    'db-chest-floor-press': {
+      name: '地板哑铃卧推',
+      instructions: [
+        '仰卧，屈膝，双手各持一只哑铃放在胸部上方。',
+        '将哑铃向上推起，直到手臂几乎完全伸直。',
+        '有控制地放下，直到手肘轻触地面。',
+      ],
+      executionCues: [
+        '手肘与躯干大约呈 45 度角，不要完全外展。',
+        '推起过程中手腕始终对齐在手肘正上方。',
+      ],
+      easierVariant: {
+        name: '轻负荷地板卧推',
+        instructions: ['使用较轻的哑铃完成相同动作，如有需要可减小幅度。'],
+        executionCues: ['完整幅度、较轻重量，比不完整幅度、较重重量更好。'],
+      },
+      harderVariant: {
+        name: '底部停顿地板卧推',
+        instructions: ['完成推举动作，手肘接近地面时停顿 2 秒。'],
+        executionCues: ['停顿保持可控，不要在地面上弹跳。'],
+      },
+    },
+    'db-chest-floor-fly': {
+      name: '地板哑铃飞鸟',
+      instructions: [
+        '仰卧，屈膝，双手各持一只哑铃，手臂伸直举于胸部上方。',
+        '手肘微屈，向两侧展开手臂放下哑铃，直到接近地面。',
+        '沿相同弧线将双臂收回胸部上方。',
+      ],
+      executionCues: [
+        '整个动作过程中手肘保持固定的轻微弯曲。',
+        '动作是一个宽弧线，而不是垂直推举。',
+      ],
+      easierVariant: {
+        name: '小幅度地板飞鸟',
+        instructions: ['做相同的动作，只部分展开手臂。'],
+        executionCues: ['如果感觉肩部有压力，请减小幅度。'],
+      },
+      harderVariant: {
+        name: '展开位停顿地板飞鸟',
+        instructions: ['完成展开动作，手臂接近地面时保持姿势 1-2 秒。'],
+        executionCues: ['停顿保持轻柔，不要给肩部增加负担。'],
+      },
+    },
+    'db-back-bent-row': {
+      name: '俯身双臂划船',
+      instructions: [
+        '双脚与髋同宽，膝盖微屈，上身前倾，双手各持一只哑铃。',
+        '将哑铃拉向腹部，手肘向后，同时夹紧肩胛骨。',
+        '有控制地放下，直到手臂几乎完全伸直。',
+      ],
+      executionCues: [
+        '整个动作过程中背部保持伸展，不要弓起。',
+        '动作发力来自背部，而不仅仅是手肘的弯曲。',
+      ],
+      easierVariant: {
+        name: '小前倾角度划船',
+        instructions: ['做相同的动作，但上身前倾角度更小，以减轻背部负担。'],
+        executionCues: ['仍然要保持背部伸展。'],
+      },
+      harderVariant: {
+        name: '拉起位停顿划船',
+        instructions: ['完成划船动作，手肘向后时保持姿势 1-2 秒。'],
+        executionCues: ['停顿期间肩胛骨保持夹紧。'],
+      },
+    },
+    'db-back-single-row': {
+      name: '单臂哑铃划船',
+      instructions: [
+        '同侧的手和膝盖撑在椅子或稳固的支撑面上，上身与地面平行。',
+        '用另一只手将哑铃拉向髋部，手肘向后。',
+        '有控制地放下，然后换另一侧重复。',
+      ],
+      executionCues: [
+        '拉起过程中上身保持稳定，不要旋转。',
+        '动作过程中手肘贴近身体。',
+      ],
+      easierVariant: {
+        name: '小幅度单臂划船',
+        instructions: ['做相同的动作，但幅度更小。'],
+        executionCues: ['如果上身容易旋转，请减小幅度。'],
+      },
+      harderVariant: {
+        name: '拉起位停顿单臂划船',
+        instructions: ['完成拉起动作，手肘向后时保持姿势 1-2 秒。'],
+        executionCues: ['停顿期间上身保持稳定。'],
+      },
+    },
+    'db-shoulder-press': {
+      name: '哑铃肩上推举',
+      instructions: [
+        '站立或坐姿，双手各持一只哑铃举于肩部高度，掌心朝前。',
+        '将哑铃向上推起，直到手臂几乎完全伸直。',
+        '有控制地放下，回到肩部高度。',
+      ],
+      executionCues: [
+        '推举过程中避免弓腰：上身保持稳定。',
+        '哑铃沿垂直路径移动，而不是向前。',
+      ],
+      easierVariant: {
+        name: '坐姿肩上推举',
+        instructions: ['坐姿完成相同动作，背部有支撑，以减少上身参与。'],
+        executionCues: ['只专注于手臂的动作。'],
+      },
+      harderVariant: {
+        name: '单臂交替肩上推举',
+        instructions: ['一次一只手臂完成推举，同时保持上身稳定。'],
+        executionCues: ['单臂推举时避免向侧方倾斜。'],
+      },
+    },
+    'db-shoulder-lateral-raise': {
+      name: '哑铃侧平举',
+      instructions: [
+        '站立，双手各持一只哑铃放在身体两侧，手肘微屈。',
+        '将手臂向两侧抬起，直到肩部高度。',
+        '有控制地放下，回到起始位置。',
+      ],
+      executionCues: [
+        '动作发力来自肩部，而不是手臂的甩动。',
+        '上举过程中手腕略低于手肘。',
+      ],
+      easierVariant: {
+        name: '小幅度侧平举',
+        instructions: ['做相同的动作，手臂只抬起到一半高度。'],
+        executionCues: ['如果感觉颈部有压力，请减小幅度。'],
+      },
+      harderVariant: {
+        name: '顶部停顿侧平举',
+        instructions: ['完成抬起动作，手臂达到肩部高度时保持姿势 1-2 秒。'],
+        executionCues: ['停顿期间肩膀也要保持下沉。'],
+      },
+    },
+    'db-shoulder-front-raise': {
+      name: '哑铃前平举',
+      instructions: [
+        '站立，双手各持一只哑铃放在大腿前方，手肘微屈。',
+        '将一只手臂向前抬起，直到肩部高度。',
+        '有控制地放下，然后换另一只手臂或交替进行。',
+      ],
+      executionCues: [
+        '上身保持稳定，不要借助背部甩动来举起重量。',
+        '动作到肩部高度即停止，不要更高。',
+      ],
+      easierVariant: {
+        name: '小幅度前平举',
+        instructions: ['做相同的动作，手臂只抬起到一半高度。'],
+        executionCues: ['如果上身容易向后倾，请减小幅度。'],
+      },
+      harderVariant: {
+        name: '顶部停顿前平举',
+        instructions: ['完成抬起动作，手臂达到肩部高度时保持姿势 1-2 秒。'],
+        executionCues: ['停顿期间上身保持稳定。'],
+      },
+    },
+    'db-arms-bicep-curl': {
+      name: '哑铃二头肌弯举',
+      instructions: [
+        '站立，双手各持一只哑铃放在身体两侧，掌心朝前。',
+        '弯曲手肘，将哑铃举向肩部。',
+        '有控制地放下，直到手臂几乎完全伸直。',
+      ],
+      executionCues: [
+        '整个动作过程中手肘贴近身体。',
+        '避免借助背部甩动来举起重量。',
+      ],
+      easierVariant: {
+        name: '靠墙二头肌弯举',
+        instructions: ['背部靠墙完成相同动作，以减少甩动。'],
+        executionCues: ['与墙面的接触有助于孤立发力部位。'],
+      },
+      harderVariant: {
+        name: '单臂交替弯举加停顿',
+        instructions: ['一次一只手臂完成弯举，在最高位置保持 1-2 秒。'],
+        executionCues: ['交替过程中静止的手臂保持伸直放松。'],
+      },
+    },
+    'db-arms-hammer-curl': {
+      name: '哑铃锤式弯举',
+      instructions: [
+        '站立，双手各持一只哑铃放在身体两侧，掌心朝向身体。',
+        '弯曲手肘，将哑铃举向肩部，掌心始终朝内。',
+        '有控制地放下，直到手臂几乎完全伸直。',
+      ],
+      executionCues: [
+        '整个动作过程中手腕保持静止，与前臂对齐。',
+        '手肘贴近身体。',
+      ],
+      easierVariant: {
+        name: '靠墙锤式弯举',
+        instructions: ['背部靠墙完成相同动作。'],
+        executionCues: ['与墙面的接触可以减少甩动。'],
+      },
+      harderVariant: {
+        name: '单臂交替锤式弯举加停顿',
+        instructions: ['一次一只手臂完成弯举，在最高位置保持 1-2 秒。'],
+        executionCues: ['交替过程中上身保持稳定。'],
+      },
+    },
+    'db-arms-tricep-extension': {
+      name: '哑铃头上臂屈伸',
+      instructions: [
+        '站立或坐姿，双手共同握住一只哑铃举过头顶，手臂几乎伸直。',
+        '弯曲手肘，将哑铃放低至头后方。',
+        '伸直手臂，回到起始位置。',
+      ],
+      executionCues: [
+        '手肘始终朝前，不要向两侧张开。',
+        '动作只发生在肘部，上身保持静止。',
+      ],
+      easierVariant: {
+        name: '小幅度臂屈伸',
+        instructions: ['做相同的动作，减小下降幅度。'],
+        executionCues: ['如果感觉肩部有压力，请减小幅度。'],
+      },
+      harderVariant: {
+        name: '底部停顿臂屈伸',
+        instructions: ['完成屈伸动作，手肘弯曲时保持姿势 1-2 秒。'],
+        executionCues: ['停顿期间手肘保持静止。'],
+      },
+    },
+    'db-legs-goblet-squat': {
+      name: '哑铃高脚杯深蹲',
+      instructions: [
+        '站立，双脚与肩同宽，双手共同竖直握住一只哑铃放在胸前。',
+        '弯曲膝盖下蹲，如同做深蹲一样，哑铃始终贴近身体。',
+        '用脚跟发力站起，回到起始位置。',
+      ],
+      executionCues: [
+        '膝盖始终朝向脚尖方向。',
+        '下蹲过程中上身尽量保持挺直。',
+      ],
+      easierVariant: {
+        name: '小幅度高脚杯深蹲',
+        instructions: ['做相同的动作，减小下蹲深度。'],
+        executionCues: ['如果完整深度难以控制，可使用较轻的哑铃。'],
+      },
+      harderVariant: {
+        name: '底部停顿高脚杯深蹲',
+        instructions: ['完成深蹲动作，在最低点保持姿势 2 秒。'],
+        executionCues: ['停顿期间上身保持稳定。'],
+      },
+    },
+    'db-legs-rdl': {
+      name: '哑铃罗马尼亚硬拉',
+      instructions: [
+        '站立，双手各持一只哑铃放在大腿前方，膝盖微屈。',
+        '将髋部向后推，沿腿部放低哑铃，背部保持伸展。',
+        '髋部向前推起，回到直立位置。',
+      ],
+      executionCues: [
+        '整个动作过程中哑铃始终贴近腿部。',
+        '下降过程中背部保持伸展，不要弓起。',
+      ],
+      easierVariant: {
+        name: '小幅度罗马尼亚硬拉',
+        instructions: ['做相同的动作，只下降一半幅度。'],
+        executionCues: ['如果背部难以保持伸展，请减小幅度。'],
+      },
+      harderVariant: {
+        name: '底部停顿罗马尼亚硬拉',
+        instructions: ['完成硬拉动作，在最低点保持姿势 2 秒。'],
+        executionCues: ['停顿期间背部也要保持伸展。'],
+      },
+    },
+    'db-core-russian-twist': {
+      name: '负重俄罗斯转体',
+      instructions: [
+        '坐姿，屈膝，上身略微后倾，双手共同握住一只哑铃放在胸前。',
+        '转动上身将哑铃移向一侧，再移向另一侧。',
+        '整组动作保持可控的节奏。',
+      ],
+      executionCues: [
+        '动作发力来自上身，而不仅仅是手臂。',
+        '转动过程中背部保持伸展，不要弓起。',
+      ],
+      easierVariant: {
+        name: '双脚着地俄罗斯转体',
+        instructions: ['做相同的动作，但双脚始终着地，以获得更好的稳定性。'],
+        executionCues: ['如果上身难以保持稳定，请使用较轻的哑铃。'],
+      },
+      harderVariant: {
+        name: '双脚离地俄罗斯转体',
+        instructions: ['整组动作过程中双脚始终离地完成转体。'],
+        executionCues: ['保持平衡需要更慢、更可控的节奏。'],
+      },
+    },
+    'db-core-suitcase-carry': {
+      name: '单侧负重行走',
+      instructions: [
+        '站立，一只手提一只较重的哑铃放在身体一侧，另一只手臂自由摆动以保持平衡。',
+        '直线行走或原地踏步，上身保持挺直，双肩保持水平。',
+        '如果训练组要求，中途换手。',
+      ],
+      executionCues: [
+        '双肩保持水平，不要向负重一侧倾斜。',
+        '步伐保持短小可控，不要匆忙。',
+      ],
+      easierVariant: {
+        name: '轻负荷单侧行走',
+        instructions: ['使用较轻的哑铃完成相同动作。'],
+        executionCues: ['如果双肩容易失衡，请减轻负荷。'],
+      },
+      harderVariant: {
+        name: '中途停顿单侧行走',
+        instructions: ['完成行走动作，中途停下并保持姿势 2-3 秒。'],
+        executionCues: ['停顿期间上身也要保持挺直。'],
+      },
+    },
+    'db-fullbody-thruster': {
+      name: '哑铃借力推举（深蹲+推举）',
+      instructions: [
+        '站立，双手各持一只哑铃举于肩部高度，双脚与肩同宽。',
+        '下蹲，然后用脚跟发力站起，同时将哑铃推举过头顶。',
+        '有控制地放下，将哑铃收回肩部高度。',
+      ],
+      executionCues: [
+        '向上的推力来自腿部力量，而不仅仅是手臂。',
+        '动作保持流畅，深蹲和推举之间没有突兀的停顿。',
+      ],
+      easierVariant: {
+        name: '分段完成借力推举',
+        instructions: ['先完成完整深蹲，再将过头推举作为单独的动作完成。'],
+        executionCues: ['在动作变得自然之前，分开完成也没关系。'],
+      },
+      harderVariant: {
+        name: '底部停顿借力推举',
+        instructions: ['完成借力推举动作，在深蹲最低点保持姿势 1-2 秒后再站起并推举。'],
+        executionCues: ['停顿期间上身保持稳定。'],
+      },
+    },
+    'db-fullbody-renegade-row': {
+      name: '哑铃俯撑划船（Renegade row）',
+      instructions: [
+        '呈高位平板支撑姿势，双手各撑一只哑铃放在肩部正下方的地面上。',
+        '保持骨盆稳定，将一只哑铃拉向髋部，再放回地面。',
+        '换另一侧重复，交替进行。',
+      ],
+      executionCues: [
+        '拉起过程中骨盆保持与地面平行，不要旋转。',
+        '双脚略微分开有助于保持稳定。',
+      ],
+      easierVariant: {
+        name: '跪姿俯撑划船',
+        instructions: ['做相同的动作，但双膝跪地，而不是高位平板支撑。'],
+        executionCues: ['在保持拉起动作的同时减轻骨盆的负担。'],
+      },
+      harderVariant: {
+        name: '俯撑划船加俯卧撑',
+        instructions: ['两侧各完成一次拉起动作后，加一个俯卧撑再重复。'],
+        executionCues: ['只有在能保持骨盆稳定的情况下才加入俯卧撑。'],
       },
     },
   },

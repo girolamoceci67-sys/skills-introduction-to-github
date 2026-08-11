@@ -19,7 +19,7 @@ export default function OnboardingLimitations() {
 
   return (
     <Screen>
-      <StepProgress currentStep={4} totalSteps={4} />
+      <StepProgress currentStep={4} totalSteps={5} />
       <View style={styles.header}>
         <Text style={styles.title}>{t('onboarding.limitationsTitle')}</Text>
         <Text style={styles.subtitle}>{t('onboarding.limitationsSubtitle')}</Text>
@@ -37,9 +37,9 @@ export default function OnboardingLimitations() {
       </View>
       <Text style={styles.disclaimer}>{t('onboarding.limitationsDisclaimer')}</Text>
       <PrimaryButton
-        label={t('onboarding.createPlan')}
+        label={t('common.continue')}
         disabled={!hasSelection}
-        onPress={() => router.push('/onboarding/summary')}
+        onPress={() => router.push('/onboarding/equipment')}
       />
     </Screen>
   );

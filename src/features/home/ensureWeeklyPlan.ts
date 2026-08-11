@@ -1,4 +1,5 @@
 import { generateWeeklyPlan, onWeekRollover } from '../../domain/engine/adaptEngine';
+import { dumbbellLibrary } from '../../domain/exercises/dumbbellLibrary';
 import { exerciseLibrary } from '../../domain/exercises/library';
 import type { UserProfile, WeeklyPlan } from '../../domain/exercises/types';
 import { getLatestPlan, getPlanForWeek, saveGeneratedPlan } from '../../data/repositories/planRepository';
@@ -24,7 +25,9 @@ export async function ensureWeeklyPlanForCurrentWeek(user: UserProfile): Promise
 
   const generated = generateWeeklyPlan({
     user: rolledOverUser,
-    exerciseLibrary,
+    exerciseLibrary: rolledOverUser.dumbbellModuleUnlocked
+      ? [...exerciseLibrary, ...dumbbellLibrary]
+      : exerciseLibrary,
     weekStartDate,
     createId: createLocalId,
   });

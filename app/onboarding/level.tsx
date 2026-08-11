@@ -18,7 +18,7 @@ export default function OnboardingLevel() {
 
   return (
     <Screen>
-      <StepProgress currentStep={1} totalSteps={4} />
+      <StepProgress currentStep={1} totalSteps={5} />
       <View style={styles.header}>
         <Text style={styles.title}>{t('onboarding.levelTitle')}</Text>
         <Text style={styles.subtitle}>{t('onboarding.levelSubtitle')}</Text>

@@ -52,6 +52,13 @@ const it: LocaleResource = {
       'Eviteremo o adatteremo gli esercizi che le coinvolgono direttamente. Puoi selezionarne più di una.',
     limitationsDisclaimer:
       'Queste informazioni servono solo a personalizzare la selezione degli esercizi e non costituiscono una valutazione medica.',
+    equipmentTitle: 'Hai dei manubri compatti o regolabili?',
+    equipmentSubtitle:
+      'Se li hai, sbloccheremo un modulo di esercizi con manubri da alternare o affiancare a quelli a corpo libero.',
+    equipmentYes: 'Sì, ne ho',
+    equipmentNo: 'No, non ne ho',
+    equipmentMinLabel: 'Carico minimo disponibile (kg)',
+    equipmentMaxLabel: 'Carico massimo disponibile (kg)',
     createPlan: 'Crea il mio piano',
     preparingPlan: 'Stiamo preparando il tuo piano',
     saveErrorTitle: 'Non siamo riusciti a salvare il profilo',
@@ -115,11 +122,29 @@ const it: LocaleResource = {
     noProfileTitle: 'Profilo non trovato',
     noProfileSubtitle: 'Riavvia l’app per rifare l’onboarding.',
     errorTitle: 'Non siamo riusciti a generare il piano',
+    dumbbellReaskTitle: 'Hai dei manubri?',
+    dumbbellReaskSubtitle: 'Ora che ti sei allenato con costanza, potresti sbloccare il modulo con i manubri.',
+    dumbbellReaskCta: 'Rispondi',
+    dumbbellReaskDismiss: 'No, non ora',
+  },
+  dumbbellReask: {
+    title: 'Hai dei manubri compatti o regolabili?',
+    subtitle:
+      'Se li hai, sbloccheremo un modulo di esercizi con manubri da alternare o affiancare a quelli a corpo libero.',
+    yes: 'Sì, ne ho',
+    no: 'No, non ne ho',
+    minLabel: 'Carico minimo disponibile (kg)',
+    maxLabel: 'Carico massimo disponibile (kg)',
+    confirm: 'Conferma',
+    skip: 'Non ora',
   },
   library: {
     title: 'Libreria esercizi',
     subtitle: 'Tutti gli esercizi sono a corpo libero, pensati per uno spazio domestico di almeno 2x2 m.',
+    subtitleWithDumbbell:
+      'Esercizi a corpo libero e con manubri, pensati per uno spazio domestico di almeno 2x2 m.',
     levelBadge: 'Livello base {{tier}} di 3',
+    levelBadgeDumbbell: 'Livello base {{tier}} di 3 · {{min}}–{{max}} kg',
     excludedBadge: 'Escluso per alcune limitazioni',
     notFound: 'Esercizio non trovato',
     previewCaption: 'Anteprima del movimento',
@@ -144,6 +169,8 @@ const it: LocaleResource = {
     rest: 'Riposo',
     skipRest: 'Salta riposo',
     feedbackTitle: 'Come è andata?',
+    loadLabel: 'Carico (kg)',
+    exerciseFeedbackTitle: 'Come è andato questo esercizio?',
   },
   celebration: {
     title: 'Allenamento completato!',
@@ -156,6 +183,8 @@ const it: LocaleResource = {
     streak_one: '{{count}} allenamento consecutivo',
     streak_other: '{{count}} allenamenti consecutivi',
     weeklyAdherence: 'Aderenza settimanale',
+    loadProgression: 'Carico per esercizio (manubri)',
+    loadLatest: 'ultimo: {{kg}} kg',
     weeklyGoal: 'Obiettivo di questa settimana',
     goalProgress: '{{completed}} di {{target}} allenamenti completati',
     goalReminderSuffix: ' · promemoria alle {{time}}',
@@ -190,6 +219,10 @@ const it: LocaleResource = {
     push: 'Spinta',
     pull: 'Tirata',
     mobility_cardio: 'Mobilità e cardio',
+    chest: 'Petto',
+    back: 'Schiena',
+    shoulders: 'Spalle',
+    arms: 'Braccia',
   },
   variants: {
     easier: 'Variante facilitata',
@@ -648,6 +681,358 @@ const it: LocaleResource = {
         name: 'Alzata da seduto lenta',
         instructions: ['Esegui il movimento rallentando sia la fase di salita che quella di discesa.'],
         executionCues: ['Rallentare aumenta il lavoro richiesto senza bisogno di saltare o spingere con forza.'],
+      },
+    },
+    'db-chest-floor-press': {
+      name: 'Distensioni su pavimento',
+      instructions: [
+        'Sdraiati sulla schiena, ginocchia piegate, un manubrio in ogni mano appoggiato sul petto.',
+        'Spingi i manubri verso l’alto fino a distendere quasi completamente le braccia.',
+        'Abbassa con controllo fino a quando i gomiti sfiorano il pavimento.',
+      ],
+      executionCues: [
+        'I gomiti restano a circa 45 gradi dal busto, non completamente aperti.',
+        'I polsi restano allineati sopra i gomiti durante la spinta.',
+      ],
+      easierVariant: {
+        name: 'Distensioni su pavimento a carico ridotto',
+        instructions: ['Esegui lo stesso movimento con un manubrio più leggero, riducendo se serve l’ampiezza.'],
+        executionCues: ['Meglio un movimento completo con meno peso che uno parziale con più peso.'],
+      },
+      harderVariant: {
+        name: 'Distensioni su pavimento con pausa in basso',
+        instructions: ['Esegui la distensione e, con i gomiti vicino al pavimento, fai una pausa di 2 secondi.'],
+        executionCues: ['La pausa resta controllata, senza rimbalzare sul pavimento.'],
+      },
+    },
+    'db-chest-floor-fly': {
+      name: 'Aperture su pavimento',
+      instructions: [
+        'Sdraiati sulla schiena, ginocchia piegate, un manubrio in ogni mano, braccia distese sopra il petto.',
+        'Apri le braccia lateralmente abbassando i manubri con gomiti leggermente piegati, fino a sfiorare il pavimento.',
+        'Richiudi le braccia sopra il petto seguendo lo stesso arco.',
+      ],
+      executionCues: [
+        'I gomiti mantengono una leggera piegatura fissa per tutto il movimento.',
+        'Il movimento è un arco ampio, non una spinta verticale.',
+      ],
+      easierVariant: {
+        name: 'Aperture su pavimento a range ridotto',
+        instructions: ['Esegui lo stesso movimento aprendo le braccia solo parzialmente.'],
+        executionCues: ['Riduci l’ampiezza se senti tensione nella spalla.'],
+      },
+      harderVariant: {
+        name: 'Aperture su pavimento con pausa in apertura',
+        instructions: ['Esegui l’apertura e, con le braccia quasi a terra, mantieni la posizione per 1-2 secondi.'],
+        executionCues: ['La pausa resta leggera, senza forzare la spalla.'],
+      },
+    },
+    'db-back-bent-row': {
+      name: 'Rematore bilaterale',
+      instructions: [
+        'Piedi larghi quanto i fianchi, ginocchia leggermente piegate, busto inclinato in avanti, un manubrio in ogni mano.',
+        'Tira i manubri verso l’addome portando i gomiti indietro, avvicinando le scapole.',
+        'Scendi con controllo fino a distendere quasi completamente le braccia.',
+      ],
+      executionCues: [
+        'La schiena resta lunga per tutto il movimento, senza incurvarsi.',
+        'Il movimento parte dalla schiena, non da un semplice piegamento del gomito.',
+      ],
+      easierVariant: {
+        name: 'Rematore bilaterale con busto meno inclinato',
+        instructions: ['Esegui lo stesso movimento inclinando il busto meno in avanti, per ridurre il carico sulla schiena.'],
+        executionCues: ['Mantieni comunque la schiena lunga.'],
+      },
+      harderVariant: {
+        name: 'Rematore bilaterale con pausa in trazione',
+        instructions: ['Esegui il rematore e, con i gomiti indietro, mantieni la posizione per 1-2 secondi.'],
+        executionCues: ['Le scapole restano avvicinate durante la pausa.'],
+      },
+    },
+    'db-back-single-row': {
+      name: 'Rematore a un braccio',
+      instructions: [
+        'Appoggia mano e ginocchio dello stesso lato su una sedia o superficie stabile, busto parallelo al pavimento.',
+        'Con l’altra mano, tira il manubrio verso il fianco portando il gomito indietro.',
+        'Scendi con controllo, poi ripeti dal lato opposto.',
+      ],
+      executionCues: [
+        'Il busto resta fermo, senza ruotare durante la trazione.',
+        'Il gomito rimane vicino al busto durante il movimento.',
+      ],
+      easierVariant: {
+        name: 'Rematore a un braccio a range ridotto',
+        instructions: ['Esegui lo stesso movimento con un’escursione più piccola.'],
+        executionCues: ['Riduci l’ampiezza se il busto tende a ruotare.'],
+      },
+      harderVariant: {
+        name: 'Rematore a un braccio con pausa in trazione',
+        instructions: ['Esegui la trazione e, con il gomito indietro, mantieni la posizione per 1-2 secondi.'],
+        executionCues: ['Il busto resta stabile per tutta la pausa.'],
+      },
+    },
+    'db-shoulder-press': {
+      name: 'Spinte sopra la testa',
+      instructions: [
+        'In piedi o seduto, un manubrio per mano all’altezza delle spalle, palmi rivolti in avanti.',
+        'Spingi i manubri verso l’alto fino a distendere quasi completamente le braccia.',
+        'Scendi con controllo fino a tornare all’altezza delle spalle.',
+      ],
+      executionCues: [
+        'Evita di inarcare la schiena durante la spinta: il busto resta stabile.',
+        'I manubri seguono una traiettoria verticale, non in avanti.',
+      ],
+      easierVariant: {
+        name: 'Spinte sopra la testa da seduto',
+        instructions: ['Esegui lo stesso movimento da seduto, con schiena appoggiata, per ridurre il coinvolgimento del busto.'],
+        executionCues: ['Concentrati solo sul movimento delle braccia.'],
+      },
+      harderVariant: {
+        name: 'Spinte sopra la testa a braccia alternate',
+        instructions: ['Esegui la spinta con un braccio alla volta, mantenendo il busto stabile.'],
+        executionCues: ['Evita di inclinarti lateralmente durante la spinta a un braccio.'],
+      },
+    },
+    'db-shoulder-lateral-raise': {
+      name: 'Alzate laterali',
+      instructions: [
+        'In piedi, un manubrio per mano lungo i fianchi, gomiti leggermente piegati.',
+        'Solleva le braccia lateralmente fino all’altezza delle spalle.',
+        'Scendi con controllo fino alla posizione di partenza.',
+      ],
+      executionCues: [
+        'Il movimento parte dalle spalle, non da uno slancio delle braccia.',
+        'I polsi restano leggermente più bassi dei gomiti durante la salita.',
+      ],
+      easierVariant: {
+        name: 'Alzate laterali a range ridotto',
+        instructions: ['Esegui lo stesso movimento sollevando le braccia solo fino a metà altezza.'],
+        executionCues: ['Riduci l’ampiezza se senti tensione al collo.'],
+      },
+      harderVariant: {
+        name: 'Alzate laterali con pausa in alto',
+        instructions: ['Esegui l’alzata e, con le braccia all’altezza delle spalle, mantieni la posizione per 1-2 secondi.'],
+        executionCues: ['Le spalle restano basse anche durante la pausa.'],
+      },
+    },
+    'db-shoulder-front-raise': {
+      name: 'Alzate frontali',
+      instructions: [
+        'In piedi, un manubrio per mano davanti alle cosce, gomiti leggermente piegati.',
+        'Solleva un braccio in avanti fino all’altezza delle spalle.',
+        'Scendi con controllo, poi ripeti con l’altro braccio o alterna.',
+      ],
+      executionCues: [
+        'Il busto resta fermo, senza usare lo slancio della schiena per sollevare il peso.',
+        'Il movimento si ferma all’altezza delle spalle, non oltre.',
+      ],
+      easierVariant: {
+        name: 'Alzate frontali a range ridotto',
+        instructions: ['Esegui lo stesso movimento sollevando il braccio solo fino a metà altezza.'],
+        executionCues: ['Riduci l’ampiezza se il busto tende a inclinarsi indietro.'],
+      },
+      harderVariant: {
+        name: 'Alzate frontali con pausa in alto',
+        instructions: ['Esegui l’alzata e, con il braccio all’altezza delle spalle, mantieni la posizione per 1-2 secondi.'],
+        executionCues: ['Il busto resta fermo per tutta la pausa.'],
+      },
+    },
+    'db-arms-bicep-curl': {
+      name: 'Curl bicipiti',
+      instructions: [
+        'In piedi, un manubrio per mano lungo i fianchi, palmi rivolti in avanti.',
+        'Piega i gomiti sollevando i manubri verso le spalle.',
+        'Scendi con controllo fino a distendere quasi completamente le braccia.',
+      ],
+      executionCues: [
+        'I gomiti restano vicini al busto per tutto il movimento.',
+        'Evita di usare lo slancio della schiena per sollevare il peso.',
+      ],
+      easierVariant: {
+        name: 'Curl bicipiti in appoggio',
+        instructions: ['Esegui lo stesso movimento con la schiena appoggiata a una parete, per ridurre lo slancio.'],
+        executionCues: ['Il contatto con la parete aiuta a isolare il movimento.'],
+      },
+      harderVariant: {
+        name: 'Curl bicipiti a braccia alternate con pausa',
+        instructions: ['Esegui il curl con un braccio alla volta, mantenendo la posizione più alta per 1-2 secondi.'],
+        executionCues: ['Il braccio fermo resta disteso e rilassato durante l’alternanza.'],
+      },
+    },
+    'db-arms-hammer-curl': {
+      name: 'Curl a martello',
+      instructions: [
+        'In piedi, un manubrio per mano lungo i fianchi, palmi rivolti verso il corpo.',
+        'Piega i gomiti sollevando i manubri verso le spalle, mantenendo i palmi rivolti verso l’interno.',
+        'Scendi con controllo fino a distendere quasi completamente le braccia.',
+      ],
+      executionCues: [
+        'I polsi restano fermi e allineati agli avambracci per tutto il movimento.',
+        'I gomiti restano vicini al busto.',
+      ],
+      easierVariant: {
+        name: 'Curl a martello in appoggio',
+        instructions: ['Esegui lo stesso movimento con la schiena appoggiata a una parete.'],
+        executionCues: ['Il contatto con la parete riduce lo slancio.'],
+      },
+      harderVariant: {
+        name: 'Curl a martello a braccia alternate con pausa',
+        instructions: ['Esegui il curl con un braccio alla volta, mantenendo la posizione più alta per 1-2 secondi.'],
+        executionCues: ['Il busto resta stabile durante l’alternanza.'],
+      },
+    },
+    'db-arms-tricep-extension': {
+      name: 'Estensioni tricipiti sopra la testa',
+      instructions: [
+        'In piedi o seduto, tieni un manubrio con entrambe le mani sopra la testa, braccia quasi distese.',
+        'Piega i gomiti abbassando il manubrio dietro la testa.',
+        'Distendi le braccia tornando alla posizione di partenza.',
+      ],
+      executionCues: [
+        'I gomiti restano puntati in avanti, senza aprirsi lateralmente.',
+        'Il movimento avviene solo all’altezza del gomito, il busto resta fermo.',
+      ],
+      easierVariant: {
+        name: 'Estensioni tricipiti a range ridotto',
+        instructions: ['Esegui lo stesso movimento riducendo la profondità della discesa.'],
+        executionCues: ['Riduci l’ampiezza se senti tensione alla spalla.'],
+      },
+      harderVariant: {
+        name: 'Estensioni tricipiti con pausa in basso',
+        instructions: ['Esegui l’estensione e, con i gomiti piegati, mantieni la posizione per 1-2 secondi.'],
+        executionCues: ['I gomiti restano fermi durante la pausa.'],
+      },
+    },
+    'db-legs-goblet-squat': {
+      name: 'Squat a coppa',
+      instructions: [
+        'In piedi, piedi larghi quanto le spalle, un manubrio tenuto verticalmente con entrambe le mani davanti al petto.',
+        'Piega le ginocchia e scendi come in uno squat, mantenendo il manubrio vicino al corpo.',
+        'Risali spingendo sui talloni fino alla posizione di partenza.',
+      ],
+      executionCues: [
+        'Le ginocchia seguono la direzione delle punte dei piedi.',
+        'Il busto resta il più eretto possibile durante la discesa.',
+      ],
+      easierVariant: {
+        name: 'Squat a coppa a range ridotto',
+        instructions: ['Esegui lo stesso movimento riducendo la profondità della discesa.'],
+        executionCues: ['Usa un manubrio più leggero se la profondità completa è difficile da controllare.'],
+      },
+      harderVariant: {
+        name: 'Squat a coppa con pausa in basso',
+        instructions: ['Esegui lo squat e, nel punto più basso, mantieni la posizione per 2 secondi.'],
+        executionCues: ['Il busto resta stabile durante la pausa.'],
+      },
+    },
+    'db-legs-rdl': {
+      name: 'Stacco rumeno',
+      instructions: [
+        'In piedi, un manubrio per mano davanti alle cosce, ginocchia leggermente piegate.',
+        'Spingi i fianchi indietro abbassando i manubri lungo le gambe, mantenendo la schiena lunga.',
+        'Risali spingendo i fianchi in avanti fino alla posizione eretta.',
+      ],
+      executionCues: [
+        'I manubri restano vicini alle gambe per tutto il movimento.',
+        'La schiena resta lunga, senza incurvarsi durante la discesa.',
+      ],
+      easierVariant: {
+        name: 'Stacco rumeno a range ridotto',
+        instructions: ['Esegui lo stesso movimento scendendo solo fino a metà percorso.'],
+        executionCues: ['Riduci l’ampiezza se la schiena fatica a restare lunga.'],
+      },
+      harderVariant: {
+        name: 'Stacco rumeno con pausa in basso',
+        instructions: ['Esegui lo stacco e, nel punto più basso, mantieni la posizione per 2 secondi.'],
+        executionCues: ['La schiena resta lunga anche durante la pausa.'],
+      },
+    },
+    'db-core-russian-twist': {
+      name: 'Twist russo con carico',
+      instructions: [
+        'Seduto, ginocchia piegate, busto inclinato leggermente indietro, un manubrio tenuto con entrambe le mani davanti al petto.',
+        'Ruota il busto portando il manubrio da un lato, poi dall’altro.',
+        'Mantieni un ritmo controllato per tutta la serie.',
+      ],
+      executionCues: [
+        'Il movimento parte dal busto, non solo dalle braccia.',
+        'Mantieni la schiena lunga, senza incurvarla durante la rotazione.',
+      ],
+      easierVariant: {
+        name: 'Twist russo con piedi a terra',
+        instructions: ['Esegui lo stesso movimento mantenendo i piedi appoggiati a terra, per maggiore stabilità.'],
+        executionCues: ['Usa un manubrio più leggero se il busto fatica a restare stabile.'],
+      },
+      harderVariant: {
+        name: 'Twist russo con piedi sollevati',
+        instructions: ['Esegui il twist mantenendo i piedi sollevati da terra durante tutta la serie.'],
+        executionCues: ['L’equilibrio richiede un ritmo più lento e controllato.'],
+      },
+    },
+    'db-core-suitcase-carry': {
+      name: 'Camminata a valigia',
+      instructions: [
+        'In piedi, un manubrio pesante tenuto con un braccio lungo il fianco, altro braccio libero per l’equilibrio.',
+        'Cammina in linea retta o sul posto mantenendo il busto eretto e le spalle allineate.',
+        'Cambia braccio a metà tempo se richiesto dalla serie.',
+      ],
+      executionCues: [
+        'Le spalle restano allineate, senza inclinarsi verso il lato del carico.',
+        'I passi restano brevi e controllati, non affrettati.',
+      ],
+      easierVariant: {
+        name: 'Camminata a valigia a carico ridotto',
+        instructions: ['Esegui lo stesso esercizio con un manubrio più leggero.'],
+        executionCues: ['Riduci il carico se le spalle tendono a sbilanciarsi.'],
+      },
+      harderVariant: {
+        name: 'Camminata a valigia con pausa a metà',
+        instructions: ['Esegui la camminata e, a metà tempo, fermati mantenendo la posizione per 2-3 secondi.'],
+        executionCues: ['Il busto resta eretto anche durante la pausa.'],
+      },
+    },
+    'db-fullbody-thruster': {
+      name: 'Thruster (squat + spinta)',
+      instructions: [
+        'In piedi, un manubrio per mano all’altezza delle spalle, piedi larghi quanto le spalle.',
+        'Scendi in uno squat, poi risali spingendo sui talloni e spingendo contemporaneamente i manubri sopra la testa.',
+        'Scendi con controllo riportando i manubri all’altezza delle spalle.',
+      ],
+      executionCues: [
+        'La spinta verso l’alto parte dalla forza delle gambe, non solo dalle braccia.',
+        'Il movimento resta fluido, senza pause brusche tra squat e spinta.',
+      ],
+      easierVariant: {
+        name: 'Thruster in due tempi',
+        instructions: ['Esegui prima lo squat completo, poi la spinta sopra la testa come due movimenti separati.'],
+        executionCues: ['Va bene scomporre il movimento finché non risulta naturale.'],
+      },
+      harderVariant: {
+        name: 'Thruster con pausa in basso',
+        instructions: ['Esegui il thruster e, nel punto più basso dello squat, mantieni la posizione per 1-2 secondi prima di risalire e spingere.'],
+        executionCues: ['Il busto resta stabile durante la pausa.'],
+      },
+    },
+    'db-fullbody-renegade-row': {
+      name: 'Renegade row',
+      instructions: [
+        'In posizione di plank alto, un manubrio per mano a terra sotto le spalle.',
+        'Tira un manubrio verso il fianco mantenendo il bacino stabile, poi appoggialo a terra.',
+        'Ripeti dal lato opposto, alternando.',
+      ],
+      executionCues: [
+        'Il bacino resta parallelo al pavimento, senza ruotare durante la trazione.',
+        'Le gambe leggermente più larghe aiutano la stabilità.',
+      ],
+      easierVariant: {
+        name: 'Renegade row sulle ginocchia',
+        instructions: ['Esegui lo stesso movimento con le ginocchia a terra invece che in plank alto.'],
+        executionCues: ['Riduce il carico sul bacino mantenendo il gesto della trazione.'],
+      },
+      harderVariant: {
+        name: 'Renegade row con push-up',
+        instructions: ['Esegui la trazione su ciascun lato, poi aggiungi un piegamento (push-up) prima di ripetere.'],
+        executionCues: ['Aggiungi il piegamento solo se riesci a mantenere il bacino stabile.'],
       },
     },
   },

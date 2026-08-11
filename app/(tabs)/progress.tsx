@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
-import { format, parseISO } from 'date-fns';
-import { BarChart } from 'react-native-gifted-charts';
+import { format, parseISO, type Locale } from 'date-fns';
+import { BarChart, LineChart } from 'react-native-gifted-charts';
 import { useTranslation } from 'react-i18next';
 
 import { NumberPicker } from '../../src/components/NumberPicker';
@@ -14,6 +14,8 @@ import { getSessionHistory } from '../../src/data/repositories/sessionRepository
 import { getCurrentUser } from '../../src/data/repositories/userRepository';
 import { bumpRefreshBus, useRefreshBus } from '../../src/data/refreshBus';
 import { computeCurrentStreak, computeWeeklyAdherence } from '../../src/domain/engine/streak';
+import { computeLoadProgressionByExercise, type ExerciseLoadSeries } from '../../src/domain/engine/loadProgression';
+import { useExerciseContent } from '../../src/domain/exercises/exerciseContent';
 import type { UserProfile, WeeklyGoal, WorkoutSession } from '../../src/domain/exercises/types';
 import { syncDailyReminder } from '../../src/features/goals/reminderScheduler';
 import { dateFnsLocaleFor } from '../../src/i18n/dateLocale';
@@ -33,6 +35,7 @@ type LoadState =
       streak: number;
       adherence: ReturnType<typeof computeWeeklyAdherence>;
       history: WorkoutSession[];
+      loadProgression: ExerciseLoadSeries[];
       goal: WeeklyGoal | null;
     };
 
@@ -61,7 +64,7 @@ export default function Progress() {
         const weekStartDate = currentWeekStartDate();
         const [plans, history, goal] = await Promise.all([
           getRecentPlans(user.id, 8),
-          getSessionHistory(user.id, 10),
+          getSessionHistory(user.id, 30),
           getGoalForWeek(user.id, weekStartDate),
         ]);
         if (cancelled) return;
@@ -71,7 +74,8 @@ export default function Progress() {
           user,
           streak: computeCurrentStreak(plans),
           adherence: computeWeeklyAdherence(plans),
-          history,
+          history: history.slice(0, 10),
+          loadProgression: computeLoadProgressionByExercise(history),
           goal,
         });
       })
@@ -115,7 +119,7 @@ export default function Progress() {
     );
   }
 
-  const { user, streak, adherence, history, goal } = state;
+  const { user, streak, adherence, history, loadProgression, goal } = state;
   const dateLocale = dateFnsLocaleFor(i18n.language);
   const chartData = adherence.map((point) => ({
     value: point.adherencePercent,
@@ -171,6 +175,15 @@ export default function Progress() {
             yAxisTextStyle={{ color: colors.textMuted }}
             xAxisLabelTextStyle={{ color: colors.textMuted, fontSize: 11 }}
           />
+        </View>
+      )}
+
+      {loadProgression.length > 0 && (
+        <View style={styles.card}>
+          <Text style={styles.sectionTitle}>{t('progress.loadProgression')}</Text>
+          {loadProgression.map((series) => (
+            <LoadProgressionRow key={series.exerciseId} series={series} dateLocale={dateLocale} />
+          ))}
         </View>
       )}
 
@@ -253,6 +266,38 @@ export default function Progress() {
   );
 }
 
+function LoadProgressionRow({ series, dateLocale }: { series: ExerciseLoadSeries; dateLocale: Locale }) {
+  const { t } = useTranslation();
+  const content = useExerciseContent(series.exerciseId);
+  const latest = series.points[series.points.length - 1];
+  const lineData = series.points.map((point) => ({
+    value: point.loadKg,
+    label: format(parseISO(point.date), 'dd/MM', { locale: dateLocale }),
+  }));
+
+  return (
+    <View style={styles.loadRow}>
+      <View style={styles.loadRowHeader}>
+        <Text style={styles.loadExerciseName}>{content.name}</Text>
+        <Text style={styles.loadLatestValue}>{t('progress.loadLatest', { kg: latest.loadKg })}</Text>
+      </View>
+      {lineData.length > 1 ? (
+        <LineChart
+          data={lineData}
+          height={90}
+          thickness={2}
+          color={colors.primary}
+          dataPointsColor={colors.primary}
+          yAxisTextStyle={{ color: colors.textMuted, fontSize: 10 }}
+          xAxisLabelTextStyle={{ color: colors.textMuted, fontSize: 10 }}
+          noOfSections={3}
+          spacing={Math.max(28, 220 / lineData.length)}
+        />
+      ) : null}
+    </View>
+  );
+}
+
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
   title: { ...typography.title, color: colors.text, marginBottom: spacing.lg },
@@ -267,6 +312,10 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
   },
   sectionTitle: { ...typography.heading, fontSize: 17, color: colors.text },
+  loadRow: { marginTop: spacing.sm },
+  loadRowHeader: { flexDirection: 'row', justifyContent: 'space-between', marginBottom: spacing.xs },
+  loadExerciseName: { ...typography.body, fontWeight: '600', color: colors.text },
+  loadLatestValue: { ...typography.body, fontWeight: '700', color: colors.primary },
   streakValue: { ...typography.title, fontSize: 40, color: colors.primary, textAlign: 'center' },
   streakLabel: { ...typography.body, color: colors.textMuted, textAlign: 'center' },
   editForm: { gap: spacing.md },

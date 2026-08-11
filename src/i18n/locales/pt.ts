@@ -52,6 +52,13 @@ const pt: LocaleResource = {
       'Vamos evitar ou adaptar os exercícios que as envolvam diretamente. Podes selecionar mais do que uma.',
     limitationsDisclaimer:
       'Esta informação serve apenas para personalizar a seleção de exercícios e não constitui uma avaliação médica.',
+    equipmentTitle: 'Tens halteres compactos ou ajustáveis?',
+    equipmentSubtitle:
+      'Se tiveres, vamos desbloquear um módulo de exercícios com halteres para alternar ou combinar com os de peso corporal.',
+    equipmentYes: 'Sim, tenho',
+    equipmentNo: 'Não tenho',
+    equipmentMinLabel: 'Carga mínima disponível (kg)',
+    equipmentMaxLabel: 'Carga máxima disponível (kg)',
     createPlan: 'Criar o meu plano',
     preparingPlan: 'Estamos a preparar o teu plano',
     saveErrorTitle: 'Não conseguimos guardar o teu perfil',
@@ -109,11 +116,29 @@ const pt: LocaleResource = {
     noProfileTitle: 'Perfil não encontrado',
     noProfileSubtitle: 'Reinicia a app para refazer o registo inicial.',
     errorTitle: 'Não conseguimos gerar o teu plano',
+    dumbbellReaskTitle: 'Tens halteres?',
+    dumbbellReaskSubtitle: 'Agora que tens treinado com constância, podias desbloquear o módulo de halteres.',
+    dumbbellReaskCta: 'Responder',
+    dumbbellReaskDismiss: 'Agora não',
+  },
+  dumbbellReask: {
+    title: 'Tens halteres compactos ou ajustáveis?',
+    subtitle:
+      'Se tiveres, vamos desbloquear um módulo de exercícios com halteres para alternar ou combinar com os de peso corporal.',
+    yes: 'Sim, tenho',
+    no: 'Não tenho',
+    minLabel: 'Carga mínima disponível (kg)',
+    maxLabel: 'Carga máxima disponível (kg)',
+    confirm: 'Confirmar',
+    skip: 'Agora não',
   },
   library: {
     title: 'Biblioteca de exercícios',
     subtitle: 'Todos os exercícios são com o peso do corpo, pensados para um espaço em casa de pelo menos 2x2 m.',
+    subtitleWithDumbbell:
+      'Exercícios com peso do corpo e com halteres, pensados para um espaço em casa de pelo menos 2x2 m.',
     levelBadge: 'Nível base {{tier}} de 3',
+    levelBadgeDumbbell: 'Nível base {{tier}} de 3 · {{min}}–{{max}} kg',
     excludedBadge: 'Excluído por algumas limitações',
     notFound: 'Exercício não encontrado',
     previewCaption: 'Pré-visualização do movimento',
@@ -138,6 +163,8 @@ const pt: LocaleResource = {
     rest: 'Descanso',
     skipRest: 'Saltar descanso',
     feedbackTitle: 'Como correu?',
+    loadLabel: 'Carga (kg)',
+    exerciseFeedbackTitle: 'Como correu este exercício?',
   },
   celebration: {
     title: 'Treino concluído!',
@@ -150,6 +177,8 @@ const pt: LocaleResource = {
     streak_one: '{{count}} treino consecutivo',
     streak_other: '{{count}} treinos consecutivos',
     weeklyAdherence: 'Adesão semanal',
+    loadProgression: 'Carga por exercício (halteres)',
+    loadLatest: 'última: {{kg}} kg',
     weeklyGoal: 'Objetivo desta semana',
     goalProgress: '{{completed}} de {{target}} treinos concluídos',
     goalReminderSuffix: ' · lembrete às {{time}}',
@@ -184,6 +213,10 @@ const pt: LocaleResource = {
     push: 'Empurrar',
     pull: 'Puxar',
     mobility_cardio: 'Mobilidade e cardio',
+    chest: 'Peito',
+    back: 'Costas',
+    shoulders: 'Ombros',
+    arms: 'Braços',
   },
   variants: {
     easier: 'Variante facilitada',
@@ -642,6 +675,358 @@ const pt: LocaleResource = {
         name: 'Levantar da cadeira lento',
         instructions: ['Realiza o movimento tornando mais lenta tanto a fase de subida como a de descida.'],
         executionCues: ['Ir mais devagar aumenta o esforço exigido sem precisar de saltar ou empurrar com força.'],
+      },
+    },
+    'db-chest-floor-press': {
+      name: 'Supino no chão',
+      instructions: [
+        'Deita-te de costas, joelhos dobrados, um haltere em cada mão apoiado no peito.',
+        'Empurra os halteres para cima até estenderes quase por completo os braços.',
+        'Desce com controlo até os cotovelos tocarem levemente o chão.',
+      ],
+      executionCues: [
+        'Os cotovelos mantêm-se a cerca de 45 graus do tronco, não totalmente abertos.',
+        'Os pulsos mantêm-se alinhados sobre os cotovelos durante o empurrão.',
+      ],
+      easierVariant: {
+        name: 'Supino no chão com carga reduzida',
+        instructions: ['Realiza o mesmo movimento com um haltere mais leve, reduzindo a amplitude se necessário.'],
+        executionCues: ['É melhor um movimento completo com menos peso do que um parcial com mais peso.'],
+      },
+      harderVariant: {
+        name: 'Supino no chão com pausa em baixo',
+        instructions: ['Realiza o supino e, com os cotovelos perto do chão, faz uma pausa de 2 segundos.'],
+        executionCues: ['A pausa mantém-se controlada, sem saltitar no chão.'],
+      },
+    },
+    'db-chest-floor-fly': {
+      name: 'Voo no chão',
+      instructions: [
+        'Deita-te de costas, joelhos dobrados, um haltere em cada mão, braços estendidos sobre o peito.',
+        'Abre os braços lateralmente baixando os halteres com os cotovelos ligeiramente dobrados, até quase tocar o chão.',
+        'Volta a juntar os braços sobre o peito seguindo o mesmo arco.',
+      ],
+      executionCues: [
+        'Os cotovelos mantêm uma ligeira dobra fixa durante todo o movimento.',
+        'O movimento é um arco amplo, não um empurrão vertical.',
+      ],
+      easierVariant: {
+        name: 'Voo no chão com amplitude reduzida',
+        instructions: ['Realiza o mesmo movimento abrindo os braços apenas parcialmente.'],
+        executionCues: ['Reduz a amplitude se sentires tensão no ombro.'],
+      },
+      harderVariant: {
+        name: 'Voo no chão com pausa na abertura',
+        instructions: ['Realiza a abertura e, com os braços quase no chão, mantém a posição 1-2 segundos.'],
+        executionCues: ['A pausa mantém-se leve, sem forçar o ombro.'],
+      },
+    },
+    'db-back-bent-row': {
+      name: 'Remada curvada',
+      instructions: [
+        'Pés à largura das ancas, joelhos ligeiramente dobrados, tronco inclinado à frente, um haltere em cada mão.',
+        'Puxa os halteres em direção ao abdómen levando os cotovelos atrás, aproximando as omoplatas.',
+        'Desce com controlo até estenderes quase por completo os braços.',
+      ],
+      executionCues: [
+        'As costas mantêm-se longas durante todo o movimento, sem curvar.',
+        'O movimento parte das costas, não de uma simples flexão do cotovelo.',
+      ],
+      easierVariant: {
+        name: 'Remada curvada com tronco menos inclinado',
+        instructions: ['Realiza o mesmo movimento inclinando menos o tronco à frente, para reduzir a carga nas costas.'],
+        executionCues: ['Mantém mesmo assim as costas longas.'],
+      },
+      harderVariant: {
+        name: 'Remada curvada com pausa na tração',
+        instructions: ['Realiza a remada e, com os cotovelos atrás, mantém a posição 1-2 segundos.'],
+        executionCues: ['As omoplatas mantêm-se aproximadas durante a pausa.'],
+      },
+    },
+    'db-back-single-row': {
+      name: 'Remada a um braço',
+      instructions: [
+        'Apoia a mão e o joelho do mesmo lado numa cadeira ou superfície estável, tronco paralelo ao chão.',
+        'Com a outra mão, puxa o haltere em direção à anca levando o cotovelo atrás.',
+        'Desce com controlo e repete do lado oposto.',
+      ],
+      executionCues: [
+        'O tronco mantém-se parado, sem rodar durante a tração.',
+        'O cotovelo permanece perto do tronco durante o movimento.',
+      ],
+      easierVariant: {
+        name: 'Remada a um braço com amplitude reduzida',
+        instructions: ['Realiza o mesmo movimento com um percurso mais pequeno.'],
+        executionCues: ['Reduz a amplitude se o tronco tender a rodar.'],
+      },
+      harderVariant: {
+        name: 'Remada a um braço com pausa na tração',
+        instructions: ['Realiza a tração e, com o cotovelo atrás, mantém a posição 1-2 segundos.'],
+        executionCues: ['O tronco mantém-se estável durante toda a pausa.'],
+      },
+    },
+    'db-shoulder-press': {
+      name: 'Desenvolvimento acima da cabeça',
+      instructions: [
+        'De pé ou sentado, um haltere em cada mão à altura dos ombros, palmas viradas para a frente.',
+        'Empurra os halteres para cima até estenderes quase por completo os braços.',
+        'Desce com controlo até voltares à altura dos ombros.',
+      ],
+      executionCues: [
+        'Evita arquear as costas durante o empurrão: o tronco mantém-se estável.',
+        'Os halteres seguem uma trajetória vertical, não para a frente.',
+      ],
+      easierVariant: {
+        name: 'Desenvolvimento sentado',
+        instructions: ['Realiza o mesmo movimento sentado, com as costas apoiadas, para reduzir o envolvimento do tronco.'],
+        executionCues: ['Concentra-te apenas no movimento dos braços.'],
+      },
+      harderVariant: {
+        name: 'Desenvolvimento com braços alternados',
+        instructions: ['Realiza o empurrão com um braço de cada vez, mantendo o tronco estável.'],
+        executionCues: ['Evita inclinar-te lateralmente durante o empurrão a um braço.'],
+      },
+    },
+    'db-shoulder-lateral-raise': {
+      name: 'Elevações laterais',
+      instructions: [
+        'De pé, um haltere em cada mão junto às ancas, cotovelos ligeiramente dobrados.',
+        'Eleva os braços lateralmente até à altura dos ombros.',
+        'Desce com controlo até à posição inicial.',
+      ],
+      executionCues: [
+        'O movimento parte dos ombros, não de um impulso dos braços.',
+        'Os pulsos mantêm-se um pouco mais baixos do que os cotovelos durante a subida.',
+      ],
+      easierVariant: {
+        name: 'Elevações laterais com amplitude reduzida',
+        instructions: ['Realiza o mesmo movimento elevando os braços apenas até meia altura.'],
+        executionCues: ['Reduz a amplitude se sentires tensão no pescoço.'],
+      },
+      harderVariant: {
+        name: 'Elevações laterais com pausa em cima',
+        instructions: ['Realiza a elevação e, com os braços à altura dos ombros, mantém a posição 1-2 segundos.'],
+        executionCues: ['Os ombros mantêm-se baixos também durante a pausa.'],
+      },
+    },
+    'db-shoulder-front-raise': {
+      name: 'Elevações frontais',
+      instructions: [
+        'De pé, um haltere em cada mão à frente das coxas, cotovelos ligeiramente dobrados.',
+        'Eleva um braço à frente até à altura dos ombros.',
+        'Desce com controlo e repete com o outro braço ou alterna.',
+      ],
+      executionCues: [
+        'O tronco mantém-se parado, sem usar o impulso das costas para levantar o peso.',
+        'O movimento para à altura dos ombros, não mais além.',
+      ],
+      easierVariant: {
+        name: 'Elevações frontais com amplitude reduzida',
+        instructions: ['Realiza o mesmo movimento elevando o braço apenas até meia altura.'],
+        executionCues: ['Reduz a amplitude se o tronco tender a inclinar-se para trás.'],
+      },
+      harderVariant: {
+        name: 'Elevações frontais com pausa em cima',
+        instructions: ['Realiza a elevação e, com o braço à altura dos ombros, mantém a posição 1-2 segundos.'],
+        executionCues: ['O tronco mantém-se parado durante toda a pausa.'],
+      },
+    },
+    'db-arms-bicep-curl': {
+      name: 'Rosca bíceps',
+      instructions: [
+        'De pé, um haltere em cada mão junto às ancas, palmas viradas para a frente.',
+        'Dobra os cotovelos elevando os halteres em direção aos ombros.',
+        'Desce com controlo até estenderes quase por completo os braços.',
+      ],
+      executionCues: [
+        'Os cotovelos mantêm-se perto do tronco durante todo o movimento.',
+        'Evita usar o impulso das costas para levantar o peso.',
+      ],
+      easierVariant: {
+        name: 'Rosca bíceps encostado',
+        instructions: ['Realiza o mesmo movimento com as costas encostadas a uma parede, para reduzir o impulso.'],
+        executionCues: ['O contacto com a parede ajuda a isolar o movimento.'],
+      },
+      harderVariant: {
+        name: 'Rosca bíceps alternada com pausa',
+        instructions: ['Realiza a rosca com um braço de cada vez, mantendo a posição mais alta 1-2 segundos.'],
+        executionCues: ['O braço parado mantém-se estendido e relaxado durante a alternância.'],
+      },
+    },
+    'db-arms-hammer-curl': {
+      name: 'Rosca martelo',
+      instructions: [
+        'De pé, um haltere em cada mão junto às ancas, palmas viradas para o corpo.',
+        'Dobra os cotovelos elevando os halteres em direção aos ombros, mantendo as palmas viradas para dentro.',
+        'Desce com controlo até estenderes quase por completo os braços.',
+      ],
+      executionCues: [
+        'Os pulsos mantêm-se parados e alinhados com os antebraços durante todo o movimento.',
+        'Os cotovelos mantêm-se perto do tronco.',
+      ],
+      easierVariant: {
+        name: 'Rosca martelo encostado',
+        instructions: ['Realiza o mesmo movimento com as costas encostadas a uma parede.'],
+        executionCues: ['O contacto com a parede reduz o impulso.'],
+      },
+      harderVariant: {
+        name: 'Rosca martelo alternada com pausa',
+        instructions: ['Realiza a rosca com um braço de cada vez, mantendo a posição mais alta 1-2 segundos.'],
+        executionCues: ['O tronco mantém-se estável durante a alternância.'],
+      },
+    },
+    'db-arms-tricep-extension': {
+      name: 'Extensão de tríceps acima da cabeça',
+      instructions: [
+        'De pé ou sentado, segura um haltere com ambas as mãos acima da cabeça, braços quase estendidos.',
+        'Dobra os cotovelos baixando o haltere atrás da cabeça.',
+        'Estende os braços voltando à posição inicial.',
+      ],
+      executionCues: [
+        'Os cotovelos mantêm-se apontados para a frente, sem abrir lateralmente.',
+        'O movimento acontece só no cotovelo, o tronco mantém-se parado.',
+      ],
+      easierVariant: {
+        name: 'Extensão de tríceps com amplitude reduzida',
+        instructions: ['Realiza o mesmo movimento reduzindo a profundidade da descida.'],
+        executionCues: ['Reduz a amplitude se sentires tensão no ombro.'],
+      },
+      harderVariant: {
+        name: 'Extensão de tríceps com pausa em baixo',
+        instructions: ['Realiza a extensão e, com os cotovelos dobrados, mantém a posição 1-2 segundos.'],
+        executionCues: ['Os cotovelos mantêm-se parados durante a pausa.'],
+      },
+    },
+    'db-legs-goblet-squat': {
+      name: 'Agachamento goblet',
+      instructions: [
+        'De pé, pés à largura dos ombros, um haltere segurado na vertical com ambas as mãos à frente do peito.',
+        'Dobra os joelhos e desce como num agachamento, mantendo o haltere perto do corpo.',
+        'Sobe empurrando pelos calcanhares até à posição inicial.',
+      ],
+      executionCues: [
+        'Os joelhos seguem a direção das pontas dos pés.',
+        'O tronco mantém-se o mais ereto possível durante a descida.',
+      ],
+      easierVariant: {
+        name: 'Agachamento goblet com amplitude reduzida',
+        instructions: ['Realiza o mesmo movimento reduzindo a profundidade da descida.'],
+        executionCues: ['Usa um haltere mais leve se a profundidade completa for difícil de controlar.'],
+      },
+      harderVariant: {
+        name: 'Agachamento goblet com pausa em baixo',
+        instructions: ['Realiza o agachamento e, no ponto mais baixo, mantém a posição 2 segundos.'],
+        executionCues: ['O tronco mantém-se estável durante a pausa.'],
+      },
+    },
+    'db-legs-rdl': {
+      name: 'Levantamento terra romeno',
+      instructions: [
+        'De pé, um haltere em cada mão à frente das coxas, joelhos ligeiramente dobrados.',
+        'Leva as ancas para trás baixando os halteres ao longo das pernas, mantendo as costas longas.',
+        'Sobe empurrando as ancas para a frente até à posição ereta.',
+      ],
+      executionCues: [
+        'Os halteres mantêm-se perto das pernas durante todo o movimento.',
+        'As costas mantêm-se longas, sem curvar durante a descida.',
+      ],
+      easierVariant: {
+        name: 'Levantamento terra romeno com amplitude reduzida',
+        instructions: ['Realiza o mesmo movimento descendo apenas até meio percurso.'],
+        executionCues: ['Reduz a amplitude se as costas tiverem dificuldade em manter-se longas.'],
+      },
+      harderVariant: {
+        name: 'Levantamento terra romeno com pausa em baixo',
+        instructions: ['Realiza o levantamento e, no ponto mais baixo, mantém a posição 2 segundos.'],
+        executionCues: ['As costas mantêm-se longas também durante a pausa.'],
+      },
+    },
+    'db-core-russian-twist': {
+      name: 'Rotação russa com carga',
+      instructions: [
+        'Sentado, joelhos dobrados, tronco inclinado ligeiramente para trás, um haltere segurado com ambas as mãos à frente do peito.',
+        'Roda o tronco levando o haltere para um lado, depois para o outro.',
+        'Mantém um ritmo controlado durante toda a série.',
+      ],
+      executionCues: [
+        'O movimento parte do tronco, não só dos braços.',
+        'Mantém as costas longas, sem curvar durante a rotação.',
+      ],
+      easierVariant: {
+        name: 'Rotação russa com pés no chão',
+        instructions: ['Realiza o mesmo movimento mantendo os pés apoiados no chão, para mais estabilidade.'],
+        executionCues: ['Usa um haltere mais leve se o tronco tiver dificuldade em manter-se estável.'],
+      },
+      harderVariant: {
+        name: 'Rotação russa com pés elevados',
+        instructions: ['Realiza a rotação mantendo os pés elevados do chão durante toda a série.'],
+        executionCues: ['O equilíbrio exige um ritmo mais lento e controlado.'],
+      },
+    },
+    'db-core-suitcase-carry': {
+      name: 'Caminhada com carga a um lado',
+      instructions: [
+        'De pé, um haltere pesado segurado com um braço junto à anca, outro braço livre para o equilíbrio.',
+        'Caminha em linha reta ou no lugar mantendo o tronco ereto e os ombros alinhados.',
+        'Troca de braço a meio tempo se a série o exigir.',
+      ],
+      executionCues: [
+        'Os ombros mantêm-se alinhados, sem inclinar para o lado da carga.',
+        'Os passos mantêm-se curtos e controlados, sem pressa.',
+      ],
+      easierVariant: {
+        name: 'Caminhada com carga reduzida',
+        instructions: ['Realiza o mesmo exercício com um haltere mais leve.'],
+        executionCues: ['Reduz a carga se os ombros tenderem a desequilibrar-se.'],
+      },
+      harderVariant: {
+        name: 'Caminhada com pausa a meio',
+        instructions: ['Realiza a caminhada e, a meio tempo, para mantendo a posição 2-3 segundos.'],
+        executionCues: ['O tronco mantém-se ereto também durante a pausa.'],
+      },
+    },
+    'db-fullbody-thruster': {
+      name: 'Thruster (agachamento + empurrão)',
+      instructions: [
+        'De pé, um haltere em cada mão à altura dos ombros, pés à largura dos ombros.',
+        'Desce num agachamento, depois sobe empurrando pelos calcanhares e empurrando ao mesmo tempo os halteres acima da cabeça.',
+        'Desce com controlo devolvendo os halteres à altura dos ombros.',
+      ],
+      executionCues: [
+        'O impulso para cima parte da força das pernas, não só dos braços.',
+        'O movimento mantém-se fluido, sem pausas bruscas entre o agachamento e o empurrão.',
+      ],
+      easierVariant: {
+        name: 'Thruster em dois tempos',
+        instructions: ['Realiza primeiro o agachamento completo, depois o empurrão acima da cabeça como dois movimentos separados.'],
+        executionCues: ['Está bem dividir o movimento até resultar natural.'],
+      },
+      harderVariant: {
+        name: 'Thruster com pausa em baixo',
+        instructions: ['Realiza o thruster e, no ponto mais baixo do agachamento, mantém a posição 1-2 segundos antes de subir e empurrar.'],
+        executionCues: ['O tronco mantém-se estável durante a pausa.'],
+      },
+    },
+    'db-fullbody-renegade-row': {
+      name: 'Renegade row',
+      instructions: [
+        'Em posição de prancha alta, um haltere em cada mão apoiado no chão sob os ombros.',
+        'Puxa um haltere em direção à anca mantendo a bacia estável, depois volta a apoiá-lo no chão.',
+        'Repete do lado oposto, alternando.',
+      ],
+      executionCues: [
+        'A bacia mantém-se paralela ao chão, sem rodar durante a tração.',
+        'Pés ligeiramente mais afastados ajudam na estabilidade.',
+      ],
+      easierVariant: {
+        name: 'Renegade row de joelhos',
+        instructions: ['Realiza o mesmo movimento com os joelhos no chão em vez de prancha alta.'],
+        executionCues: ['Reduz a carga na bacia mantendo o gesto da tração.'],
+      },
+      harderVariant: {
+        name: 'Renegade row com flexão',
+        instructions: ['Realiza a tração em cada lado, depois acrescenta uma flexão de braços antes de repetir.'],
+        executionCues: ['Acrescenta a flexão só se conseguires manter a bacia estável.'],
       },
     },
   },

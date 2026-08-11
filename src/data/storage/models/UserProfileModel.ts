@@ -14,4 +14,9 @@ export default class UserProfileModel extends Model {
   @field('difficulty_score') difficultyScore!: number;
   @field('consecutive_easy_count') consecutiveEasyCount!: number;
   @field('consecutive_hard_or_missed_count') consecutiveHardOrMissedCount!: number;
+  @field('has_dumbbells') hasDumbbells!: boolean;
+  @field('dumbbell_min_kg') dumbbellMinKg!: number | null;
+  @field('dumbbell_max_kg') dumbbellMaxKg!: number | null;
+  @field('dumbbell_module_unlocked') dumbbellModuleUnlocked!: boolean;
+  @field('dumbbell_reask_dismissed') dumbbellReaskDismissed!: boolean;
 }

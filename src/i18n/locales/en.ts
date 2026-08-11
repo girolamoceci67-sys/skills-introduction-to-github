@@ -51,6 +51,13 @@ const en: LocaleResource = {
     limitationsSubtitle: 'We’ll avoid or adapt exercises that involve them directly. You can select more than one.',
     limitationsDisclaimer:
       'This information is only used to personalize exercise selection and is not a medical assessment.',
+    equipmentTitle: 'Do you have compact or adjustable dumbbells?',
+    equipmentSubtitle:
+      'If you do, we’ll unlock a dumbbell exercise module you can alternate or combine with your bodyweight exercises.',
+    equipmentYes: 'Yes, I have some',
+    equipmentNo: 'No, I don’t',
+    equipmentMinLabel: 'Minimum load available (kg)',
+    equipmentMaxLabel: 'Maximum load available (kg)',
     createPlan: 'Create my plan',
     preparingPlan: 'Preparing your plan',
     saveErrorTitle: 'We couldn’t save your profile',
@@ -108,11 +115,28 @@ const en: LocaleResource = {
     noProfileTitle: 'Profile not found',
     noProfileSubtitle: 'Restart the app to redo onboarding.',
     errorTitle: 'We couldn’t generate your plan',
+    dumbbellReaskTitle: 'Do you have dumbbells?',
+    dumbbellReaskSubtitle: 'Now that you’ve been training consistently, you could unlock the dumbbell module.',
+    dumbbellReaskCta: 'Answer',
+    dumbbellReaskDismiss: 'Not now',
+  },
+  dumbbellReask: {
+    title: 'Do you have compact or adjustable dumbbells?',
+    subtitle:
+      'If you do, we’ll unlock a dumbbell exercise module you can alternate or combine with your bodyweight exercises.',
+    yes: 'Yes, I have some',
+    no: 'No, I don’t',
+    minLabel: 'Minimum load available (kg)',
+    maxLabel: 'Maximum load available (kg)',
+    confirm: 'Confirm',
+    skip: 'Not now',
   },
   library: {
     title: 'Exercise library',
     subtitle: 'All exercises are bodyweight-only, designed for a home space of at least 2x2 m.',
+    subtitleWithDumbbell: 'Bodyweight and dumbbell exercises, designed for a home space of at least 2x2 m.',
     levelBadge: 'Base level {{tier}} of 3',
+    levelBadgeDumbbell: 'Base level {{tier}} of 3 · {{min}}–{{max}} kg',
     excludedBadge: 'Excluded for some limitations',
     notFound: 'Exercise not found',
     previewCaption: 'Movement preview',
@@ -137,6 +161,8 @@ const en: LocaleResource = {
     rest: 'Rest',
     skipRest: 'Skip rest',
     feedbackTitle: 'How did it go?',
+    loadLabel: 'Load (kg)',
+    exerciseFeedbackTitle: 'How did this exercise feel?',
   },
   celebration: {
     title: 'Workout complete!',
@@ -149,6 +175,8 @@ const en: LocaleResource = {
     streak_one: '{{count}} workout in a row',
     streak_other: '{{count}} workouts in a row',
     weeklyAdherence: 'Weekly adherence',
+    loadProgression: 'Load per exercise (dumbbell)',
+    loadLatest: 'latest: {{kg}} kg',
     weeklyGoal: 'This week’s goal',
     goalProgress: '{{completed}} of {{target}} workouts completed',
     goalReminderSuffix: ' · reminder at {{time}}',
@@ -183,6 +211,10 @@ const en: LocaleResource = {
     push: 'Push',
     pull: 'Pull',
     mobility_cardio: 'Mobility & cardio',
+    chest: 'Chest',
+    back: 'Back',
+    shoulders: 'Shoulders',
+    arms: 'Arms',
   },
   variants: {
     easier: 'Easier variant',
@@ -641,6 +673,358 @@ const en: LocaleResource = {
         name: 'Slow sit-to-stand',
         instructions: ['Perform the movement slowing down both the rising and lowering phases.'],
         executionCues: ['Slowing down increases the effort required without needing to jump or push hard.'],
+      },
+    },
+    'db-chest-floor-press': {
+      name: 'Floor press',
+      instructions: [
+        'Lie on your back, knees bent, a dumbbell in each hand resting on your chest.',
+        'Press the dumbbells upward until your arms are nearly fully extended.',
+        'Lower with control until your elbows lightly touch the floor.',
+      ],
+      executionCues: [
+        'Your elbows stay at about 45 degrees from your torso, not fully flared out.',
+        'Your wrists stay stacked above your elbows during the press.',
+      ],
+      easierVariant: {
+        name: 'Floor press, lighter load',
+        instructions: ['Perform the same movement with a lighter dumbbell, reducing the range if needed.'],
+        executionCues: ['A full range with less weight is better than a partial range with more weight.'],
+      },
+      harderVariant: {
+        name: 'Floor press with pause at the bottom',
+        instructions: ['Perform the press and, with your elbows near the floor, pause for 2 seconds.'],
+        executionCues: ['The pause stays controlled, without bouncing off the floor.'],
+      },
+    },
+    'db-chest-floor-fly': {
+      name: 'Floor fly',
+      instructions: [
+        'Lie on your back, knees bent, a dumbbell in each hand, arms extended above your chest.',
+        'Open your arms out to the sides, lowering the dumbbells with elbows slightly bent, until close to the floor.',
+        'Bring your arms back together above your chest following the same arc.',
+      ],
+      executionCues: [
+        'Your elbows keep a slight, fixed bend throughout the movement.',
+        'The movement is a wide arc, not a vertical press.',
+      ],
+      easierVariant: {
+        name: 'Floor fly, reduced range',
+        instructions: ['Perform the same movement opening your arms only partway.'],
+        executionCues: ['Reduce the range if you feel tension in your shoulder.'],
+      },
+      harderVariant: {
+        name: 'Floor fly with pause at the open position',
+        instructions: ['Perform the fly and, with your arms nearly at the floor, hold the position for 1-2 seconds.'],
+        executionCues: ['The pause stays light, without forcing your shoulder.'],
+      },
+    },
+    'db-back-bent-row': {
+      name: 'Bent-over row',
+      instructions: [
+        'Feet hip-width apart, knees slightly bent, torso leaning forward, a dumbbell in each hand.',
+        'Pull the dumbbells toward your abdomen, bringing your elbows back and your shoulder blades together.',
+        'Lower with control until your arms are nearly fully extended.',
+      ],
+      executionCues: [
+        'Your back stays long throughout the movement, without rounding.',
+        'The movement starts from your back, not just a bend of the elbow.',
+      ],
+      easierVariant: {
+        name: 'Bent-over row with less forward lean',
+        instructions: ['Perform the same movement leaning your torso less forward, to reduce the load on your back.'],
+        executionCues: ['Still keep your back long.'],
+      },
+      harderVariant: {
+        name: 'Bent-over row with pause at the top',
+        instructions: ['Perform the row and, with your elbows back, hold the position for 1-2 seconds.'],
+        executionCues: ['Your shoulder blades stay together during the pause.'],
+      },
+    },
+    'db-back-single-row': {
+      name: 'Single-arm row',
+      instructions: [
+        'Rest the hand and knee on the same side on a chair or stable surface, torso parallel to the floor.',
+        'With your other hand, pull the dumbbell toward your hip, bringing your elbow back.',
+        'Lower with control, then repeat on the other side.',
+      ],
+      executionCues: [
+        'Your torso stays still, without rotating during the pull.',
+        'Your elbow stays close to your torso during the movement.',
+      ],
+      easierVariant: {
+        name: 'Single-arm row, reduced range',
+        instructions: ['Perform the same movement with a smaller range of motion.'],
+        executionCues: ['Reduce the range if your torso tends to rotate.'],
+      },
+      harderVariant: {
+        name: 'Single-arm row with pause at the top',
+        instructions: ['Perform the pull and, with your elbow back, hold the position for 1-2 seconds.'],
+        executionCues: ['Your torso stays stable throughout the pause.'],
+      },
+    },
+    'db-shoulder-press': {
+      name: 'Overhead press',
+      instructions: [
+        'Standing or seated, a dumbbell in each hand at shoulder height, palms facing forward.',
+        'Press the dumbbells upward until your arms are nearly fully extended.',
+        'Lower with control back to shoulder height.',
+      ],
+      executionCues: [
+        'Avoid arching your back during the press: your torso stays stable.',
+        'The dumbbells follow a vertical path, not forward.',
+      ],
+      easierVariant: {
+        name: 'Seated overhead press',
+        instructions: ['Perform the same movement seated, with your back supported, to reduce torso involvement.'],
+        executionCues: ['Focus only on the arm movement.'],
+      },
+      harderVariant: {
+        name: 'Alternating overhead press',
+        instructions: ['Perform the press with one arm at a time, keeping your torso stable.'],
+        executionCues: ['Avoid leaning sideways during the single-arm press.'],
+      },
+    },
+    'db-shoulder-lateral-raise': {
+      name: 'Lateral raise',
+      instructions: [
+        'Standing, a dumbbell in each hand at your sides, elbows slightly bent.',
+        'Lift your arms out to the sides up to shoulder height.',
+        'Lower with control back to the starting position.',
+      ],
+      executionCues: [
+        'The movement starts from your shoulders, not a swing of the arms.',
+        'Your wrists stay slightly lower than your elbows as you lift.',
+      ],
+      easierVariant: {
+        name: 'Lateral raise, reduced range',
+        instructions: ['Perform the same movement lifting your arms only halfway up.'],
+        executionCues: ['Reduce the range if you feel tension in your neck.'],
+      },
+      harderVariant: {
+        name: 'Lateral raise with pause at the top',
+        instructions: ['Perform the raise and, with your arms at shoulder height, hold the position for 1-2 seconds.'],
+        executionCues: ['Your shoulders stay low even during the pause.'],
+      },
+    },
+    'db-shoulder-front-raise': {
+      name: 'Front raise',
+      instructions: [
+        'Standing, a dumbbell in each hand in front of your thighs, elbows slightly bent.',
+        'Lift one arm forward up to shoulder height.',
+        'Lower with control, then repeat with the other arm or alternate.',
+      ],
+      executionCues: [
+        'Your torso stays still, without using momentum from your back to lift the weight.',
+        'The movement stops at shoulder height, not beyond.',
+      ],
+      easierVariant: {
+        name: 'Front raise, reduced range',
+        instructions: ['Perform the same movement lifting your arm only halfway up.'],
+        executionCues: ['Reduce the range if your torso tends to lean back.'],
+      },
+      harderVariant: {
+        name: 'Front raise with pause at the top',
+        instructions: ['Perform the raise and, with your arm at shoulder height, hold the position for 1-2 seconds.'],
+        executionCues: ['Your torso stays still throughout the pause.'],
+      },
+    },
+    'db-arms-bicep-curl': {
+      name: 'Bicep curl',
+      instructions: [
+        'Standing, a dumbbell in each hand at your sides, palms facing forward.',
+        'Bend your elbows, lifting the dumbbells toward your shoulders.',
+        'Lower with control until your arms are nearly fully extended.',
+      ],
+      executionCues: [
+        'Your elbows stay close to your torso throughout the movement.',
+        'Avoid using momentum from your back to lift the weight.',
+      ],
+      easierVariant: {
+        name: 'Bicep curl against a wall',
+        instructions: ['Perform the same movement with your back against a wall, to reduce momentum.'],
+        executionCues: ['Contact with the wall helps isolate the movement.'],
+      },
+      harderVariant: {
+        name: 'Alternating bicep curl with pause',
+        instructions: ['Perform the curl with one arm at a time, holding the top position for 1-2 seconds.'],
+        executionCues: ['The resting arm stays extended and relaxed during the alternation.'],
+      },
+    },
+    'db-arms-hammer-curl': {
+      name: 'Hammer curl',
+      instructions: [
+        'Standing, a dumbbell in each hand at your sides, palms facing your body.',
+        'Bend your elbows, lifting the dumbbells toward your shoulders, keeping your palms facing inward.',
+        'Lower with control until your arms are nearly fully extended.',
+      ],
+      executionCues: [
+        'Your wrists stay still and aligned with your forearms throughout the movement.',
+        'Your elbows stay close to your torso.',
+      ],
+      easierVariant: {
+        name: 'Hammer curl against a wall',
+        instructions: ['Perform the same movement with your back against a wall.'],
+        executionCues: ['Contact with the wall reduces momentum.'],
+      },
+      harderVariant: {
+        name: 'Alternating hammer curl with pause',
+        instructions: ['Perform the curl with one arm at a time, holding the top position for 1-2 seconds.'],
+        executionCues: ['Your torso stays stable during the alternation.'],
+      },
+    },
+    'db-arms-tricep-extension': {
+      name: 'Overhead tricep extension',
+      instructions: [
+        'Standing or seated, hold a dumbbell with both hands overhead, arms nearly extended.',
+        'Bend your elbows, lowering the dumbbell behind your head.',
+        'Extend your arms, returning to the starting position.',
+      ],
+      executionCues: [
+        'Your elbows stay pointed forward, without flaring out to the sides.',
+        'The movement happens only at the elbow, your torso stays still.',
+      ],
+      easierVariant: {
+        name: 'Tricep extension, reduced range',
+        instructions: ['Perform the same movement reducing the depth of the descent.'],
+        executionCues: ['Reduce the range if you feel tension in your shoulder.'],
+      },
+      harderVariant: {
+        name: 'Tricep extension with pause at the bottom',
+        instructions: ['Perform the extension and, with your elbows bent, hold the position for 1-2 seconds.'],
+        executionCues: ['Your elbows stay still during the pause.'],
+      },
+    },
+    'db-legs-goblet-squat': {
+      name: 'Goblet squat',
+      instructions: [
+        'Standing, feet shoulder-width apart, a dumbbell held vertically with both hands in front of your chest.',
+        'Bend your knees and lower into a squat, keeping the dumbbell close to your body.',
+        'Push through your heels back up to the starting position.',
+      ],
+      executionCues: [
+        'Your knees track the direction of your toes.',
+        'Your torso stays as upright as possible during the descent.',
+      ],
+      easierVariant: {
+        name: 'Goblet squat, reduced range',
+        instructions: ['Perform the same movement reducing the depth of the descent.'],
+        executionCues: ['Use a lighter dumbbell if the full depth is hard to control.'],
+      },
+      harderVariant: {
+        name: 'Goblet squat with pause at the bottom',
+        instructions: ['Perform the squat and, at the lowest point, hold the position for 2 seconds.'],
+        executionCues: ['Your torso stays stable during the pause.'],
+      },
+    },
+    'db-legs-rdl': {
+      name: 'Romanian deadlift',
+      instructions: [
+        'Standing, a dumbbell in each hand in front of your thighs, knees slightly bent.',
+        'Push your hips back, lowering the dumbbells along your legs, keeping your back long.',
+        'Push your hips forward back up to standing.',
+      ],
+      executionCues: [
+        'The dumbbells stay close to your legs throughout the movement.',
+        'Your back stays long, without rounding during the descent.',
+      ],
+      easierVariant: {
+        name: 'Romanian deadlift, reduced range',
+        instructions: ['Perform the same movement lowering only halfway.'],
+        executionCues: ['Reduce the range if your back struggles to stay long.'],
+      },
+      harderVariant: {
+        name: 'Romanian deadlift with pause at the bottom',
+        instructions: ['Perform the deadlift and, at the lowest point, hold the position for 2 seconds.'],
+        executionCues: ['Your back stays long even during the pause.'],
+      },
+    },
+    'db-core-russian-twist': {
+      name: 'Weighted Russian twist',
+      instructions: [
+        'Seated, knees bent, torso leaning slightly back, a dumbbell held with both hands in front of your chest.',
+        'Rotate your torso, bringing the dumbbell to one side, then the other.',
+        'Keep a controlled pace throughout the set.',
+      ],
+      executionCues: [
+        'The movement starts from your torso, not just your arms.',
+        'Keep your back long, without rounding during the rotation.',
+      ],
+      easierVariant: {
+        name: 'Russian twist with feet on the ground',
+        instructions: ['Perform the same movement keeping your feet on the ground, for more stability.'],
+        executionCues: ['Use a lighter dumbbell if your torso struggles to stay stable.'],
+      },
+      harderVariant: {
+        name: 'Russian twist with feet lifted',
+        instructions: ['Perform the twist keeping your feet lifted off the ground for the whole set.'],
+        executionCues: ['Balance requires a slower, more controlled pace.'],
+      },
+    },
+    'db-core-suitcase-carry': {
+      name: 'Suitcase carry',
+      instructions: [
+        'Standing, a heavy dumbbell held in one hand at your side, other arm free for balance.',
+        'Walk in a straight line or in place, keeping your torso upright and shoulders level.',
+        'Switch arms halfway through if the set calls for it.',
+      ],
+      executionCues: [
+        'Your shoulders stay level, without leaning toward the loaded side.',
+        'Your steps stay short and controlled, not rushed.',
+      ],
+      easierVariant: {
+        name: 'Suitcase carry, lighter load',
+        instructions: ['Perform the same exercise with a lighter dumbbell.'],
+        executionCues: ['Reduce the load if your shoulders tend to tilt.'],
+      },
+      harderVariant: {
+        name: 'Suitcase carry with mid-pause',
+        instructions: ['Perform the carry and, halfway through, stop and hold the position for 2-3 seconds.'],
+        executionCues: ['Your torso stays upright during the pause too.'],
+      },
+    },
+    'db-fullbody-thruster': {
+      name: 'Thruster',
+      instructions: [
+        'Standing, a dumbbell in each hand at shoulder height, feet shoulder-width apart.',
+        'Lower into a squat, then push back up through your heels while pressing the dumbbells overhead.',
+        'Lower with control, bringing the dumbbells back to shoulder height.',
+      ],
+      executionCues: [
+        'The upward drive comes from your legs, not just your arms.',
+        'The movement stays fluid, without abrupt pauses between squat and press.',
+      ],
+      easierVariant: {
+        name: 'Thruster in two steps',
+        instructions: ['Perform the full squat first, then the overhead press, as two separate movements.'],
+        executionCues: ['It’s fine to break the movement apart until it feels natural.'],
+      },
+      harderVariant: {
+        name: 'Thruster with pause at the bottom',
+        instructions: ['Perform the thruster and, at the lowest point of the squat, hold for 1-2 seconds before standing and pressing.'],
+        executionCues: ['Your torso stays stable during the pause.'],
+      },
+    },
+    'db-fullbody-renegade-row': {
+      name: 'Renegade row',
+      instructions: [
+        'In a high plank position, a dumbbell in each hand on the floor under your shoulders.',
+        'Pull one dumbbell toward your hip, keeping your hips stable, then set it back down.',
+        'Repeat on the other side, alternating.',
+      ],
+      executionCues: [
+        'Your hips stay parallel to the floor, without rotating during the pull.',
+        'Slightly wider feet help with stability.',
+      ],
+      easierVariant: {
+        name: 'Renegade row on your knees',
+        instructions: ['Perform the same movement with your knees on the ground instead of a high plank.'],
+        executionCues: ['This reduces the load on your hips while keeping the pulling pattern.'],
+      },
+      harderVariant: {
+        name: 'Renegade row with push-up',
+        instructions: ['Perform the pull on each side, then add a push-up before repeating.'],
+        executionCues: ['Add the push-up only if you can keep your hips stable.'],
       },
     },
   },

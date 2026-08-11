@@ -17,7 +17,7 @@ export default function OnboardingAvailability() {
 
   return (
     <Screen>
-      <StepProgress currentStep={3} totalSteps={4} />
+      <StepProgress currentStep={3} totalSteps={5} />
       <View style={styles.header}>
         <Text style={styles.title}>{t('onboarding.availabilityTitle')}</Text>
         <Text style={styles.subtitle}>{t('onboarding.availabilitySubtitle')}</Text>

@@ -19,6 +19,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['knees'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'legs-glute-bridge',
@@ -27,6 +29,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['none'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'legs-split-squat',
@@ -35,6 +39,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['knees'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
 
   // --- Spinta (push) ---
@@ -45,6 +51,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['wrists', 'shoulders'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'push-knee',
@@ -53,6 +61,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['wrists'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'push-standard',
@@ -61,6 +71,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['wrists', 'shoulders'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'push-forearm-wall',
@@ -69,6 +81,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['none'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
 
   // --- Tirata (pull) ---
@@ -79,6 +93,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['back'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'pull-scapular-retraction',
@@ -87,6 +103,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['shoulders'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'pull-prone-swimmer',
@@ -95,6 +113,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['back'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'pull-seated-scapular-squeeze',
@@ -103,6 +123,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['none'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
 
   // --- Core ---
@@ -113,6 +135,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'hold',
     contraindicationTags: ['wrists'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'core-dead-bug',
@@ -121,6 +145,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['back'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'core-bird-dog',
@@ -129,6 +155,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['back', 'wrists'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'core-standing-brace',
@@ -137,6 +165,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'hold',
     contraindicationTags: ['none'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
 
   // --- Mobilità e cardio a basso impatto ---
@@ -147,6 +177,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['none'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'mobility-step-touch',
@@ -155,6 +187,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['knees'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'mobility-shoulder-hip-circles',
@@ -163,6 +197,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['shoulders'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
 
   // --- Full body (disponibili nella libreria, non ancora usati dal generatore automatico del piano) ---
@@ -173,6 +209,8 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['wrists'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
   {
     id: 'fullbody-sit-to-stand',
@@ -181,5 +219,7 @@ export const exerciseLibrary: Exercise[] = [
     movementType: 'reps',
     contraindicationTags: ['knees'],
     spaceRequirement: '2x2m',
+    equipment: 'bodyweight',
+    accessTier: 'free',
   },
 ];

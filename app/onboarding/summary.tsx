@@ -11,17 +11,26 @@ import { colors, spacing, typography } from '../../src/theme/theme';
 
 export default function OnboardingSummary() {
   const { t } = useTranslation();
-  const { startingLevel, goal, daysPerWeekAvailable, limitations, reset } = useOnboardingStore();
+  const { startingLevel, goal, daysPerWeekAvailable, limitations, hasDumbbells, dumbbellMinKg, dumbbellMaxKg, reset } =
+    useOnboardingStore();
   const [status, setStatus] = useState<'saving' | 'error'>('saving');
 
   useEffect(() => {
-    if (!startingLevel || !goal || !daysPerWeekAvailable) {
+    if (!startingLevel || !goal || !daysPerWeekAvailable || hasDumbbells === null) {
       setStatus('error');
       return;
     }
     let cancelled = false;
     setStatus('saving');
-    createUserFromOnboarding({ startingLevel, goal, daysPerWeekAvailable, limitations })
+    createUserFromOnboarding({
+      startingLevel,
+      goal,
+      daysPerWeekAvailable,
+      limitations,
+      hasDumbbells,
+      dumbbellMinKg,
+      dumbbellMaxKg,
+    })
       .then(() => {
         if (cancelled) return;
         reset();

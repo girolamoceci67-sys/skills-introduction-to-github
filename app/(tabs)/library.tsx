@@ -1,9 +1,13 @@
+import { useEffect, useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
 import { Screen } from '../../src/components/Screen';
 import { Tag } from '../../src/components/Tag';
+import { getCurrentUser } from '../../src/data/repositories/userRepository';
+import { useRefreshBus } from '../../src/data/refreshBus';
+import { dumbbellLibrary } from '../../src/domain/exercises/dumbbellLibrary';
 import { useExerciseContent } from '../../src/domain/exercises/exerciseContent';
 import { exerciseLibrary } from '../../src/domain/exercises/library';
 import { useLabels } from '../../src/domain/exercises/labels';
@@ -17,6 +21,10 @@ const GROUP_ORDER: MuscleGroup[] = [
   'core',
   'mobility_cardio',
   'full_body',
+  'chest',
+  'back',
+  'shoulders',
+  'arms',
 ];
 
 function groupExercises(exercises: Exercise[]): { group: MuscleGroup; items: Exercise[] }[] {
@@ -29,6 +37,14 @@ function groupExercises(exercises: Exercise[]): { group: MuscleGroup; items: Exe
 function ExerciseRow({ exercise }: { exercise: Exercise }) {
   const { t } = useTranslation();
   const content = useExerciseContent(exercise.id);
+  const meta =
+    exercise.equipment === 'dumbbell' && exercise.loadRangeKg
+      ? t('library.levelBadgeDumbbell', {
+          tier: exercise.baseDifficultyTier,
+          min: exercise.loadRangeKg.min,
+          max: exercise.loadRangeKg.max,
+        })
+      : t('library.levelBadge', { tier: exercise.baseDifficultyTier });
 
   return (
     <Pressable
@@ -38,7 +54,7 @@ function ExerciseRow({ exercise }: { exercise: Exercise }) {
     >
       <View style={styles.cardText}>
         <Text style={styles.cardTitle}>{content.name}</Text>
-        <Text style={styles.cardMeta}>{t('library.levelBadge', { tier: exercise.baseDifficultyTier })}</Text>
+        <Text style={styles.cardMeta}>{meta}</Text>
       </View>
       {exercise.contraindicationTags.includes('none') ? null : <Tag label={t('library.excludedBadge')} />}
     </Pressable>
@@ -48,12 +64,19 @@ function ExerciseRow({ exercise }: { exercise: Exercise }) {
 export default function Library() {
   const { t } = useTranslation();
   const { muscleGroupLabels } = useLabels();
-  const sections = groupExercises(exerciseLibrary);
+  const version = useRefreshBus((state) => state.version);
+  const [dumbbellUnlocked, setDumbbellUnlocked] = useState(false);
+
+  useEffect(() => {
+    getCurrentUser().then((user) => setDumbbellUnlocked(Boolean(user?.dumbbellModuleUnlocked)));
+  }, [version]);
+
+  const sections = groupExercises(dumbbellUnlocked ? [...exerciseLibrary, ...dumbbellLibrary] : exerciseLibrary);
 
   return (
     <Screen>
       <Text style={styles.title}>{t('library.title')}</Text>
-      <Text style={styles.subtitle}>{t('library.subtitle')}</Text>
+      <Text style={styles.subtitle}>{t(dumbbellUnlocked ? 'library.subtitleWithDumbbell' : 'library.subtitle')}</Text>
       {sections.map((section) => (
         <View key={section.group} style={styles.section}>
           <Text style={styles.sectionTitle}>{muscleGroupLabels[section.group]}</Text>

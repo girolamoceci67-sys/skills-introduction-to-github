@@ -9,7 +9,8 @@ import { CountdownTimer } from '../../../src/components/CountdownTimer';
 import { NumberPicker } from '../../../src/components/NumberPicker';
 import { PrimaryButton } from '../../../src/components/PrimaryButton';
 import { Screen } from '../../../src/components/Screen';
-import { onSessionFeedback } from '../../../src/domain/engine/adaptEngine';
+import { loadOptionsKg, onSessionFeedback } from '../../../src/domain/engine/adaptEngine';
+import { dumbbellLibrary } from '../../../src/domain/exercises/dumbbellLibrary';
 import { useExerciseContent } from '../../../src/domain/exercises/exerciseContent';
 import { exerciseLibrary } from '../../../src/domain/exercises/library';
 import { useLabels } from '../../../src/domain/exercises/labels';
@@ -30,10 +31,20 @@ import { getCurrentUser, updateUser } from '../../../src/data/repositories/userR
 import { incrementGoalCompletedSessions } from '../../../src/data/repositories/goalRepository';
 import { colors, spacing, typography } from '../../../src/theme/theme';
 
-type Phase = 'loading' | 'not_found' | 'energy' | 'exercise' | 'rest' | 'feedback' | 'saving' | 'celebration';
+type Phase =
+  | 'loading'
+  | 'not_found'
+  | 'energy'
+  | 'exercise'
+  | 'rest'
+  | 'exercise_feedback'
+  | 'feedback'
+  | 'saving'
+  | 'celebration';
 type PendingAdvance = 'next_set' | 'next_exercise';
 
 const ENERGY_LEVELS: (1 | 2 | 3 | 4 | 5)[] = [1, 2, 3, 4, 5];
+const fullExerciseLibrary = [...exerciseLibrary, ...dumbbellLibrary];
 
 export default function GuidedSession() {
   const { t } = useTranslation();
@@ -56,6 +67,8 @@ export default function GuidedSession() {
   // (che avanza solo alla transizione post-riposo) questo si aggiorna subito al tap/countdown,
   // così l'abbandono a metà riposo non sottostima le serie svolte.
   const [setsDoneForCurrentExercise, setSetsDoneForCurrentExercise] = useState(0);
+  // Sovrascrittura manuale del carico consigliato per l'esercizio manubri in corso, valida solo per questa sessione.
+  const [loadOverrideKg, setLoadOverrideKg] = useState<number | null>(null);
   const pendingAdvance = useRef<PendingAdvance>('next_set');
 
   useEffect(() => {
@@ -79,8 +92,10 @@ export default function GuidedSession() {
 
   const currentPlanExercise = day?.exercises[exerciseIndex] ?? null;
   const currentExercise = currentPlanExercise
-    ? exerciseLibrary.find((e) => e.id === currentPlanExercise.exerciseId) ?? null
+    ? fullExerciseLibrary.find((e) => e.id === currentPlanExercise.exerciseId) ?? null
     : null;
+  const effectiveLoadKg =
+    currentExercise?.equipment === 'dumbbell' ? loadOverrideKg ?? currentPlanExercise?.loadKg ?? null : null;
   // Gli hook non possono essere condizionali: chiamato sempre, con stringa vuota finché l'esercizio non è pronto.
   const currentContent = useExerciseContent(currentExercise?.id ?? '');
   const currentVariant = currentPlanExercise
@@ -103,9 +118,11 @@ export default function GuidedSession() {
           onPress: async () => {
             if (sessionId && user && day) {
               // Durante 'exercise'/'rest' l'esercizio corrente non è ancora nei completedLogs;
+              // durante 'exercise_feedback' le serie sono già tutte fatte ma manca il feedback;
               // nelle altre fasi (es. 'feedback') è già stato finalizzato lì, quindi non va
               // duplicato con un log "in corso".
               const isMidExercise = (phase === 'exercise' || phase === 'rest') && currentPlanExercise;
+              const isPendingExerciseFeedback = phase === 'exercise_feedback' && currentPlanExercise;
               const logs = isMidExercise
                 ? [
                     ...completedLogs,
@@ -114,9 +131,21 @@ export default function GuidedSession() {
                       variantUsed: currentPlanExercise!.variant,
                       setsCompleted: setsDoneForCurrentExercise,
                       setsPlanned: currentPlanExercise!.sets,
+                      loadKgUsed: effectiveLoadKg ?? undefined,
                     } satisfies SessionExerciseLog,
                   ]
-                : completedLogs;
+                : isPendingExerciseFeedback
+                  ? [
+                      ...completedLogs,
+                      {
+                        exerciseId: currentPlanExercise!.exerciseId,
+                        variantUsed: currentPlanExercise!.variant,
+                        setsCompleted: currentPlanExercise!.sets,
+                        setsPlanned: currentPlanExercise!.sets,
+                        loadKgUsed: effectiveLoadKg ?? undefined,
+                      } satisfies SessionExerciseLog,
+                    ]
+                  : completedLogs;
               await abandonSession(sessionId, logs);
               const updatedUser = onSessionFeedback(user, 'abandoned', null);
               await updateUser(updatedUser);
@@ -126,7 +155,7 @@ export default function GuidedSession() {
         },
       ]
     );
-  }, [t, sessionId, user, day, currentPlanExercise, phase, setsDoneForCurrentExercise, completedLogs]);
+  }, [t, sessionId, user, day, currentPlanExercise, phase, setsDoneForCurrentExercise, completedLogs, effectiveLoadKg]);
 
   function handleStartSession(energy: 1 | 2 | 3 | 4 | 5) {
     if (!user || !plan || !day) return;
@@ -140,37 +169,64 @@ export default function GuidedSession() {
     });
   }
 
-  function finalizeCurrentExerciseLog(): SessionExerciseLog {
-    return {
-      exerciseId: currentPlanExercise!.exerciseId,
-      variantUsed: currentPlanExercise!.variant,
-      setsCompleted: currentPlanExercise!.sets,
-      setsPlanned: currentPlanExercise!.sets,
-    };
-  }
-
-  function handleSetComplete() {
-    if (!day || !currentPlanExercise) return;
-    const isLastSetOfExercise = setIndex + 1 >= currentPlanExercise.sets;
+  // Finalizza il log dell'esercizio corrente e avanza: alla sessione di feedback (ultimo
+  // esercizio del giorno) o al riposo prima del prossimo esercizio.
+  function finishExerciseAndAdvance(log: SessionExerciseLog) {
+    if (!day) return;
     const isLastExercise = exerciseIndex + 1 >= day.exercises.length;
-    setSetsDoneForCurrentExercise((n) => n + 1);
-
-    if (isLastSetOfExercise && isLastExercise) {
-      setCompletedLogs((logs) => [...logs, finalizeCurrentExerciseLog()]);
+    setCompletedLogs((logs) => [...logs, log]);
+    if (isLastExercise) {
       setPhase('feedback');
       return;
     }
-
-    pendingAdvance.current = isLastSetOfExercise ? 'next_exercise' : 'next_set';
+    pendingAdvance.current = 'next_exercise';
     setPhase('rest');
+  }
+
+  function handleSetComplete() {
+    if (!day || !currentPlanExercise || !currentExercise) return;
+    const isLastSetOfExercise = setIndex + 1 >= currentPlanExercise.sets;
+    setSetsDoneForCurrentExercise((n) => n + 1);
+
+    if (!isLastSetOfExercise) {
+      pendingAdvance.current = 'next_set';
+      setPhase('rest');
+      return;
+    }
+
+    // Gli esercizi manubri hanno un feedback dedicato (carico usato + percezione dello sforzo)
+    // prima di essere finalizzati: il feedback di fine sessione resta separato e generale.
+    if (currentExercise.equipment === 'dumbbell') {
+      setPhase('exercise_feedback');
+      return;
+    }
+
+    finishExerciseAndAdvance({
+      exerciseId: currentPlanExercise.exerciseId,
+      variantUsed: currentPlanExercise.variant,
+      setsCompleted: currentPlanExercise.sets,
+      setsPlanned: currentPlanExercise.sets,
+    });
+  }
+
+  function handleExerciseFeedback(feedback: PerceivedDifficulty) {
+    if (!currentPlanExercise) return;
+    finishExerciseAndAdvance({
+      exerciseId: currentPlanExercise.exerciseId,
+      variantUsed: currentPlanExercise.variant,
+      setsCompleted: currentPlanExercise.sets,
+      setsPlanned: currentPlanExercise.sets,
+      loadKgUsed: effectiveLoadKg ?? undefined,
+      exerciseFeedback: feedback,
+    });
   }
 
   function handleRestComplete() {
     if (pendingAdvance.current === 'next_exercise') {
-      setCompletedLogs((logs) => [...logs, finalizeCurrentExerciseLog()]);
       setExerciseIndex((i) => i + 1);
       setSetIndex(0);
       setSetsDoneForCurrentExercise(0);
+      setLoadOverrideKg(null);
     } else {
       setSetIndex((i) => i + 1);
     }
@@ -247,6 +303,17 @@ export default function GuidedSession() {
 
           <ExerciseAvatar exerciseId={currentPlanExercise.exerciseId} />
 
+          {currentExercise.equipment === 'dumbbell' && (
+            <View style={styles.loadBlock}>
+              <Text style={styles.loadLabel}>{t('session.loadLabel')}</Text>
+              <NumberPicker
+                options={loadOptionsKg(currentExercise)}
+                selected={effectiveLoadKg}
+                onSelect={setLoadOverrideKg}
+              />
+            </View>
+          )}
+
           {(currentVariant?.instructions ?? currentContent.instructions).map((step, i) => (
             <Text key={i} style={styles.stepText}>
               {i + 1}. {step}
@@ -278,6 +345,26 @@ export default function GuidedSession() {
             onComplete={handleRestComplete}
           />
           <PrimaryButton label={t('session.skipRest')} variant="secondary" onPress={handleRestComplete} />
+        </View>
+      )}
+
+      {phase === 'exercise_feedback' && currentPlanExercise && (
+        <View style={styles.center}>
+          <Text style={styles.title}>{t('session.exerciseFeedbackTitle')}</Text>
+          <Text style={styles.subtitle}>{currentVariant?.name || currentContent.name}</Text>
+          <View style={styles.feedbackRow}>
+            <PrimaryButton
+              label={t('feedback.easy')}
+              variant="secondary"
+              onPress={() => handleExerciseFeedback('easy')}
+            />
+            <PrimaryButton label={t('feedback.right')} onPress={() => handleExerciseFeedback('right')} />
+            <PrimaryButton
+              label={t('feedback.hard')}
+              variant="secondary"
+              onPress={() => handleExerciseFeedback('hard')}
+            />
+          </View>
         </View>
       )}
 
@@ -320,4 +407,6 @@ const styles = StyleSheet.create({
   repsTarget: { ...typography.title, fontSize: 40, color: colors.text },
   feedbackRow: { flexDirection: 'row', gap: spacing.sm, width: '100%' },
   exitLabel: { ...typography.body, color: colors.primary, fontWeight: '600' },
+  loadBlock: { alignItems: 'center', gap: spacing.xs, marginBottom: spacing.sm },
+  loadLabel: { ...typography.caption, color: colors.textMuted },
 });

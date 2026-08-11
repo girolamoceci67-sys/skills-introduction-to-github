@@ -13,6 +13,10 @@ export function useLabels() {
     push: t('muscleGroups.push'),
     pull: t('muscleGroups.pull'),
     mobility_cardio: t('muscleGroups.mobility_cardio'),
+    chest: t('muscleGroups.chest'),
+    back: t('muscleGroups.back'),
+    shoulders: t('muscleGroups.shoulders'),
+    arms: t('muscleGroups.arms'),
   };
 
   const variantLabels: Record<ExerciseVariantKind, string> = {
