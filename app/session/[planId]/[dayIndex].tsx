@@ -3,6 +3,7 @@ import { ActivityIndicator, Alert, Pressable, StyleSheet, Text, View } from 'rea
 import { Stack, router, useLocalSearchParams } from 'expo-router';
 
 import { ExerciseAvatar } from '../../../src/components/avatar/ExerciseAvatar';
+import { SessionCompleteCelebration } from '../../../src/components/celebration/SessionCompleteCelebration';
 import { CountdownTimer } from '../../../src/components/CountdownTimer';
 import { NumberPicker } from '../../../src/components/NumberPicker';
 import { PrimaryButton } from '../../../src/components/PrimaryButton';
@@ -27,7 +28,7 @@ import { getCurrentUser, updateUser } from '../../../src/data/repositories/userR
 import { incrementGoalCompletedSessions } from '../../../src/data/repositories/goalRepository';
 import { colors, spacing, typography } from '../../../src/theme/theme';
 
-type Phase = 'loading' | 'not_found' | 'energy' | 'exercise' | 'rest' | 'feedback' | 'saving';
+type Phase = 'loading' | 'not_found' | 'energy' | 'exercise' | 'rest' | 'feedback' | 'saving' | 'celebration';
 type PendingAdvance = 'next_set' | 'next_exercise';
 
 const ENERGY_LEVELS: (1 | 2 | 3 | 4 | 5)[] = [1, 2, 3, 4, 5];
@@ -179,7 +180,7 @@ export default function GuidedSession() {
         await updateUser(updatedUser);
         await attachSessionToPlanDay(plan.id, day.dayIndex, sessionId);
         await incrementGoalCompletedSessions(user.id, plan.weekStartDate);
-        router.replace('/(tabs)/home');
+        setPhase('celebration');
       })
       .catch(() => setPhase('feedback'));
   }
@@ -188,7 +189,7 @@ export default function GuidedSession() {
     <Screen>
       <Stack.Screen
         options={{
-          headerShown: true,
+          headerShown: phase !== 'celebration',
           title: currentExercise?.name ?? 'Allenamento',
           gestureEnabled: false,
           headerLeft: () => (
@@ -285,6 +286,16 @@ export default function GuidedSession() {
         <View style={styles.center}>
           <ActivityIndicator color={colors.primary} />
         </View>
+      )}
+
+      {phase === 'celebration' && day && (
+        <SessionCompleteCelebration
+          title="Allenamento completato!"
+          subtitle={`Hai portato a termine ${completedLogs.length} ${
+            completedLogs.length === 1 ? 'esercizio' : 'esercizi'
+          } su ${day.exercises.length}. Bel lavoro.`}
+          onContinue={() => router.replace('/(tabs)/home')}
+        />
       )}
     </Screen>
   );
