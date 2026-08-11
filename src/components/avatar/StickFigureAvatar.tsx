@@ -79,6 +79,8 @@ export function StickFigureAvatar({
     x2: pose.value.foot.x,
     y2: pose.value.foot.y,
   }));
+  const elbowJointProps = useAnimatedProps(() => ({ cx: pose.value.elbow.x, cy: pose.value.elbow.y }));
+  const kneeJointProps = useAnimatedProps(() => ({ cx: pose.value.knee.x, cy: pose.value.knee.y }));
 
   return (
     <View style={styles.wrap}>
@@ -94,6 +96,8 @@ export function StickFigureAvatar({
         <AnimatedLine animatedProps={forearmProps} stroke={colors.primaryDark} strokeWidth={3} strokeLinecap="round" />
         <AnimatedLine animatedProps={thighProps} stroke={colors.primaryDark} strokeWidth={4} strokeLinecap="round" />
         <AnimatedLine animatedProps={shinProps} stroke={colors.primaryDark} strokeWidth={4} strokeLinecap="round" />
+        <AnimatedCircle animatedProps={elbowJointProps} r={3} fill={colors.primaryDark} />
+        <AnimatedCircle animatedProps={kneeJointProps} r={3.5} fill={colors.primaryDark} />
         <AnimatedCircle animatedProps={headProps} r={9} fill={colors.primary} />
       </Svg>
     </View>
