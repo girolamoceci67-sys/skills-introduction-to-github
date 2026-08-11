@@ -155,6 +155,7 @@ const zh: LocaleResource = {
     energySubtitle: '1 = 精力不足 · 5 = 精力充沛',
     progress: '第 {{current}} / {{total}} 个动作 — 第 {{setCurrent}} / {{setTotal}} 组',
     holdLabel: '保持姿势',
+    repsTimerLabel: '完成这些次数',
     reps: '{{count}} 次',
     setComplete: '完成本组',
     rest: '休息',

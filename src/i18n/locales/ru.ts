@@ -161,6 +161,7 @@ const ru: LocaleResource = {
     energySubtitle: '1 = мало энергии · 5 = много энергии',
     progress: 'Упражнение {{current}} из {{total}} — Подход {{setCurrent}} из {{setTotal}}',
     holdLabel: 'Удерживайте позицию',
+    repsTimerLabel: 'Выполните повторения',
     reps: '{{count}} повторений',
     setComplete: 'Подход завершён',
     rest: 'Отдых',

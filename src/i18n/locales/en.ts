@@ -158,6 +158,7 @@ const en: LocaleResource = {
     energySubtitle: '1 = low energy · 5 = high energy',
     progress: 'Exercise {{current}} of {{total}} — Set {{setCurrent}} of {{setTotal}}',
     holdLabel: 'Hold the position',
+    repsTimerLabel: 'Perform the reps',
     reps: '{{count}} reps',
     setComplete: 'Set complete',
     rest: 'Rest',

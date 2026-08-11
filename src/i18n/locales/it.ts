@@ -166,6 +166,7 @@ const it: LocaleResource = {
     energySubtitle: '1 = poca energia · 5 = tanta energia',
     progress: 'Esercizio {{current}} di {{total}} — Serie {{setCurrent}} di {{setTotal}}',
     holdLabel: 'Mantieni la posizione',
+    repsTimerLabel: 'Esegui le ripetizioni',
     reps: '{{count}} ripetizioni',
     setComplete: 'Serie completata',
     rest: 'Riposo',

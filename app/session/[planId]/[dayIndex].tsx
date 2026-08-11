@@ -10,6 +10,7 @@ import { NumberPicker } from '../../../src/components/NumberPicker';
 import { PrimaryButton } from '../../../src/components/PrimaryButton';
 import { Screen } from '../../../src/components/Screen';
 import { loadOptionsKg, onSessionFeedback } from '../../../src/domain/engine/adaptEngine';
+import { estimatedRepsDurationSeconds } from '../../../src/domain/engine/progressionRules';
 import { dumbbellLibrary } from '../../../src/domain/exercises/dumbbellLibrary';
 import { useExerciseContent } from '../../../src/domain/exercises/exerciseContent';
 import { exerciseLibrary } from '../../../src/domain/exercises/library';
@@ -330,7 +331,13 @@ export default function GuidedSession() {
           ) : (
             <View style={styles.repsBlock}>
               <Text style={styles.repsTarget}>{t('session.reps', { count: currentPlanExercise.target })}</Text>
-              <PrimaryButton label={t('session.setComplete')} onPress={handleSetComplete} />
+              <CountdownTimer
+                key={`reps-${exerciseIndex}-${setIndex}`}
+                durationSeconds={estimatedRepsDurationSeconds(currentPlanExercise.target)}
+                label={t('session.repsTimerLabel')}
+                onComplete={handleSetComplete}
+              />
+              <PrimaryButton label={t('session.setComplete')} variant="secondary" onPress={handleSetComplete} />
             </View>
           )}
         </View>

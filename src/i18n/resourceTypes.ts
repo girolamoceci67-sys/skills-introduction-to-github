@@ -146,6 +146,7 @@ export interface LocaleResource {
     progress: string;
     holdLabel: string;
     reps: string;
+    repsTimerLabel: string;
     setComplete: string;
     rest: string;
     skipRest: string;

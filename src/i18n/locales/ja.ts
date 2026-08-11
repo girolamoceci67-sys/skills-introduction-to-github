@@ -155,6 +155,7 @@ const ja: LocaleResource = {
     energySubtitle: '1 = 元気がない · 5 = 元気いっぱい',
     progress: '種目 {{current}} / {{total}} — セット {{setCurrent}} / {{setTotal}}',
     holdLabel: '姿勢をキープ',
+    repsTimerLabel: '回数をこなしましょう',
     reps: '{{count}} 回',
     setComplete: 'セット完了',
     rest: '休憩',

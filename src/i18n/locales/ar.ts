@@ -155,6 +155,7 @@ const ar: LocaleResource = {
     energySubtitle: '1 = طاقة منخفضة · 5 = طاقة عالية',
     progress: 'التمرين {{current}} من {{total}} — المجموعة {{setCurrent}} من {{setTotal}}',
     holdLabel: 'حافظ على الوضعية',
+    repsTimerLabel: 'أدِّ التكرارات',
     reps: '{{count}} تكرارات',
     setComplete: 'اكتملت المجموعة',
     rest: 'راحة',

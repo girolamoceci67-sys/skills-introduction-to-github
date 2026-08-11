@@ -15,6 +15,20 @@ export const WEEK_ROLLOVER_REGRESS_STEP = 0.3;
 export const CONSECUTIVE_EASY_TO_PROGRESS = 2;
 export const MAX_MISSED_TRAINING_DAYS_BEFORE_REGRESS = 2;
 
+/**
+ * Tempo stimato per ripetizione (in secondi) per gli esercizi a ripetizioni, usato in sessione per
+ * mostrare un conto alla rovescia e avanzare automaticamente come già avviene per gli esercizi a
+ * tempo. Valore scelto in base a un ritmo controllato tipico per movimenti a corpo libero/manubri
+ * per principianti (circa 3-4 secondi a ripetizione tra fase di discesa e salita); non derivabile
+ * dal codice esistente, quindi assunzione da validare.
+ */
+export const SECONDS_PER_REP = 3.5;
+
+/** Durata stimata in secondi per completare un set di `reps` ripetizioni, arrotondata al secondo. */
+export function estimatedRepsDurationSeconds(reps: number): number {
+  return Math.max(1, Math.round(reps * SECONDS_PER_REP));
+}
+
 const STARTING_SCORE_BY_LEVEL: Record<StartingLevel, number> = {
   sedentary: MIN_DIFFICULTY_SCORE,
   occasional: MIN_DIFFICULTY_SCORE + 0.5,
