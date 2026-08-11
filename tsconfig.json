@@ -3,7 +3,8 @@
   "compilerOptions": {
     "strict": true,
     "experimentalDecorators": true,
-    "useDefineForClassFields": false
+    "useDefineForClassFields": false,
+    "moduleSuffixes": [".native", ""]
   },
   "include": [
     "**/*.ts",
