@@ -27,7 +27,12 @@ const styles = StyleSheet.create({
     flexGrow: 1,
   },
   inner: {
-    flex: 1,
+    // "flexGrow: 1" invece di "flex: 1": un figlio diretto del contentContainer di una
+    // ScrollView con "flex: 1" (che imposta flexBasis a 0) può misurarsi in modo instabile su
+    // Android nativo, espandendosi oltre l'altezza reale del contenuto e lasciando grandi spazi
+    // vuoti sotto le schermate con poco testo (es. Libreria). flexGrow si limita a riempire lo
+    // spazio disponibile quando serve, senza quell'effetto.
+    flexGrow: 1,
     padding: spacing.lg,
   },
 });
