@@ -5,7 +5,7 @@ export interface SupportedLanguage {
   rtl: boolean;
 }
 
-/** Le 7 lingue più parlate al mondo, mostrate nella schermata di selezione lingua. */
+/** Le lingue più parlate al mondo, mostrate nella schermata di selezione lingua. */
 export const SUPPORTED_LANGUAGES: SupportedLanguage[] = [
   { code: 'en', nativeName: 'English', flag: '🇬🇧', rtl: false },
   { code: 'zh', nativeName: '中文', flag: '🇨🇳', rtl: false },
@@ -14,6 +14,8 @@ export const SUPPORTED_LANGUAGES: SupportedLanguage[] = [
   { code: 'pt', nativeName: 'Português', flag: '🇵🇹', rtl: false },
   { code: 'ja', nativeName: '日本語', flag: '🇯🇵', rtl: false },
   { code: 'it', nativeName: 'Italiano', flag: '🇮🇹', rtl: false },
+  { code: 'fr', nativeName: 'Français', flag: '🇫🇷', rtl: false },
+  { code: 'ru', nativeName: 'Русский', flag: '🇷🇺', rtl: false },
 ];
 
 export const DEFAULT_LANGUAGE_CODE = 'en';

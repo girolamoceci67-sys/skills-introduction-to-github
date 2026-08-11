@@ -8,9 +8,11 @@ import { getStoredLanguage, setStoredLanguage } from './storage';
 import ar from './locales/ar';
 import en from './locales/en';
 import es from './locales/es';
+import fr from './locales/fr';
 import it from './locales/it';
 import ja from './locales/ja';
 import pt from './locales/pt';
+import ru from './locales/ru';
 import zh from './locales/zh';
 
 const resources = {
@@ -21,6 +23,8 @@ const resources = {
   pt: { translation: pt },
   ar: { translation: ar },
   ja: { translation: ja },
+  fr: { translation: fr },
+  ru: { translation: ru },
 };
 
 function deviceLanguageCode(): string {
