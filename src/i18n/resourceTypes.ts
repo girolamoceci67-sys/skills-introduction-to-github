@@ -156,6 +156,18 @@ export interface LocaleResource {
     muteAudio: string;
     unmuteAudio: string;
   };
+  sessionIntro: {
+    focusBodyweight: string;
+    focusDumbbell: string;
+    focusMixed: string;
+    difficultyLabel: string;
+    objectiveStayConsistent: string;
+    objectiveBuildStrength: string;
+    objectiveImproveMobility: string;
+    objectiveGeneralEnergy: string;
+    nextDayTraining: string;
+    nextDayRest: string;
+  };
   celebration: {
     title: string;
     subtitle_one: string;

@@ -172,6 +172,18 @@ const ru: LocaleResource = {
     muteAudio: 'Выключить звук',
     unmuteAudio: 'Включить звук',
   },
+  sessionIntro: {
+    focusBodyweight: 'Тренировка с собственным весом',
+    focusDumbbell: 'Тренировка с гантелями',
+    focusMixed: 'Смешанная тренировка',
+    difficultyLabel: 'Сложность {{score}}/10',
+    objectiveStayConsistent: 'Сегодня важно просто прийти: формируйте привычку.',
+    objectiveBuildStrength: 'Сегодня закладываете основу силы: качество движения важнее всего.',
+    objectiveImproveMobility: 'Сегодня в фокусе подвижность: двигайтесь спокойно и дышите.',
+    objectiveGeneralEnergy: 'Сегодня заряжаетесь энергией: достаточно нескольких минут, чтобы почувствовать себя лучше.',
+    nextDayTraining: 'Завтра: {{focus}}',
+    nextDayRest: 'Завтра: день отдыха',
+  },
   celebration: {
     title: 'Тренировка завершена!',
     subtitle_one: 'Вы выполнили {{count}} упражнение из {{total}}. Отличная работа.',

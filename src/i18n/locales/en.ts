@@ -169,6 +169,18 @@ const en: LocaleResource = {
     muteAudio: 'Mute audio',
     unmuteAudio: 'Unmute audio',
   },
+  sessionIntro: {
+    focusBodyweight: 'Bodyweight workout',
+    focusDumbbell: 'Dumbbell workout',
+    focusMixed: 'Mixed workout',
+    difficultyLabel: 'Difficulty {{score}}/10',
+    objectiveStayConsistent: 'Today is just about showing up: build the habit.',
+    objectiveBuildStrength: 'Today you build strength foundations: quality of movement first.',
+    objectiveImproveMobility: "Today's focus is mobility: move slowly and breathe.",
+    objectiveGeneralEnergy: 'Today you recharge your energy: a few minutes is enough to feel better.',
+    nextDayTraining: 'Tomorrow: {{focus}}',
+    nextDayRest: 'Tomorrow: rest day',
+  },
   celebration: {
     title: 'Workout complete!',
     subtitle_one: 'You completed {{count}} exercise out of {{total}}. Great work.',

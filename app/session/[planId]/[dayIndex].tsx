@@ -9,6 +9,7 @@ import { CountdownTimer } from '../../../src/components/CountdownTimer';
 import { NumberPicker } from '../../../src/components/NumberPicker';
 import { PrimaryButton } from '../../../src/components/PrimaryButton';
 import { Screen } from '../../../src/components/Screen';
+import { SessionIntroCard } from '../../../src/components/session/SessionIntroCard';
 import { useSessionAudio } from '../../../src/domain/audio/useSessionAudio';
 import { loadOptionsKg, onSessionFeedback } from '../../../src/domain/engine/adaptEngine';
 import { estimatedRepsDurationSeconds } from '../../../src/domain/engine/progressionRules';
@@ -16,6 +17,7 @@ import { dumbbellLibrary } from '../../../src/domain/exercises/dumbbellLibrary';
 import { useExerciseContent } from '../../../src/domain/exercises/exerciseContent';
 import { exerciseLibrary } from '../../../src/domain/exercises/library';
 import { useLabels } from '../../../src/domain/exercises/labels';
+import { dayFocus, nextDayPreview, rpeFromDifficultyScore } from '../../../src/domain/session/sessionIntro';
 import type {
   PerceivedDifficulty,
   PlanDay,
@@ -130,6 +132,10 @@ export default function GuidedSession() {
         ? currentContent.harderVariant
         : null
     : null;
+
+  const todayFocus = day ? dayFocus(day, fullExerciseLibrary) : null;
+  const todayRpe = user ? rpeFromDifficultyScore(user.difficultyScore) : null;
+  const upcomingDay = plan && day ? nextDayPreview(plan, day.dayIndex, fullExerciseLibrary) : null;
 
   const confirmAbandon = useCallback(() => {
     Alert.alert(
@@ -313,6 +319,9 @@ export default function GuidedSession() {
 
       {phase === 'energy' && (
         <View style={styles.center}>
+          {user && todayFocus && todayRpe !== null && (
+            <SessionIntroCard focus={todayFocus} rpe={todayRpe} goal={user.goal} nextDay={upcomingDay} />
+          )}
           <Text style={styles.title}>{t('session.energyTitle')}</Text>
           <Text style={styles.subtitle}>{t('session.energySubtitle')}</Text>
           <NumberPicker

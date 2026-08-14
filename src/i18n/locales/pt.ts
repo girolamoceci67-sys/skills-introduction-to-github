@@ -171,6 +171,18 @@ const pt: LocaleResource = {
     muteAudio: 'Silenciar áudio',
     unmuteAudio: 'Ativar áudio',
   },
+  sessionIntro: {
+    focusBodyweight: 'Treino de peso corporal',
+    focusDumbbell: 'Treino com halteres',
+    focusMixed: 'Treino misto',
+    difficultyLabel: 'Dificuldade {{score}}/10',
+    objectiveStayConsistent: 'Hoje o importante é aparecer: construir o hábito.',
+    objectiveBuildStrength: 'Hoje trabalhas as bases de força: qualidade do movimento antes de tudo.',
+    objectiveImproveMobility: 'Hoje o foco é a mobilidade: mexe-te com calma e respira.',
+    objectiveGeneralEnergy: 'Hoje recarregas energia: bastam alguns minutos para te sentires melhor.',
+    nextDayTraining: 'Amanhã: {{focus}}',
+    nextDayRest: 'Amanhã: dia de descanso',
+  },
   celebration: {
     title: 'Treino concluído!',
     subtitle_one: 'Concluíste {{count}} exercício de {{total}}. Bom trabalho.',

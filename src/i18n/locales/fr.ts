@@ -172,6 +172,18 @@ const fr: LocaleResource = {
     muteAudio: 'Couper le son',
     unmuteAudio: 'Activer le son',
   },
+  sessionIntro: {
+    focusBodyweight: 'Séance au poids du corps',
+    focusDumbbell: 'Séance avec haltères',
+    focusMixed: 'Séance mixte',
+    difficultyLabel: 'Difficulté {{score}}/10',
+    objectiveStayConsistent: "Aujourd’hui, l’important est de se présenter : construisez l’habitude.",
+    objectiveBuildStrength: "Aujourd’hui, vous posez les bases de la force : la qualité du mouvement avant tout.",
+    objectiveImproveMobility: "Aujourd’hui, l’accent est mis sur la mobilité : bougez calmement et respirez.",
+    objectiveGeneralEnergy: "Aujourd’hui, vous rechargez votre énergie : quelques minutes suffisent pour se sentir mieux.",
+    nextDayTraining: 'Demain : {{focus}}',
+    nextDayRest: 'Demain : jour de repos',
+  },
   celebration: {
     title: 'Séance terminée !',
     subtitle_one: 'Vous avez complété {{count}} exercice sur {{total}}. Bravo.',

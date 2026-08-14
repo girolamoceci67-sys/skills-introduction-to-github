@@ -166,6 +166,18 @@ const ja: LocaleResource = {
     muteAudio: '音声をミュート',
     unmuteAudio: 'ミュート解除',
   },
+  sessionIntro: {
+    focusBodyweight: '自重トレーニング',
+    focusDumbbell: 'ダンベルトレーニング',
+    focusMixed: '複合トレーニング',
+    difficultyLabel: '難易度 {{score}}/10',
+    objectiveStayConsistent: '今日は続けることが大切：習慣を作りましょう。',
+    objectiveBuildStrength: '今日は筋力の土台作り：動きの質を大切に。',
+    objectiveImproveMobility: '今日はモビリティが中心：ゆっくり動いて呼吸を意識しましょう。',
+    objectiveGeneralEnergy: '今日はエネルギー補給：数分で気分が良くなります。',
+    nextDayTraining: '明日：{{focus}}',
+    nextDayRest: '明日：休息日',
+  },
   celebration: {
     title: 'トレーニング完了！',
     subtitle_one: '{{total}} 種目中 {{count}} 種目を完了しました。よくがんばりました。',

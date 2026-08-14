@@ -12,6 +12,16 @@ export const colors = {
   danger: '#B3462C',
 } as const;
 
+/** Palette dedicata alla figura animata negli esercizi: più "illustrazione" che stick-figure puro. */
+export const figureColors = {
+  skin: '#D9A87B',
+  skinShadow: '#C4915F',
+  top: '#1E6B4F',
+  bottoms: '#153A28',
+  shoes: '#1B1B18',
+  shadowOnGround: 'rgba(27, 27, 24, 0.14)',
+} as const;
+
 export const spacing = {
   xs: 4,
   sm: 8,

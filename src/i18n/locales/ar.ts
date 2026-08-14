@@ -166,6 +166,18 @@ const ar: LocaleResource = {
     muteAudio: 'كتم الصوت',
     unmuteAudio: 'تفعيل الصوت',
   },
+  sessionIntro: {
+    focusBodyweight: 'تمرين بوزن الجسم',
+    focusDumbbell: 'تمرين بالدمبل',
+    focusMixed: 'تمرين مختلط',
+    difficultyLabel: 'الصعوبة {{score}}/10',
+    objectiveStayConsistent: 'المهم اليوم هو الحضور فقط: ابنِ العادة.',
+    objectiveBuildStrength: 'اليوم تبني أسس القوة: جودة الحركة أولاً.',
+    objectiveImproveMobility: 'التركيز اليوم على المرونة: تحرك بهدوء وتنفّس.',
+    objectiveGeneralEnergy: 'اليوم تشحن طاقتك: بضع دقائق تكفي لتشعر بتحسن.',
+    nextDayTraining: 'غدًا: {{focus}}',
+    nextDayRest: 'غدًا: يوم راحة',
+  },
   celebration: {
     title: 'اكتمل التمرين!',
     subtitle_one: 'أكملت {{count}} من أصل {{total}} تمارين. عمل رائع.',

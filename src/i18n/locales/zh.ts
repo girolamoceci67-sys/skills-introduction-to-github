@@ -166,6 +166,18 @@ const zh: LocaleResource = {
     muteAudio: '静音',
     unmuteAudio: '取消静音',
   },
+  sessionIntro: {
+    focusBodyweight: '自重训练',
+    focusDumbbell: '哑铃训练',
+    focusMixed: '混合训练',
+    difficultyLabel: '难度 {{score}}/10',
+    objectiveStayConsistent: '今天只要坚持出现就好：养成习惯。',
+    objectiveBuildStrength: '今天打好力量基础：动作质量优先。',
+    objectiveImproveMobility: '今天专注灵活性：慢慢动，配合呼吸。',
+    objectiveGeneralEnergy: '今天为自己充电：几分钟就能感觉更好。',
+    nextDayTraining: '明天：{{focus}}',
+    nextDayRest: '明天：休息日',
+  },
   celebration: {
     title: '训练完成！',
     subtitle_one: '你完成了 {{total}} 个动作中的 {{count}} 个。干得漂亮。',
