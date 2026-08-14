@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
+import { AnimatedPressable } from './AnimatedPressable';
 import { colors, radii, spacing, typography } from '../theme/theme';
 
 interface NumberPickerProps {
@@ -12,15 +13,16 @@ export function NumberPicker({ options, selected, onSelect }: NumberPickerProps)
   return (
     <View style={styles.row}>
       {options.map((value) => (
-        <Pressable
+        <AnimatedPressable
           key={value}
           accessibilityRole="button"
           accessibilityState={{ selected: selected === value }}
           onPress={() => onSelect(value)}
+          scaleTo={0.9}
           style={[styles.button, selected === value && styles.buttonSelected]}
         >
           <Text style={[styles.label, selected === value && styles.labelSelected]}>{value}</Text>
-        </Pressable>
+        </AnimatedPressable>
       ))}
     </View>
   );

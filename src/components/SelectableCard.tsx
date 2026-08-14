@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 
+import { AnimatedPressable } from './AnimatedPressable';
 import { colors, radii, shadows, spacing, typography } from '../theme/theme';
 
 interface SelectableCardProps {
@@ -11,10 +12,11 @@ interface SelectableCardProps {
 
 export function SelectableCard({ title, description, selected, onPress }: SelectableCardProps) {
   return (
-    <Pressable
+    <AnimatedPressable
       accessibilityRole="button"
       accessibilityState={{ selected }}
       onPress={onPress}
+      scaleTo={0.98}
       style={[styles.card, selected && styles.cardSelected]}
     >
       <View style={styles.textWrap}>
@@ -22,7 +24,7 @@ export function SelectableCard({ title, description, selected, onPress }: Select
         {description ? <Text style={styles.description}>{description}</Text> : null}
       </View>
       <View style={[styles.radio, selected && styles.radioSelected]} />
-    </Pressable>
+    </AnimatedPressable>
   );
 }
 

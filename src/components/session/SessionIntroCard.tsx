@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { colors, radii, shadows, spacing, typography } from '../../theme/theme';
 import {
@@ -26,7 +27,7 @@ export function SessionIntroCard({ focus, rpe, goal, nextDay }: SessionIntroCard
   const { t } = useTranslation();
 
   return (
-    <View style={styles.card}>
+    <Animated.View entering={FadeInDown.springify().damping(16)} style={styles.card}>
       <View style={styles.badgeRow}>
         <View style={styles.focusBadge}>
           <Text style={styles.focusBadgeLabel}>{t(FOCUS_KEY[focus])}</Text>
@@ -47,7 +48,7 @@ export function SessionIntroCard({ focus, rpe, goal, nextDay }: SessionIntroCard
           </Text>
         </View>
       )}
-    </View>
+    </Animated.View>
   );
 }
 

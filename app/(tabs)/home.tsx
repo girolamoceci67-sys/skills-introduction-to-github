@@ -1,8 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Pressable, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import Animated, { FadeInDown } from 'react-native-reanimated';
 
+import { AnimatedPressable } from '../../src/components/AnimatedPressable';
 import { PrimaryButton } from '../../src/components/PrimaryButton';
 import { Screen } from '../../src/components/Screen';
 import { getCurrentUser, updateUser } from '../../src/data/repositories/userRepository';
@@ -38,14 +40,27 @@ function PlanExerciseText({ planExercise }: { planExercise: PlanDayExercise }) {
   );
 }
 
-function DayRow({ day, planId, isToday }: { day: PlanDay; planId: string; isToday: boolean }) {
+function DayRow({
+  day,
+  planId,
+  isToday,
+  index,
+}: {
+  day: PlanDay;
+  planId: string;
+  isToday: boolean;
+  index: number;
+}) {
   const { t } = useTranslation();
   const weekdays = t('weekdays', { returnObjects: true }) as string[];
   const isTraining = day.type === 'training';
   const isDone = Boolean(day.sessionId);
 
   return (
-    <View style={[styles.dayCard, isToday && styles.dayCardToday]}>
+    <Animated.View
+      entering={FadeInDown.delay(index * 60).springify().damping(16)}
+      style={[styles.dayCard, isToday && styles.dayCardToday]}
+    >
       <View style={styles.dayHeaderRow}>
         <Text style={styles.dayLabel}>{weekdays[day.dayIndex]}</Text>
         <View style={styles.badgeRow}>
@@ -58,20 +73,20 @@ function DayRow({ day, planId, isToday }: { day: PlanDay; planId: string; isToda
       ) : (
         <>
           <View style={styles.exerciseList}>
-            {day.exercises.map((planExercise, index) => (
-              <PlanExerciseText key={`${planExercise.exerciseId}-${index}`} planExercise={planExercise} />
+            {day.exercises.map((planExercise, exerciseIndex) => (
+              <PlanExerciseText key={`${planExercise.exerciseId}-${exerciseIndex}`} planExercise={planExercise} />
             ))}
           </View>
-          <Pressable
+          <AnimatedPressable
             accessibilityRole="button"
             onPress={() => router.push(`/session/${planId}/${day.dayIndex}`)}
-            style={({ pressed }) => [styles.startButton, pressed && styles.startButtonPressed]}
+            style={styles.startButton}
           >
             <Text style={styles.startButtonLabel}>{isDone ? t('home.redo') : t('home.start')}</Text>
-          </Pressable>
+          </AnimatedPressable>
         </>
       )}
-    </View>
+    </Animated.View>
   );
 }
 
@@ -153,13 +168,13 @@ export default function Home() {
       <Text style={styles.subtitle}>{t('home.subtitle', { tier: plan.difficultyTierSnapshot })}</Text>
       {shouldOfferDumbbellReask(user) ? <DumbbellReaskBanner user={user} /> : null}
       {isWeekComplete ? (
-        <View style={styles.weekCompleteCard}>
+        <Animated.View entering={FadeInDown.springify().damping(16)} style={styles.weekCompleteCard}>
           <Text style={styles.weekCompleteTitle}>{t('home.weekCompleteTitle')}</Text>
           <Text style={styles.weekCompleteSubtitle}>{t('home.weekCompleteSubtitle')}</Text>
-        </View>
+        </Animated.View>
       ) : null}
-      {plan.days.map((day) => (
-        <DayRow key={day.dayIndex} day={day} planId={plan.id} isToday={day.dayIndex === todayIndex} />
+      {plan.days.map((day, index) => (
+        <DayRow key={day.dayIndex} day={day} planId={plan.id} isToday={day.dayIndex === todayIndex} index={index} />
       ))}
     </Screen>
   );
@@ -177,16 +192,16 @@ function DumbbellReaskBanner({ user }: { user: UserProfile }) {
       <Text style={styles.reaskTitle}>{t('home.dumbbellReaskTitle')}</Text>
       <Text style={styles.reaskSubtitle}>{t('home.dumbbellReaskSubtitle')}</Text>
       <View style={styles.reaskActions}>
-        <Pressable
+        <AnimatedPressable
           accessibilityRole="button"
           onPress={() => router.push('/dumbbell-reask')}
-          style={({ pressed }) => [styles.reaskPrimaryButton, pressed && styles.startButtonPressed]}
+          style={styles.reaskPrimaryButton}
         >
           <Text style={styles.reaskPrimaryLabel}>{t('home.dumbbellReaskCta')}</Text>
-        </Pressable>
-        <Pressable accessibilityRole="button" onPress={dismiss} style={styles.reaskDismissButton}>
+        </AnimatedPressable>
+        <AnimatedPressable accessibilityRole="button" onPress={dismiss} style={styles.reaskDismissButton}>
           <Text style={styles.reaskDismissLabel}>{t('home.dumbbellReaskDismiss')}</Text>
-        </Pressable>
+        </AnimatedPressable>
       </View>
     </View>
   );
@@ -262,6 +277,5 @@ const styles = StyleSheet.create({
     paddingVertical: spacing.sm,
     alignItems: 'center',
   },
-  startButtonPressed: { opacity: 0.85 },
   startButtonLabel: { ...typography.body, fontWeight: '700', color: '#FFFFFF' },
 });

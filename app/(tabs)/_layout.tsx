@@ -1,14 +1,26 @@
+import { useEffect } from 'react';
 import { Tabs } from 'expo-router';
-import { Text } from 'react-native';
 import { useTranslation } from 'react-i18next';
+import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 
 import { colors } from '../../src/theme/theme';
 
 function TabIcon({ symbol, focused }: { symbol: string; focused: boolean }) {
+  const scale = useSharedValue(1);
+
+  useEffect(() => {
+    scale.value = withSpring(focused ? 1.15 : 1, { damping: 10, stiffness: 220 });
+  }, [focused, scale]);
+
+  const animatedStyle = useAnimatedStyle(() => ({ transform: [{ scale: scale.value }] }));
+
   return (
-    <Text style={{ fontSize: 20, opacity: focused ? 1 : 0.5 }} accessibilityElementsHidden>
+    <Animated.Text
+      style={[{ fontSize: 20, opacity: focused ? 1 : 0.5 }, animatedStyle]}
+      accessibilityElementsHidden
+    >
       {symbol}
-    </Text>
+    </Animated.Text>
   );
 }
 

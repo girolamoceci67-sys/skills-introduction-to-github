@@ -1,8 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
+import { FadeInDown } from 'react-native-reanimated';
 
+import { AnimatedPressable } from '../../src/components/AnimatedPressable';
 import { Screen } from '../../src/components/Screen';
 import { Tag } from '../../src/components/Tag';
 import { getCurrentUser } from '../../src/data/repositories/userRepository';
@@ -34,7 +36,11 @@ function groupExercises(exercises: Exercise[]): { group: MuscleGroup; items: Exe
   })).filter((section) => section.items.length > 0);
 }
 
-function ExerciseRow({ exercise }: { exercise: Exercise }) {
+/** Oltre le prime righe lo scaglionamento si ferma (arrivano già tutte "vicine" nel tempo): evita un'attesa lunga per scorrere liste ampie. */
+const MAX_STAGGERED_ROWS = 8;
+const STAGGER_STEP_MS = 35;
+
+function ExerciseRow({ exercise, index }: { exercise: Exercise; index: number }) {
   const { t } = useTranslation();
   const content = useExerciseContent(exercise.id);
   const meta =
@@ -47,8 +53,10 @@ function ExerciseRow({ exercise }: { exercise: Exercise }) {
       : t('library.levelBadge', { tier: exercise.baseDifficultyTier });
 
   return (
-    <Pressable
-      style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
+    <AnimatedPressable
+      entering={FadeInDown.delay(Math.min(index, MAX_STAGGERED_ROWS) * STAGGER_STEP_MS).damping(18)}
+      style={styles.card}
+      scaleTo={0.98}
       onPress={() => router.push(`/library/${exercise.id}`)}
       accessibilityRole="button"
     >
@@ -57,7 +65,7 @@ function ExerciseRow({ exercise }: { exercise: Exercise }) {
         <Text style={styles.cardMeta}>{meta}</Text>
       </View>
       {exercise.contraindicationTags.includes('none') ? null : <Tag label={t('library.excludedBadge')} />}
-    </Pressable>
+    </AnimatedPressable>
   );
 }
 
@@ -72,6 +80,7 @@ export default function Library() {
   }, [version]);
 
   const sections = groupExercises(dumbbellUnlocked ? [...exerciseLibrary, ...dumbbellLibrary] : exerciseLibrary);
+  let rowIndex = 0;
 
   return (
     <Screen>
@@ -81,7 +90,7 @@ export default function Library() {
         <View key={section.group} style={styles.section}>
           <Text style={styles.sectionTitle}>{muscleGroupLabels[section.group]}</Text>
           {section.items.map((exercise) => (
-            <ExerciseRow key={exercise.id} exercise={exercise} />
+            <ExerciseRow key={exercise.id} exercise={exercise} index={rowIndex++} />
           ))}
         </View>
       ))}
@@ -112,7 +121,6 @@ const styles = StyleSheet.create({
     gap: spacing.sm,
     ...shadows.card,
   },
-  cardPressed: { opacity: 0.7 },
   cardText: { flex: 1 },
   cardTitle: { ...typography.body, fontWeight: '600', color: colors.text },
   cardMeta: { ...typography.caption, color: colors.textMuted, marginTop: 2 },

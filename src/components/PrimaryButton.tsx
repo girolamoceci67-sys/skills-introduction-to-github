@@ -1,5 +1,6 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 
+import { AnimatedPressable } from './AnimatedPressable';
 import { colors, radii, spacing, typography } from '../theme/theme';
 
 interface PrimaryButtonProps {
@@ -12,19 +13,14 @@ interface PrimaryButtonProps {
 export function PrimaryButton({ label, onPress, disabled, variant = 'primary' }: PrimaryButtonProps) {
   const isSecondary = variant === 'secondary';
   return (
-    <Pressable
+    <AnimatedPressable
       accessibilityRole="button"
       onPress={onPress}
       disabled={disabled}
-      style={({ pressed }) => [
-        styles.base,
-        isSecondary ? styles.secondary : styles.primary,
-        disabled && styles.disabled,
-        pressed && !disabled && styles.pressed,
-      ]}
+      style={[styles.base, isSecondary ? styles.secondary : styles.primary, disabled && styles.disabled]}
     >
       <Text style={[styles.label, isSecondary && styles.labelSecondary]}>{label}</Text>
-    </Pressable>
+    </AnimatedPressable>
   );
 }
 
@@ -45,9 +41,6 @@ const styles = StyleSheet.create({
   },
   disabled: {
     opacity: 0.4,
-  },
-  pressed: {
-    opacity: 0.85,
   },
   label: {
     ...typography.body,
