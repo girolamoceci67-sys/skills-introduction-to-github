@@ -19,6 +19,7 @@ export default function GymLayout() {
       <Stack.Screen name="master/exercises" options={{ title: 'Esercizi personalizzati' }} />
       <Stack.Screen name="master/member/[memberId]" options={{ title: 'Piano iscritto' }} />
       <Stack.Screen name="member/index" options={{ title: 'Il mio piano' }} />
+      <Stack.Screen name="session/index" options={{ title: 'Allenamento', gestureEnabled: false }} />
     </Stack>
   );
 }

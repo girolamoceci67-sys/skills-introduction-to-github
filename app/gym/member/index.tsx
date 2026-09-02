@@ -4,6 +4,7 @@ import { router, useFocusEffect } from 'expo-router';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { AnimatedPressable } from '../../../src/components/AnimatedPressable';
+import { PrimaryButton } from '../../../src/components/PrimaryButton';
 import { Screen } from '../../../src/components/Screen';
 import { dumbbellLibrary } from '../../../src/domain/exercises/dumbbellLibrary';
 import { useExerciseContent } from '../../../src/domain/exercises/exerciseContent';
@@ -71,6 +72,10 @@ export default function MemberHome() {
 
       {plan?.length === 0 && (
         <Text style={styles.emptyText}>Il tuo istruttore non ha ancora assegnato esercizi. Torna più tardi.</Text>
+      )}
+
+      {plan && plan.length > 0 && (
+        <PrimaryButton label="Inizia l'allenamento" onPress={() => router.push('/gym/session')} />
       )}
 
       {plan?.map((item, index) => (
