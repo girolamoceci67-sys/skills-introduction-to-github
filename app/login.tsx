@@ -3,10 +3,12 @@ import { ActivityIndicator, StyleSheet, Text, TextInput, View } from 'react-nati
 import { router } from 'expo-router';
 import { useTranslation } from 'react-i18next';
 
+import { AnimatedPressable } from '../src/components/AnimatedPressable';
 import { PrimaryButton } from '../src/components/PrimaryButton';
 import { Screen } from '../src/components/Screen';
 import { useAuthSession } from '../src/auth/authSession';
 import { createAccount, hasStoredAccount, verifyLogin } from '../src/auth/authStorage';
+import { gymBackendConfigured } from '../src/gym/supabaseClient';
 import { colors, radii, spacing, typography } from '../src/theme/theme';
 
 type Mode = 'checking' | 'create' | 'login';
@@ -134,6 +136,12 @@ export default function Login() {
         onPress={isCreate ? handleCreate : handleLogin}
         disabled={submitting}
       />
+
+      {gymBackendConfigured && (
+        <AnimatedPressable style={styles.gymLink} onPress={() => router.push('/gym/login')} accessibilityRole="button">
+          <Text style={styles.gymLinkLabel}>Sei di una palestra (master o iscritto)? Accedi qui →</Text>
+        </AnimatedPressable>
+      )}
     </Screen>
   );
 }
@@ -164,4 +172,6 @@ const styles = StyleSheet.create({
     color: colors.textMuted,
     marginBottom: spacing.lg,
   },
+  gymLink: { marginTop: spacing.lg, alignSelf: 'center' },
+  gymLinkLabel: { ...typography.caption, color: colors.primary, fontWeight: '600' },
 });

@@ -70,6 +70,35 @@ function toPlanExercise(row: {
   };
 }
 
+export interface NewGymResult {
+  gymId: string;
+  masterId: string;
+}
+
+/**
+ * Registra una nuova palestra + il suo primo account master, tramite l'Edge Function `create-gym`
+ * (unico punto autorizzato: nessuna policy permette di creare gym/profiles direttamente dal client).
+ * Non richiede una sessione: è il punto di ingresso, chi lo chiama non è ancora autenticato.
+ */
+export async function createGymAccount(input: {
+  gymName: string;
+  masterEmail: string;
+  masterPassword: string;
+  masterDisplayName: string;
+}): Promise<NewGymResult> {
+  const client = requireClient();
+  const { data, error } = await client.functions.invoke('create-gym', {
+    body: {
+      gymName: input.gymName,
+      masterEmail: input.masterEmail,
+      masterPassword: input.masterPassword,
+      masterDisplayName: input.masterDisplayName,
+    },
+  });
+  if (error) throw error;
+  return data as NewGymResult;
+}
+
 export async function signInMember(email: string, password: string): Promise<void> {
   const client = requireClient();
   const { error } = await client.auth.signInWithPassword({ email, password });
