@@ -24,12 +24,17 @@ function PlanRow({ item, gymExercises, order }: { item: MemberPlanExercise; gymE
   const name = builtinExercise ? content.name : custom?.name ?? '—';
   const instructions = builtinExercise ? content.instructions.join(' ') : custom?.instructions ?? '';
 
+  const targetLabel = item.targetUnit === 'seconds' ? `${item.target}s` : `${item.target} rip.`;
+
   return (
     <Animated.View entering={FadeInDown.delay(Math.min(order, 8) * 50)} style={styles.card}>
       <View style={styles.cardHeaderRow}>
         <Text style={styles.badge}>{order + 1}</Text>
         <Text style={styles.cardTitle}>{name}</Text>
       </View>
+      <Text style={styles.cardMeta}>
+        {item.sets} serie × {targetLabel} — riposo {item.restSeconds}s
+      </Text>
       {instructions ? <Text style={styles.cardBody}>{instructions}</Text> : null}
     </Animated.View>
   );
@@ -118,6 +123,7 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   cardTitle: { ...typography.body, fontWeight: '700', color: colors.text, flex: 1 },
+  cardMeta: { ...typography.caption, color: colors.primaryDark, fontWeight: '600', marginTop: 2 },
   cardBody: { ...typography.caption, color: colors.textMuted, marginTop: spacing.xs },
   signOutLink: { marginTop: spacing.xl, alignSelf: 'center', marginBottom: spacing.lg },
   signOutLabel: { ...typography.body, color: colors.danger, fontWeight: '600' },

@@ -46,8 +46,21 @@ create table if not exists member_plan_exercises (
   exercise_source text not null check (exercise_source in ('builtin', 'gym_custom')),
   exercise_ref text not null,
   sort_order int not null default 0,
+  -- Volume scelto dal master per questo esercizio in questo piano: numero di serie, target (ripetizioni
+  -- o secondi di mantenimento a seconda di target_unit) e riposo tra le serie.
+  sets int not null default 2,
+  target int not null default 9,
+  target_unit text not null default 'reps' check (target_unit in ('reps', 'seconds')),
+  rest_seconds int not null default 60,
   created_at timestamptz not null default now()
 );
+
+-- Migrazione: se la tabella esisteva già senza queste colonne (versione precedente dello schema),
+-- questa aggiunta è sicura da rieseguire anche più volte o su un'installazione già aggiornata.
+alter table member_plan_exercises add column if not exists sets int not null default 2;
+alter table member_plan_exercises add column if not exists target int not null default 9;
+alter table member_plan_exercises add column if not exists target_unit text not null default 'reps';
+alter table member_plan_exercises add column if not exists rest_seconds int not null default 60;
 
 -- Row Level Security: ogni master vede/gestisce solo la propria palestra; ogni iscritto vede solo se stesso.
 

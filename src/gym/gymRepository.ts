@@ -1,5 +1,5 @@
 import { supabase } from './supabaseClient';
-import type { ExerciseSource, Gym, GymExercise, GymProfile, MemberPlanExercise } from './types';
+import type { ExerciseSource, Gym, GymExercise, GymProfile, MemberPlanExercise, TargetUnit } from './types';
 
 function requireClient() {
   if (!supabase) throw new Error('Supabase non configurato: EXPO_PUBLIC_SUPABASE_URL/ANON_KEY mancanti.');
@@ -57,6 +57,10 @@ function toPlanExercise(row: {
   exercise_source: string;
   exercise_ref: string;
   sort_order: number;
+  sets: number;
+  target: number;
+  target_unit: string;
+  rest_seconds: number;
   created_at: string;
 }): MemberPlanExercise {
   return {
@@ -66,6 +70,10 @@ function toPlanExercise(row: {
     exerciseSource: row.exercise_source as ExerciseSource,
     exerciseRef: row.exercise_ref,
     sortOrder: row.sort_order,
+    sets: row.sets,
+    target: row.target,
+    targetUnit: row.target_unit as TargetUnit,
+    restSeconds: row.rest_seconds,
     createdAt: row.created_at,
   };
 }
@@ -213,12 +221,17 @@ export async function listMemberPlan(memberId: string): Promise<MemberPlanExerci
   return (data ?? []).map(toPlanExercise);
 }
 
+export interface MemberPlanItemInput {
+  source: ExerciseSource;
+  ref: string;
+  sets: number;
+  target: number;
+  targetUnit: TargetUnit;
+  restSeconds: number;
+}
+
 /** Sostituisce l'intero piano assegnato all'iscritto con la nuova selezione (ordine = ordine dell'array). */
-export async function setMemberPlan(
-  gymId: string,
-  memberId: string,
-  items: { source: ExerciseSource; ref: string }[]
-): Promise<void> {
+export async function setMemberPlan(gymId: string, memberId: string, items: MemberPlanItemInput[]): Promise<void> {
   const client = requireClient();
   const { error: deleteError } = await client.from('member_plan_exercises').delete().eq('member_id', memberId);
   if (deleteError) throw deleteError;
@@ -230,6 +243,10 @@ export async function setMemberPlan(
       exercise_source: item.source,
       exercise_ref: item.ref,
       sort_order: index,
+      sets: item.sets,
+      target: item.target,
+      target_unit: item.targetUnit,
+      rest_seconds: item.restSeconds,
     }))
   );
   if (insertError) throw insertError;

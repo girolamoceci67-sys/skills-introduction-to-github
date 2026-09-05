@@ -19,16 +19,10 @@ export interface GymRuntimeExercise {
 }
 
 /**
- * Volume fisso per le sessioni palestra in v1: stessi valori di riferimento del tier 1 usato per i
- * nuovi utenti individuali (2 serie, 8-10 rip. → punto medio 9, 60s di riposo). Il master sceglie
- * quali esercizi assegnare, non ancora quante serie/ripetizioni: personalizzazione per-esercizio
- * lasciata a un round successivo.
+ * Costruisce il piano eseguibile in sessione a partire dalla selezione del master: sets/target/
+ * targetUnit/restSeconds vengono presi direttamente dalla riga member_plan_exercises (scelti dal
+ * master nell'editor del piano), non più da un volume fisso.
  */
-const DEFAULT_SETS = 2;
-const DEFAULT_REPS = 9;
-const HOLD_SECONDS_PER_REP_UNIT = 3;
-const DEFAULT_REST_SECONDS = 60;
-
 export function buildGymRuntimePlan(
   plan: MemberPlanExercise[],
   builtinLibrary: Exercise[],
@@ -42,7 +36,6 @@ export function buildGymRuntimePlan(
     if (row.exerciseSource === 'builtin') {
       const exercise = builtinById.get(row.exerciseRef);
       if (!exercise) continue;
-      const isHold = exercise.movementType === 'hold';
       items.push({
         key: row.id,
         source: 'builtin',
@@ -50,25 +43,24 @@ export function buildGymRuntimePlan(
         movementType: exercise.movementType,
         equipment: exercise.equipment,
         loadRangeKg: exercise.loadRangeKg,
-        sets: DEFAULT_SETS,
-        target: isHold ? DEFAULT_REPS * HOLD_SECONDS_PER_REP_UNIT : DEFAULT_REPS,
-        targetUnit: isHold ? 'seconds' : 'reps',
-        restSeconds: DEFAULT_REST_SECONDS,
+        sets: row.sets,
+        target: row.target,
+        targetUnit: row.targetUnit,
+        restSeconds: row.restSeconds,
       });
     } else {
       const custom = gymById.get(row.exerciseRef);
       if (!custom) continue;
-      const isHold = custom.movementType === 'hold';
       items.push({
         key: row.id,
         source: 'gym_custom',
         exerciseId: custom.id,
         movementType: custom.movementType,
         equipment: custom.equipment,
-        sets: DEFAULT_SETS,
-        target: isHold ? DEFAULT_REPS * HOLD_SECONDS_PER_REP_UNIT : DEFAULT_REPS,
-        targetUnit: isHold ? 'seconds' : 'reps',
-        restSeconds: DEFAULT_REST_SECONDS,
+        sets: row.sets,
+        target: row.target,
+        targetUnit: row.targetUnit,
+        restSeconds: row.restSeconds,
         customContent: { name: custom.name, instructions: custom.instructions },
       });
     }

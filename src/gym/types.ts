@@ -30,10 +30,12 @@ export interface GymExercise {
 }
 
 export type ExerciseSource = 'builtin' | 'gym_custom';
+export type TargetUnit = 'reps' | 'seconds';
 
 /**
  * Una riga del piano assegnato dal master a un iscritto: riferisce o un esercizio della libreria
  * integrata nell'app (exerciseRef = suo id, es. 'bw-squat') o un GymExercise (exerciseRef = suo id).
+ * Il volume (serie/ripetizioni o secondi/riposo) è scelto dal master per questo esercizio, per questo iscritto.
  */
 export interface MemberPlanExercise {
   id: string;
@@ -42,5 +44,9 @@ export interface MemberPlanExercise {
   exerciseSource: ExerciseSource;
   exerciseRef: string;
   sortOrder: number;
+  sets: number;
+  target: number;
+  targetUnit: TargetUnit;
+  restSeconds: number;
   createdAt: string;
 }
