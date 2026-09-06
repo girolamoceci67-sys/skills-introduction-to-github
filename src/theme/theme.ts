@@ -16,6 +16,7 @@ export const colors = {
 export const figureColors = {
   skin: '#D9A87B',
   skinShadow: '#C4915F',
+  hair: '#2B2420',
   top: '#1E6B4F',
   bottoms: '#153A28',
   shoes: '#1B1B18',

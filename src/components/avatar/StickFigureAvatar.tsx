@@ -8,18 +8,36 @@ import Animated, {
   withRepeat,
   withTiming,
 } from 'react-native-reanimated';
-import Svg, { Circle, Defs, Ellipse, Line, RadialGradient, Stop } from 'react-native-svg';
+import Svg, { Circle, Defs, Ellipse, Line, Polygon, RadialGradient, Stop } from 'react-native-svg';
 
 import { colors, figureColors } from '../../theme/theme';
 import type { ExerciseAvatarAnimation } from '../../domain/exercises/avatarPoses';
 
 const AnimatedCircle = Animated.createAnimatedComponent(Circle);
-const AnimatedLine = Animated.createAnimatedComponent(Line);
 const AnimatedEllipse = Animated.createAnimatedComponent(Ellipse);
+const AnimatedPolygon = Animated.createAnimatedComponent(Polygon);
+const AnimatedLine = Animated.createAnimatedComponent(Line);
 
 function interp(a: number, b: number, t: number) {
   'worklet';
   return a + (b - a) * t;
+}
+
+/**
+ * Poligono a "trapezio" lungo il segmento (x1,y1)-(x2,y2), largo w1 a un capo e w2 all'altro:
+ * dà ad arti e tronco una forma affusolata (più larga alla spalla/anca, più stretta al polso/
+ * caviglia) invece di un tratto a spessore costante, per una silhouette più umana.
+ */
+function limbPoints(x1: number, y1: number, x2: number, y2: number, w1: number, w2: number) {
+  'worklet';
+  const dx = x2 - x1;
+  const dy = y2 - y1;
+  const len = Math.sqrt(dx * dx + dy * dy) || 1;
+  const nx = -dy / len;
+  const ny = dx / len;
+  const h1 = w1 / 2;
+  const h2 = w2 / 2;
+  return `${x1 + nx * h1},${y1 + ny * h1} ${x2 + nx * h2},${y2 + ny * h2} ${x2 - nx * h2},${y2 - ny * h2} ${x1 - nx * h1},${y1 - ny * h1}`;
 }
 
 export function StickFigureAvatar({
@@ -53,42 +71,45 @@ export function StickFigureAvatar({
   const headProps = useAnimatedProps(() => ({ cx: pose.value.head.x, cy: pose.value.head.y }));
   const headHighlightProps = useAnimatedProps(() => ({
     cx: pose.value.head.x - 3,
-    cy: pose.value.head.y - 3.5,
+    cy: pose.value.head.y - 3.8,
   }));
+  const hairProps = useAnimatedProps(() => ({
+    cx: pose.value.head.x,
+    cy: pose.value.head.y - 6.3,
+  }));
+
   const torsoProps = useAnimatedProps(() => ({
-    x1: pose.value.neck.x,
-    y1: pose.value.neck.y,
-    x2: pose.value.hip.x,
-    y2: pose.value.hip.y,
+    points: limbPoints(pose.value.neck.x, pose.value.neck.y, pose.value.hip.x, pose.value.hip.y, 15, 12),
   }));
   const upperArmProps = useAnimatedProps(() => ({
-    x1: pose.value.neck.x,
-    y1: pose.value.neck.y,
-    x2: pose.value.elbow.x,
-    y2: pose.value.elbow.y,
+    points: limbPoints(pose.value.neck.x, pose.value.neck.y, pose.value.elbow.x, pose.value.elbow.y, 7.5, 6.2),
   }));
   const forearmProps = useAnimatedProps(() => ({
-    x1: pose.value.elbow.x,
-    y1: pose.value.elbow.y,
-    x2: pose.value.hand.x,
-    y2: pose.value.hand.y,
+    points: limbPoints(pose.value.elbow.x, pose.value.elbow.y, pose.value.hand.x, pose.value.hand.y, 6, 5),
   }));
   const thighProps = useAnimatedProps(() => ({
-    x1: pose.value.hip.x,
-    y1: pose.value.hip.y,
-    x2: pose.value.knee.x,
-    y2: pose.value.knee.y,
+    points: limbPoints(pose.value.hip.x, pose.value.hip.y, pose.value.knee.x, pose.value.knee.y, 12, 8.5),
   }));
   const shinProps = useAnimatedProps(() => ({
-    x1: pose.value.knee.x,
-    y1: pose.value.knee.y,
-    x2: pose.value.foot.x,
-    y2: pose.value.foot.y,
+    points: limbPoints(pose.value.knee.x, pose.value.knee.y, pose.value.foot.x, pose.value.foot.y, 7.5, 5.5),
   }));
+
   const elbowJointProps = useAnimatedProps(() => ({ cx: pose.value.elbow.x, cy: pose.value.elbow.y }));
   const kneeJointProps = useAnimatedProps(() => ({ cx: pose.value.knee.x, cy: pose.value.knee.y }));
   const handProps = useAnimatedProps(() => ({ cx: pose.value.hand.x, cy: pose.value.hand.y }));
-  const footProps = useAnimatedProps(() => ({ cx: pose.value.foot.x, cy: pose.value.foot.y }));
+  const ankleProps = useAnimatedProps(() => ({ cx: pose.value.foot.x, cy: pose.value.foot.y }));
+  // La "scarpa" è un poligono affusolato che prolunga la direzione ginocchio->piede oltre la
+  // caviglia (stessa tecnica dei poligoni degli arti), così resta plausibile in ogni posa senza
+  // ricorrere a rotazioni SVG (non supportate in modo affidabile dal renderer web).
+  const shoeProps = useAnimatedProps(() => {
+    const dx = pose.value.foot.x - pose.value.knee.x;
+    const dy = pose.value.foot.y - pose.value.knee.y;
+    const len = Math.sqrt(dx * dx + dy * dy) || 1;
+    const toeX = pose.value.foot.x + (dx / len) * 9;
+    const toeY = pose.value.foot.y + (dy / len) * 9;
+    return { points: limbPoints(pose.value.foot.x, pose.value.foot.y, toeX, toeY, 7, 3) };
+  });
+
   // L'ombra a terra segue il centro di massa (bacino) e si assottiglia quando il bacino si alza
   // rispetto al terreno (es. fase di salto), dando un minimo di senso di profondità.
   const groundShadowProps = useAnimatedProps(() => {
@@ -116,8 +137,8 @@ export function StickFigureAvatar({
       <Svg width="100%" height="100%" viewBox={`0 0 ${viewBoxWidth} ${viewBoxHeight}`}>
         <Defs>
           <RadialGradient id="headGradient" cx="35%" cy="30%" r="75%">
-            <Stop offset="0%" stopColor={colors.primary} />
-            <Stop offset="100%" stopColor={colors.primaryDark} />
+            <Stop offset="0%" stopColor={figureColors.skin} />
+            <Stop offset="100%" stopColor={figureColors.skinShadow} />
           </RadialGradient>
         </Defs>
 
@@ -129,35 +150,22 @@ export function StickFigureAvatar({
           fill={figureColors.shadowOnGround}
         />
 
-        <AnimatedLine
-          animatedProps={thighProps}
-          stroke={figureColors.bottoms}
-          strokeWidth={9}
-          strokeLinecap="round"
-        />
-        <AnimatedLine animatedProps={shinProps} stroke={figureColors.skin} strokeWidth={7} strokeLinecap="round" />
-        <AnimatedCircle animatedProps={kneeJointProps} r={4} fill={figureColors.bottoms} />
-        <AnimatedCircle animatedProps={footProps} r={5} fill={figureColors.shoes} />
+        <AnimatedPolygon animatedProps={thighProps} fill={figureColors.bottoms} />
+        <AnimatedPolygon animatedProps={shinProps} fill={figureColors.skin} />
+        <AnimatedCircle animatedProps={kneeJointProps} r={4.2} fill={figureColors.bottoms} />
+        <AnimatedCircle animatedProps={ankleProps} r={3.4} fill={figureColors.skinShadow} />
+        <AnimatedPolygon animatedProps={shoeProps} fill={figureColors.shoes} />
 
-        <AnimatedLine animatedProps={torsoProps} stroke={figureColors.top} strokeWidth={12} strokeLinecap="round" />
+        <AnimatedPolygon animatedProps={torsoProps} fill={figureColors.top} />
 
-        <AnimatedLine
-          animatedProps={upperArmProps}
-          stroke={figureColors.skin}
-          strokeWidth={6}
-          strokeLinecap="round"
-        />
-        <AnimatedLine
-          animatedProps={forearmProps}
-          stroke={figureColors.skin}
-          strokeWidth={5.5}
-          strokeLinecap="round"
-        />
-        <AnimatedCircle animatedProps={elbowJointProps} r={3.5} fill={figureColors.skinShadow} />
+        <AnimatedPolygon animatedProps={upperArmProps} fill={figureColors.skin} />
+        <AnimatedPolygon animatedProps={forearmProps} fill={figureColors.skin} />
+        <AnimatedCircle animatedProps={elbowJointProps} r={3.6} fill={figureColors.skinShadow} />
         {!showDumbbell && <AnimatedCircle animatedProps={handProps} r={4} fill={figureColors.skinShadow} />}
 
-        <AnimatedCircle animatedProps={headProps} r={11} fill="url(#headGradient)" />
-        <AnimatedCircle animatedProps={headHighlightProps} r={2.6} fill="rgba(255,255,255,0.35)" />
+        <AnimatedCircle animatedProps={headProps} r={10.5} fill="url(#headGradient)" />
+        <AnimatedEllipse animatedProps={hairProps} rx={9.4} ry={6.2} fill={figureColors.hair} />
+        <AnimatedCircle animatedProps={headHighlightProps} r={2.4} fill="rgba(255,255,255,0.4)" />
 
         {showDumbbell && (
           <>
