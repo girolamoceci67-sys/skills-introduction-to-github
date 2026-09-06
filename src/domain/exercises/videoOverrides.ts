@@ -19,4 +19,6 @@ export const videoOverrides: Record<string, number> = {
   'push-wall': require('../../../assets/exercise-videos/push-wall.mp4'),
   'fullbody-cat-cow': require('../../../assets/exercise-videos/fullbody-cat-cow.mp4'),
   'legs-squat': require('../../../assets/exercise-videos/legs-squat.mp4'),
+  'db-back-bent-row': require('../../../assets/exercise-videos/db-back-bent-row.mp4'),
+  'legs-split-squat': require('../../../assets/exercise-videos/legs-split-squat.mp4'),
 };
