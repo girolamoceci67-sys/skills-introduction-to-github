@@ -10,4 +10,7 @@ export const videoOverrides: Record<string, number> = {
   'db-arms-bicep-curl': require('../../../assets/exercise-videos/db-arms-bicep-curl.mp4'),
   'pull-superman': require('../../../assets/exercise-videos/pull-superman.mp4'),
   'legs-glute-bridge': require('../../../assets/exercise-videos/legs-glute-bridge.mp4'),
+  'db-chest-floor-fly': require('../../../assets/exercise-videos/db-chest-floor-fly.mp4'),
+  'pull-prone-swimmer': require('../../../assets/exercise-videos/pull-prone-swimmer.mp4'),
+  'core-bird-dog': require('../../../assets/exercise-videos/core-bird-dog.mp4'),
 };
