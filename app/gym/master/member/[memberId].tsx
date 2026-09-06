@@ -10,9 +10,15 @@ import { dumbbellLibrary } from '../../../../src/domain/exercises/dumbbellLibrar
 import { useExerciseContent } from '../../../../src/domain/exercises/exerciseContent';
 import { exerciseLibrary } from '../../../../src/domain/exercises/library';
 import type { MovementType } from '../../../../src/domain/exercises/types';
-import { listGymExercises, listMemberPlan, setMemberPlan, type MemberPlanItemInput } from '../../../../src/gym/gymRepository';
+import {
+  listGymExercises,
+  listMemberPlan,
+  listMemberWorkoutSessions,
+  setMemberPlan,
+  type MemberPlanItemInput,
+} from '../../../../src/gym/gymRepository';
 import { useGymSession } from '../../../../src/gym/gymSession';
-import type { ExerciseSource, GymExercise, TargetUnit } from '../../../../src/gym/types';
+import type { ExerciseSource, GymExercise, TargetUnit, WorkoutSession } from '../../../../src/gym/types';
 import { colors, radii, shadows, spacing, typography } from '../../../../src/theme/theme';
 
 const builtinLibrary = [...exerciseLibrary, ...dumbbellLibrary];
@@ -116,29 +122,74 @@ function CustomRow({
   );
 }
 
+const STATUS_LABEL: Record<WorkoutSession['status'], string> = {
+  completed: 'Completato',
+  abandoned: 'Interrotto',
+};
+
+function formatSessionDate(iso: string): string {
+  return new Date(iso).toLocaleDateString('it-IT', {
+    day: '2-digit',
+    month: '2-digit',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+function HistorySection({ sessions }: { sessions: WorkoutSession[] | null }) {
+  if (sessions === null) {
+    return <ActivityIndicator color={colors.primary} style={{ marginBottom: spacing.md }} />;
+  }
+  if (sessions.length === 0) {
+    return (
+      <View style={styles.historyBox}>
+        <Text style={styles.historyEmpty}>Nessun allenamento registrato ancora.</Text>
+      </View>
+    );
+  }
+  return (
+    <View style={styles.historyBox}>
+      {sessions.map((session) => (
+        <View key={session.id} style={styles.historyRow}>
+          <Text style={styles.historyDate}>{formatSessionDate(session.startedAt)}</Text>
+          <Text
+            style={[styles.historyStatus, session.status === 'abandoned' && styles.historyStatusAbandoned]}
+          >
+            {STATUS_LABEL[session.status]} · {session.exercisesCompleted}/{session.exercisesTotal}
+          </Text>
+        </View>
+      ))}
+    </View>
+  );
+}
+
 export default function MemberPlanEditor() {
   const { memberId } = useLocalSearchParams<{ memberId: string }>();
   const profile = useGymSession((state) => state.profile);
   const [selection, setSelection] = useState<MemberPlanItemInput[] | null>(null);
   const [gymExercises, setGymExercises] = useState<GymExercise[]>([]);
+  const [sessions, setSessions] = useState<WorkoutSession[] | null>(null);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
 
   const load = useCallback(() => {
     if (!profile || !memberId) return;
-    Promise.all([listMemberPlan(memberId), listGymExercises(profile.gymId)]).then(([plan, exercises]) => {
-      setSelection(
-        plan.map((p) => ({
-          source: p.exerciseSource,
-          ref: p.exerciseRef,
-          sets: p.sets,
-          target: p.target,
-          targetUnit: p.targetUnit,
-          restSeconds: p.restSeconds,
-        }))
-      );
-      setGymExercises(exercises);
-    });
+    Promise.all([listMemberPlan(memberId), listGymExercises(profile.gymId), listMemberWorkoutSessions(memberId)]).then(
+      ([plan, exercises, memberSessions]) => {
+        setSelection(
+          plan.map((p) => ({
+            source: p.exerciseSource,
+            ref: p.exerciseRef,
+            sets: p.sets,
+            target: p.target,
+            targetUnit: p.targetUnit,
+            restSeconds: p.restSeconds,
+          }))
+        );
+        setGymExercises(exercises);
+        setSessions(memberSessions);
+      }
+    );
   }, [profile, memberId]);
 
   useFocusEffect(load);
@@ -197,6 +248,9 @@ export default function MemberPlanEditor() {
         Tocca il nome per aggiungere/rimuovere; una volta selezionato, imposta serie/ripetizioni/riposo —{' '}
         {selection.length} selezionati.
       </Text>
+
+      <Text style={styles.sectionTitle}>Storico allenamenti</Text>
+      <HistorySection sessions={sessions} />
 
       <PrimaryButton
         label={saving ? 'Salvataggio…' : saved ? 'Salvato ✓' : 'Salva piano'}
@@ -283,4 +337,19 @@ const styles = StyleSheet.create({
   },
   controlsHint: { ...typography.caption, color: colors.textMuted },
   stepperRow: { flexDirection: 'row', justifyContent: 'space-around' },
+  historyBox: {
+    backgroundColor: colors.surface,
+    borderWidth: 1,
+    borderColor: colors.border,
+    borderRadius: radii.md,
+    padding: spacing.md,
+    marginBottom: spacing.md,
+    gap: spacing.xs,
+    ...shadows.card,
+  },
+  historyEmpty: { ...typography.caption, color: colors.textMuted },
+  historyRow: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' },
+  historyDate: { ...typography.caption, color: colors.textMuted },
+  historyStatus: { ...typography.caption, color: colors.primaryDark, fontWeight: '700' },
+  historyStatusAbandoned: { color: colors.warning },
 });

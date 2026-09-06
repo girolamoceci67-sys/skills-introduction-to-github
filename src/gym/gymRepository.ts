@@ -1,5 +1,14 @@
 import { supabase } from './supabaseClient';
-import type { ExerciseSource, Gym, GymExercise, GymProfile, MemberPlanExercise, TargetUnit } from './types';
+import type {
+  ExerciseSource,
+  Gym,
+  GymExercise,
+  GymProfile,
+  MemberPlanExercise,
+  TargetUnit,
+  WorkoutSession,
+  WorkoutSessionStatus,
+} from './types';
 
 function requireClient() {
   if (!supabase) throw new Error('Supabase non configurato: EXPO_PUBLIC_SUPABASE_URL/ANON_KEY mancanti.');
@@ -250,4 +259,63 @@ export async function setMemberPlan(gymId: string, memberId: string, items: Memb
     }))
   );
   if (insertError) throw insertError;
+}
+
+function toWorkoutSession(row: {
+  id: string;
+  gym_id: string;
+  member_id: string;
+  started_at: string;
+  completed_at: string | null;
+  status: string;
+  exercises_completed: number;
+  exercises_total: number;
+  created_at: string;
+}): WorkoutSession {
+  return {
+    id: row.id,
+    gymId: row.gym_id,
+    memberId: row.member_id,
+    startedAt: row.started_at,
+    completedAt: row.completed_at,
+    status: row.status as WorkoutSessionStatus,
+    exercisesCompleted: row.exercises_completed,
+    exercisesTotal: row.exercises_total,
+    createdAt: row.created_at,
+  };
+}
+
+/** Registra l'esito di una sessione guidata (completata o interrotta a metà) a fine allenamento. */
+export async function logWorkoutSession(input: {
+  gymId: string;
+  memberId: string;
+  startedAt: Date;
+  status: WorkoutSessionStatus;
+  exercisesCompleted: number;
+  exercisesTotal: number;
+}): Promise<void> {
+  const client = requireClient();
+  const { error } = await client.from('workout_sessions').insert({
+    gym_id: input.gymId,
+    member_id: input.memberId,
+    started_at: input.startedAt.toISOString(),
+    completed_at: new Date().toISOString(),
+    status: input.status,
+    exercises_completed: input.exercisesCompleted,
+    exercises_total: input.exercisesTotal,
+  });
+  if (error) throw error;
+}
+
+/** Ultime sessioni di un iscritto, più recenti prima — usato dal master per vedere chi si è allenato e quanto. */
+export async function listMemberWorkoutSessions(memberId: string, limit = 10): Promise<WorkoutSession[]> {
+  const client = requireClient();
+  const { data, error } = await client
+    .from('workout_sessions')
+    .select('*')
+    .eq('member_id', memberId)
+    .order('started_at', { ascending: false })
+    .limit(limit);
+  if (error) throw error;
+  return (data ?? []).map(toWorkoutSession);
 }

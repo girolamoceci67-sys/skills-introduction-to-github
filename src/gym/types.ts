@@ -50,3 +50,18 @@ export interface MemberPlanExercise {
   restSeconds: number;
   createdAt: string;
 }
+
+export type WorkoutSessionStatus = 'completed' | 'abandoned';
+
+/** Una sessione guidata avviata da un iscritto: registrata a fine allenamento (completo o interrotto). */
+export interface WorkoutSession {
+  id: string;
+  gymId: string;
+  memberId: string;
+  startedAt: string;
+  completedAt: string | null;
+  status: WorkoutSessionStatus;
+  exercisesCompleted: number;
+  exercisesTotal: number;
+  createdAt: string;
+}

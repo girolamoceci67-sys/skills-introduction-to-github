@@ -1,7 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
-import { router } from 'expo-router';
+import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
+import { Stack, router } from 'expo-router';
 
+import { AnimatedPressable } from '../../../src/components/AnimatedPressable';
 import { ExerciseAvatar } from '../../../src/components/avatar/ExerciseAvatar';
 import { SessionCompleteCelebration } from '../../../src/components/celebration/SessionCompleteCelebration';
 import { CountdownTimer } from '../../../src/components/CountdownTimer';
@@ -11,7 +12,7 @@ import { dumbbellLibrary } from '../../../src/domain/exercises/dumbbellLibrary';
 import { useExerciseContent } from '../../../src/domain/exercises/exerciseContent';
 import { exerciseLibrary } from '../../../src/domain/exercises/library';
 import { estimatedRepsDurationSeconds } from '../../../src/domain/engine/progressionRules';
-import { listGymExercises, listMemberPlan } from '../../../src/gym/gymRepository';
+import { listGymExercises, listMemberPlan, logWorkoutSession } from '../../../src/gym/gymRepository';
 import { buildGymRuntimePlan, type GymRuntimeExercise } from '../../../src/gym/gymSessionPlan';
 import { useGymSession } from '../../../src/gym/gymSession';
 import { colors, spacing, typography } from '../../../src/theme/theme';
@@ -47,6 +48,7 @@ export default function GymGuidedSession() {
   const [exerciseIndex, setExerciseIndex] = useState(0);
   const [setIndex, setSetIndex] = useState(0);
   const pendingAdvance = useRef<PendingAdvance>('next_set');
+  const startedAt = useRef(new Date());
 
   useEffect(() => {
     if (!profile) return;
@@ -73,6 +75,16 @@ export default function GymGuidedSession() {
       return;
     }
     if (exerciseIndex + 1 >= items.length) {
+      if (profile) {
+        logWorkoutSession({
+          gymId: profile.gymId,
+          memberId: profile.id,
+          startedAt: startedAt.current,
+          status: 'completed',
+          exercisesCompleted: items.length,
+          exercisesTotal: items.length,
+        }).catch(() => {});
+      }
       setPhase('done');
       return;
     }
@@ -90,8 +102,47 @@ export default function GymGuidedSession() {
     setPhase('exercise');
   }
 
+  function handleExitPress() {
+    if (phase !== 'exercise' && phase !== 'rest') {
+      router.back();
+      return;
+    }
+    Alert.alert('Uscire dall\'allenamento?', 'I progressi di questa sessione verranno salvati come interrotta.', [
+      { text: 'Annulla', style: 'cancel' },
+      {
+        text: 'Esci',
+        style: 'destructive',
+        onPress: () => {
+          if (profile) {
+            logWorkoutSession({
+              gymId: profile.gymId,
+              memberId: profile.id,
+              startedAt: startedAt.current,
+              status: 'abandoned',
+              exercisesCompleted: exerciseIndex,
+              exercisesTotal: items.length,
+            }).catch(() => {});
+          }
+          router.back();
+        },
+      },
+    ]);
+  }
+
   return (
     <Screen>
+      <Stack.Screen
+        options={{
+          headerShown: phase !== 'done',
+          gestureEnabled: false,
+          headerLeft: () => (
+            <AnimatedPressable onPress={handleExitPress} accessibilityRole="button" hitSlop={12}>
+              <Text style={styles.exitLabel}>Esci</Text>
+            </AnimatedPressable>
+          ),
+        }}
+      />
+
       {phase === 'loading' && (
         <View style={styles.center}>
           <ActivityIndicator color={colors.primary} />
@@ -175,4 +226,5 @@ const styles = StyleSheet.create({
   stepText: { ...typography.body, color: colors.text, textAlign: 'left', alignSelf: 'stretch' },
   repsBlock: { alignItems: 'center', gap: spacing.md, width: '100%' },
   repsTarget: { ...typography.title, fontSize: 40, color: colors.text },
+  exitLabel: { ...typography.body, color: colors.primary, fontWeight: '600' },
 });

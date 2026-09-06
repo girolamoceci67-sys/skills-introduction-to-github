@@ -62,12 +62,27 @@ alter table member_plan_exercises add column if not exists target int not null d
 alter table member_plan_exercises add column if not exists target_unit text not null default 'reps';
 alter table member_plan_exercises add column if not exists rest_seconds int not null default 60;
 
+-- Storico allenamenti: una riga per ogni sessione guidata avviata da un iscritto (completata o
+-- abbandonata a metà), così il master può vedere chi si è allenato e quanto.
+create table if not exists workout_sessions (
+  id uuid primary key default gen_random_uuid(),
+  gym_id uuid not null references gyms (id) on delete cascade,
+  member_id uuid not null references profiles (id) on delete cascade,
+  started_at timestamptz not null default now(),
+  completed_at timestamptz,
+  status text not null check (status in ('completed', 'abandoned')),
+  exercises_completed int not null default 0,
+  exercises_total int not null default 0,
+  created_at timestamptz not null default now()
+);
+
 -- Row Level Security: ogni master vede/gestisce solo la propria palestra; ogni iscritto vede solo se stesso.
 
 alter table gyms enable row level security;
 alter table profiles enable row level security;
 alter table gym_exercises enable row level security;
 alter table member_plan_exercises enable row level security;
+alter table workout_sessions enable row level security;
 
 -- Funzione helper: ruolo e palestra dell'utente autenticato corrente.
 create or replace function auth_profile()
@@ -104,3 +119,10 @@ create policy "iscritto legge il proprio piano assegnato" on member_plan_exercis
 create policy "master legge/scrive i piani della propria palestra" on member_plan_exercises
   for all using (gym_id in (select gym_id from auth_profile() where role = 'master'))
   with check (gym_id in (select gym_id from auth_profile() where role = 'master'));
+
+create policy "iscritto crea e legge le proprie sessioni" on workout_sessions
+  for all using (member_id = auth.uid())
+  with check (member_id = auth.uid());
+
+create policy "master legge le sessioni della propria palestra" on workout_sessions
+  for select using (gym_id in (select gym_id from auth_profile() where role = 'master'));
