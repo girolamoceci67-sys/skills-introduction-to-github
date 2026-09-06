@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, View } from 'react-native';
 import { router, useFocusEffect } from 'expo-router';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
@@ -69,7 +69,10 @@ export default function MemberHome() {
 
   return (
     <Screen>
-      <Text style={styles.gymName}>{gym.name}</Text>
+      <View style={styles.gymHeaderRow}>
+        {gym.logoUrl && <Image source={{ uri: gym.logoUrl }} style={styles.gymLogo} resizeMode="cover" />}
+        <Text style={styles.gymName}>{gym.name}</Text>
+      </View>
       <Text style={styles.title}>Ciao, {profile.displayName}</Text>
       <Text style={styles.subtitle}>Ecco gli esercizi che il tuo istruttore ha scelto per te.</Text>
 
@@ -96,7 +99,9 @@ export default function MemberHome() {
 
 const styles = StyleSheet.create({
   center: { flex: 1, alignItems: 'center', justifyContent: 'center' },
-  gymName: { ...typography.caption, color: colors.primary, fontWeight: '700', marginBottom: 2 },
+  gymHeaderRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, marginBottom: 2 },
+  gymLogo: { width: 20, height: 20, borderRadius: 6 },
+  gymName: { ...typography.caption, color: colors.primary, fontWeight: '700' },
   title: { ...typography.title, color: colors.text, marginBottom: spacing.xs },
   subtitle: { ...typography.body, color: colors.textMuted, marginBottom: spacing.lg },
   emptyText: { ...typography.body, color: colors.textMuted, textAlign: 'center', marginTop: spacing.lg },

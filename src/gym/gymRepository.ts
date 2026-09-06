@@ -15,8 +15,8 @@ function requireClient() {
   return supabase;
 }
 
-function toGym(row: { id: string; name: string; created_at: string }): Gym {
-  return { id: row.id, name: row.name, createdAt: row.created_at };
+function toGym(row: { id: string; name: string; logo_url: string | null; created_at: string }): Gym {
+  return { id: row.id, name: row.name, logoUrl: row.logo_url, createdAt: row.created_at };
 }
 
 function toProfile(row: {
@@ -147,6 +147,35 @@ export async function updateGymName(gymId: string, name: string): Promise<void> 
   const client = requireClient();
   const { error } = await client.from('gyms').update({ name }).eq('id', gymId);
   if (error) throw error;
+}
+
+/**
+ * Carica il logo scelto dal master nel bucket pubblico `gym-logos` (percorso "<gymId>/logo.<ext>",
+ * sovrascritto a ogni cambio) e salva l'URL pubblico su gyms.logo_url. `fileUri` è l'URI locale
+ * restituito da expo-image-picker; su nativo e web entrambi supportano `fetch(uri).blob()`.
+ */
+export async function uploadGymLogo(gymId: string, fileUri: string, contentType: string): Promise<string> {
+  const client = requireClient();
+  const extension = contentType === 'image/png' ? 'png' : 'jpg';
+  const path = `${gymId}/logo.${extension}`;
+
+  const response = await fetch(fileUri);
+  const blob = await response.blob();
+
+  const { error: uploadError } = await client.storage
+    .from('gym-logos')
+    .upload(path, blob, { contentType, upsert: true });
+  if (uploadError) throw uploadError;
+
+  const { data } = client.storage.from('gym-logos').getPublicUrl(path);
+  // Cache-bust: lo stesso path viene sovrascritto a ogni nuovo logo, quindi senza un parametro
+  // che cambia il client (e la CDN) continuerebbero a mostrare l'immagine vecchia in cache.
+  const publicUrl = `${data.publicUrl}?v=${Date.now()}`;
+
+  const { error: updateError } = await client.from('gyms').update({ logo_url: publicUrl }).eq('id', gymId);
+  if (updateError) throw updateError;
+
+  return publicUrl;
 }
 
 export async function listGymMembers(gymId: string): Promise<GymProfile[]> {

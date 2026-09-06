@@ -5,6 +5,7 @@ export type GymRole = 'master' | 'member';
 export interface Gym {
   id: string;
   name: string;
+  logoUrl: string | null;
   createdAt: string;
 }
 

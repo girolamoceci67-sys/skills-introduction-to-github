@@ -15,8 +15,12 @@ create extension if not exists "pgcrypto";
 create table if not exists gyms (
   id uuid primary key default gen_random_uuid(),
   name text not null,
+  logo_url text,
   created_at timestamptz not null default now()
 );
+
+-- Migrazione: aggiunge la colonna se la tabella esisteva già senza (sicura da rieseguire).
+alter table gyms add column if not exists logo_url text;
 
 create table if not exists profiles (
   id uuid primary key references auth.users (id) on delete cascade,
@@ -126,3 +130,28 @@ create policy "iscritto crea e legge le proprie sessioni" on workout_sessions
 
 create policy "master legge le sessioni della propria palestra" on workout_sessions
   for select using (gym_id in (select gym_id from auth_profile() where role = 'master'));
+
+-- Storage: bucket pubblico per i loghi delle palestre. Ogni file è salvato come "<gym_id>/logo.<ext>",
+-- così le policy possono controllare che un master carichi solo dentro la cartella della propria palestra.
+-- Il bucket è pubblico in lettura (i loghi non sono dati sensibili e devono essere visibili anche a
+-- iscritti/schermate senza bisogno di URL firmati).
+insert into storage.buckets (id, name, public)
+values ('gym-logos', 'gym-logos', true)
+on conflict (id) do nothing;
+
+create policy "loghi palestra leggibili da chiunque" on storage.objects
+  for select using (bucket_id = 'gym-logos');
+
+create policy "il master carica/sostituisce solo il logo della propria palestra" on storage.objects
+  for insert to authenticated
+  with check (
+    bucket_id = 'gym-logos'
+    and (storage.foldername(name))[1]::uuid in (select gym_id from auth_profile() where role = 'master')
+  );
+
+create policy "il master aggiorna solo il logo della propria palestra" on storage.objects
+  for update to authenticated
+  using (
+    bucket_id = 'gym-logos'
+    and (storage.foldername(name))[1]::uuid in (select gym_id from auth_profile() where role = 'master')
+  );

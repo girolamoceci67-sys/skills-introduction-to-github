@@ -34,6 +34,12 @@
           "icon": "./assets/icon.png",
           "color": "#1f883d"
         }
+      ],
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "Consenti a Corpo e Salute di accedere alle foto per scegliere il logo della palestra."
+        }
       ]
     ],
     "experiments": {

@@ -1,12 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
-import { ActivityIndicator, StyleSheet, Text, TextInput, View } from 'react-native';
+import { ActivityIndicator, Image, StyleSheet, Text, TextInput, View } from 'react-native';
 import { Redirect, router, useFocusEffect } from 'expo-router';
+import * as ImagePicker from 'expo-image-picker';
 import Animated, { FadeInDown } from 'react-native-reanimated';
 
 import { AnimatedPressable } from '../../../src/components/AnimatedPressable';
 import { PrimaryButton } from '../../../src/components/PrimaryButton';
 import { Screen } from '../../../src/components/Screen';
-import { listGymMembers, updateGymName } from '../../../src/gym/gymRepository';
+import { listGymMembers, updateGymName, uploadGymLogo } from '../../../src/gym/gymRepository';
 import { useGymSession } from '../../../src/gym/gymSession';
 import type { GymProfile } from '../../../src/gym/types';
 import { colors, radii, shadows, spacing, typography } from '../../../src/theme/theme';
@@ -20,6 +21,8 @@ export default function MasterDashboard() {
 
   const [gymName, setGymName] = useState(gym?.name ?? '');
   const [savingName, setSavingName] = useState(false);
+  const [uploadingLogo, setUploadingLogo] = useState(false);
+  const [logoError, setLogoError] = useState<string | null>(null);
   const [members, setMembers] = useState<GymProfile[] | null>(null);
   const [loadError, setLoadError] = useState(false);
 
@@ -66,12 +69,62 @@ export default function MasterDashboard() {
     }
   }
 
+  async function handlePickLogo() {
+    if (!gym) return;
+    setLogoError(null);
+    const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
+    if (!permission.granted) {
+      setLogoError('Permesso alla galleria negato. Consentilo dalle impostazioni del telefono.');
+      return;
+    }
+    const result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ['images'],
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 0.8,
+    });
+    if (result.canceled || !result.assets[0]) return;
+
+    const asset = result.assets[0];
+    setUploadingLogo(true);
+    try {
+      await uploadGymLogo(gym.id, asset.uri, asset.mimeType ?? 'image/jpeg');
+      await refresh();
+    } catch {
+      setLogoError('Caricamento del logo non riuscito. Riprova.');
+    } finally {
+      setUploadingLogo(false);
+    }
+  }
+
   return (
     <Screen>
       <Text style={styles.title}>Ciao, {profile.displayName}</Text>
       <Text style={styles.subtitle}>Gestisci il nome della tua palestra e i tuoi iscritti.</Text>
 
       <View style={styles.card}>
+        <Text style={styles.label}>Logo palestra</Text>
+        <View style={styles.logoRow}>
+          <View style={styles.logoPreview}>
+            {gym.logoUrl ? (
+              <Image source={{ uri: gym.logoUrl }} style={styles.logoImage} resizeMode="cover" />
+            ) : (
+              <Text style={styles.logoPlaceholder}>{gym.name.charAt(0).toUpperCase()}</Text>
+            )}
+          </View>
+          <AnimatedPressable
+            style={styles.smallButton}
+            onPress={handlePickLogo}
+            disabled={uploadingLogo}
+            accessibilityRole="button"
+          >
+            <Text style={styles.smallButtonLabel}>
+              {uploadingLogo ? 'Caricamento…' : gym.logoUrl ? 'Cambia logo' : 'Carica logo'}
+            </Text>
+          </AnimatedPressable>
+        </View>
+        {logoError && <Text style={styles.error}>{logoError}</Text>}
+
         <Text style={styles.label}>Nome palestra</Text>
         <TextInput
           style={styles.input}
@@ -142,6 +195,18 @@ const styles = StyleSheet.create({
     ...shadows.card,
   },
   label: { ...typography.caption, color: colors.textMuted },
+  logoRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.md },
+  logoPreview: {
+    width: 56,
+    height: 56,
+    borderRadius: radii.md,
+    backgroundColor: colors.background,
+    alignItems: 'center',
+    justifyContent: 'center',
+    overflow: 'hidden',
+  },
+  logoImage: { width: '100%', height: '100%' },
+  logoPlaceholder: { ...typography.heading, color: colors.primary },
   input: {
     borderWidth: 1,
     borderColor: colors.border,

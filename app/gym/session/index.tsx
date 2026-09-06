@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Alert, StyleSheet, Text, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, StyleSheet, Text, View } from 'react-native';
 import { Stack, router } from 'expo-router';
 
 import { AnimatedPressable } from '../../../src/components/AnimatedPressable';
@@ -43,6 +43,7 @@ function ExerciseContentBlock({ item }: { item: GymRuntimeExercise }) {
 
 export default function GymGuidedSession() {
   const profile = useGymSession((state) => state.profile);
+  const gym = useGymSession((state) => state.gym);
   const [phase, setPhase] = useState<Phase>('loading');
   const [items, setItems] = useState<GymRuntimeExercise[]>([]);
   const [exerciseIndex, setExerciseIndex] = useState(0);
@@ -140,6 +141,9 @@ export default function GymGuidedSession() {
               <Text style={styles.exitLabel}>Esci</Text>
             </AnimatedPressable>
           ),
+          headerTitle: gym?.logoUrl
+            ? () => <Image source={{ uri: gym.logoUrl! }} style={styles.headerLogo} resizeMode="contain" />
+            : undefined,
         }}
       />
 
@@ -227,4 +231,5 @@ const styles = StyleSheet.create({
   repsBlock: { alignItems: 'center', gap: spacing.md, width: '100%' },
   repsTarget: { ...typography.title, fontSize: 40, color: colors.text },
   exitLabel: { ...typography.body, color: colors.primary, fontWeight: '600' },
+  headerLogo: { width: 100, height: 32 },
 });
