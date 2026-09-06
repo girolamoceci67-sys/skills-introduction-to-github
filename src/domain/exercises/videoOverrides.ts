@@ -21,4 +21,7 @@ export const videoOverrides: Record<string, number> = {
   'legs-squat': require('../../../assets/exercise-videos/legs-squat.mp4'),
   'db-back-bent-row': require('../../../assets/exercise-videos/db-back-bent-row.mp4'),
   'legs-split-squat': require('../../../assets/exercise-videos/legs-split-squat.mp4'),
+  'core-dead-bug': require('../../../assets/exercise-videos/core-dead-bug.mp4'),
+  'core-knee-plank': require('../../../assets/exercise-videos/core-knee-plank.mp4'),
+  'db-chest-floor-press': require('../../../assets/exercise-videos/db-chest-floor-press.mp4'),
 };
