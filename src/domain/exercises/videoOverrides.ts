@@ -14,4 +14,7 @@ export const videoOverrides: Record<string, number> = {
   'pull-prone-swimmer': require('../../../assets/exercise-videos/pull-prone-swimmer.mp4'),
   'core-bird-dog': require('../../../assets/exercise-videos/core-bird-dog.mp4'),
   'push-standard': require('../../../assets/exercise-videos/push-standard.mp4'),
+  'fullbody-sit-to-stand': require('../../../assets/exercise-videos/fullbody-sit-to-stand.mp4'),
+  'pull-seated-scapular-squeeze': require('../../../assets/exercise-videos/pull-seated-scapular-squeeze.mp4'),
+  'push-wall': require('../../../assets/exercise-videos/push-wall.mp4'),
 };
