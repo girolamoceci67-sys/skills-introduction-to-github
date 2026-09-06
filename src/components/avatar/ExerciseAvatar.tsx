@@ -2,17 +2,20 @@ import { StyleSheet, Text, View } from 'react-native';
 import { useTranslation } from 'react-i18next';
 
 import { avatarPoses } from '../../domain/exercises/avatarPoses';
+import { videoOverrides } from '../../domain/exercises/videoOverrides';
 import { colors, radii, shadows, spacing, typography } from '../../theme/theme';
 import { StickFigureAvatar } from './StickFigureAvatar';
+import { VideoExerciseAvatar } from './VideoExerciseAvatar';
 
 export function ExerciseAvatar({ exerciseId }: { exerciseId: string }) {
   const { t } = useTranslation();
+  const videoSource = videoOverrides[exerciseId];
   const animation = avatarPoses[exerciseId];
-  if (!animation) return null;
+  if (!videoSource && !animation) return null;
 
   return (
     <View style={styles.card}>
-      <StickFigureAvatar {...animation} />
+      {videoSource ? <VideoExerciseAvatar source={videoSource} /> : <StickFigureAvatar {...animation!} />}
       <Text style={styles.caption}>{t('library.previewCaption')}</Text>
     </View>
   );
