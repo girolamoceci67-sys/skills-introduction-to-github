@@ -17,4 +17,6 @@ export const videoOverrides: Record<string, number> = {
   'fullbody-sit-to-stand': require('../../../assets/exercise-videos/fullbody-sit-to-stand.mp4'),
   'pull-seated-scapular-squeeze': require('../../../assets/exercise-videos/pull-seated-scapular-squeeze.mp4'),
   'push-wall': require('../../../assets/exercise-videos/push-wall.mp4'),
+  'fullbody-cat-cow': require('../../../assets/exercise-videos/fullbody-cat-cow.mp4'),
+  'legs-squat': require('../../../assets/exercise-videos/legs-squat.mp4'),
 };
